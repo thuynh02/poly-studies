@@ -99,8 +99,9 @@ window.onload=function(){
     if ( $.inArray( 'familiarity-slider' , productItems[i][questionTypes] ) ){
       htmlContainer += '\
       <div class="question"> \
-      <p class="lead">On a scale of 1 - 10, how familiar are you with ' + productItems[i]['productName'] + '?</p> \
-      <div id="famSlider' + i + '"></div> \
+        <p class="lead">On a scale of 1 - 10, how familiar are you with ' + productItems[i]['productName'] + '?</p> \
+        <div id="famSlider' + i + '"></div> \
+        <p>Your slider has a value of <span id="slider-value"></span></p> \
       </div> \
       ';
     }
@@ -139,26 +140,26 @@ window.onload=function(){
 
     $("#productContainer").append( htmlContainer );
 
-    
-
     // This following portion is from the jQuery UI Javascript file. The html page that includes this javascript file
     // must also include the jQuery UI javascript file for this to work. If the product has the element 
     // 'familiarity-slider' in its 'questionTypes' array, then value implementation and assignment for the slider 
     // with the 'famSlider0' identifier is here if the product Object was the first element of the 'productItems,' 
     // again based on the index of the Object in the array 'productItems.'
     if ( $.inArray( 'familiarity-slider' , productItems[i][questionTypes] ) ){
+      var valName = '#slider-value';
 
-      $( "#famSlider" + i ).slider({
+      $("#famSlider" + i ).slider( {
         value: 0,
-        min: 1,
+        min: 0,
         max: 10,
         step: 1,
         slide: function( event, ui ) {
-          $( "#famSlideValue" + i ).val( "$" + ui.value );
+          $( valName ).html( ui.value );
         }
-      });
+      } );
 
-      $( "#famSlideValue" + i ).val( "$" + $( "#famSlider" + i ).slider( "value" ) );
+    $( valName ).html(  $("#famSlider" + i ).slider('value') );
+
     }
 
   }
