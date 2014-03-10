@@ -101,7 +101,7 @@ window.onload=function(){
       <div class="question"> \
         <p class="lead">On a scale of 1 - 10, how familiar are you with ' + productItems[i]['productName'] + '?</p> \
         <div id="famSlider' + i + '"></div> \
-        <p>Your slider has a value of <span id="slider-value"></span></p> \
+        <p>Your slider has a value of <span id="slider-value' + i + '"></span></p> \
       </div> \
       ';
     }
@@ -131,6 +131,10 @@ window.onload=function(){
     // After all the html is appended for each questionType, based on keyword (such as 'usage'), the 'htmlContainer's 
     // 'productItem' div is closed. The first one is to end the column sizing, and the second is to end 'productItem.'
     htmlContainer += '\
+        <h1 id="productNav"> \
+          <a href="#" id="prev" class="btn btn-default">Previous</a> \
+          <a href="#" id="next" class="btn btn-default">Next</a> \
+        </h1> \
       </div>\
     </div>';
 
@@ -146,7 +150,7 @@ window.onload=function(){
     // with the 'famSlider0' identifier is here if the product Object was the first element of the 'productItems,' 
     // again based on the index of the Object in the array 'productItems.'
     if ( $.inArray( 'familiarity-slider' , productItems[i][questionTypes] ) ){
-      var valName = '#slider-value';
+      var valName = '#slider-value' + i;
 
       $("#famSlider" + i ).slider( {
         value: 0,
