@@ -1,0 +1,111 @@
+body{
+	padding: 5% 5%;
+	background-color: #AAAAAA;
+}
+
+/*================================ TABLE ================================*/
+
+/* Overwrite bootstrap table vertical alignment from top to middle*/
+.table>tbody>tr>th, .table>tbody>tr>td{
+	vertical-align: middle;
+}
+
+tr{
+	height: 50px;
+}
+
+tr:nth-child(even){
+	background-color: #ebe7eb;
+}
+
+th, td{
+	text-align: center;
+}
+
+/* First-child table data will be the question number. Bold and left align*/
+td:first-child{
+	font-weight: bold;
+	text-align: left;
+}
+
+/* Second-child table data will be the question itself. Left align*/
+td:nth-child(2){
+	text-align: left;
+}
+
+
+/*================================ INPUTS ================================*/
+
+/* Makes all input text fields rounded */
+input[type="text"]{
+	margin: 0px 8px;
+	border-radius: 5px;
+	border: 1px #cccccc solid;
+}
+
+/* Add space from radio buttons*/
+input[type="radio"]{
+	margin-right: 5px;
+}
+
+/*================================ SURVEY CONTENT ================================*/
+
+#title, #subTitle, #scaleInfo{
+	text-align: center;
+}
+
+.thickDivider{
+	border: 1px #AAAAAA solid;
+	margin: 40px 0;
+}
+
+#age, #gender{
+	margin-bottom: 20px;
+	word-spacing: 5px;
+}
+
+#surveyContainer{
+	background-color: white;
+	padding: 5%;
+	border-radius: 5px;
+}
+
+/* The last question is not part of the table. 
+Padding-left used to align this question with the others */
+#surveyContainer span{
+	padding: 0 8px;
+	text-align: left;
+	font-weight: bold;
+}
+
+#submit{
+	width: 100%;
+	text-align: center;
+}
+
+/*================================ "Responsive" Table ================================*/
+
+@media(max-width:979px){
+
+	/*Hides likert scale table headings*/
+	th{
+		display: none;
+	}
+
+	/*Allow likert choices to collapse atop one another*/
+	td{
+		float: left;
+	}
+
+	/*Do not float question number and question. This separates questions from likert choices*/
+	td:first-child, td:nth-child(2){
+		float: none;
+	}
+}
+
+
+
+
+
+
+
