@@ -50,7 +50,7 @@ window.onload=function(){
   // Skinny Luke (Index 2), Colin Morgan (Index 3), and Ariel (Index 4)
 
   productItems.push( createProductItem( "Jethro", "images/jethro.jpg", questionTypes ) );
-  productItems.push( createProductItem( "Merlin", "images/merlin.jpg", questionTypes ) );
+  productItems.push( createProductItem( "Merlin", "images/merlin.jpg", questionTypes ) )
   productItems.push( createProductItem( "Skinny Luke", "images/mojo.jpg", questionTypes ) );
   productItems.push( createProductItem( "Colin Morgan", "images/normal.jpg", questionTypes ) );
   productItems.push( createProductItem( "Ariel", "images/tempest.png", questionTypes ) );
@@ -69,8 +69,9 @@ window.onload=function(){
 
     // First, the image of the product Object is displayed using the pathway in the Object's 'imagePath' attribute.
     var htmlContainer = '\
-      <div class="productItem' + i + '"> \
-        <img src="' + productItems[i]['imagePath'] + '" alt=""> \
+      <div class="productItem"> \
+        <img src="' + productItems[i]['imagePath'] + '" alt="" class="col-xs-12 col-md-4"> \
+        <div class="col-xs-12 col-md-8 productDesc"> \
       ';
     
     // If the product Object's 'questionTypes' array contain the keyword 'usage' as one of its elements, add to the
@@ -81,7 +82,7 @@ window.onload=function(){
     // not been written.
     if ( $.inArray( 'usage' , productItems[i][questionTypes] ) ){
       htmlContainer += '\
-      <div id="usage' + i + '" class="question"> \
+      <div class="usage question"> \
         <p class="lead">Have you ever had a ' + productItems[i]['productName'] + '?</p> \
         <input type="radio" name="usageValue' + i + '" value="yes" /> Yes \
         <input type="radio" name="usageValue' + i + '" value="no" /> No \
@@ -127,8 +128,9 @@ window.onload=function(){
     }
 
     // After all the html is appended for each questionType, based on keyword (such as 'usage'), the 'htmlContainer's 
-    // 'productItem' div is closed. 
+    // 'productItem' div is closed. The first one is to end the column sizing, and the second is to end 'productItem.'
     htmlContainer += '\
+      </div>\
     </div>';
 
     // In the html page that includes this javascript file, if they have an identifying container with the identifier 
@@ -136,6 +138,8 @@ window.onload=function(){
     // '#productContainer.'
 
     $("#productContainer").append( htmlContainer );
+
+    
 
     // This following portion is from the jQuery UI Javascript file. The html page that includes this javascript file
     // must also include the jQuery UI javascript file for this to work. If the product has the element 
@@ -172,14 +176,13 @@ window.onload=function(){
   // variable 'currentQuestion' - Counter variable for the current question the viewer is on, initialized to the first 
   //      question of the first product Object element in 'productItems'
   
-  var $divs = $( "#productContainer > div" ),
-    $questions = $( "#productContainer > div > .question" ),
+  var $divs = $( "#productContainer > .productItem" ),
+    $questions = $( "#productContainer > .productItem > div > .question" ),
     amountDiv = $divs.length,                           
     amountQuestions = $questions.length,                      
     currentQuestion = 0,                                      
     questionsPerDiv = amountQuestions / amountDiv,
-    currentDiv = currentQuestion / questionsPerDiv,
-    theEnd = $( ".endOfQuestions" ).length
+    currentDiv = currentQuestion / questionsPerDiv
     ;
 
   // This hides all the div containers within the '#productContainer', and then only shows the one with the value from
@@ -204,16 +207,11 @@ window.onload=function(){
     // not been written to read in values after the data has been clicked to change the elements of the 'questionValues' 
     // array of each product Object.
 
-    if( currentDiv == amountDiv && theEnd < 1 && this.id == 'next' ) {
-
-      for (var i = 0; i < productItems.length; i++) {
-        var found = $.inArray( 0, productItems[i][questionValues] );
-        if( found == -1 ){ $("#next").html("Hello World"); }
-        else{ 
-          currentQuestion = found;
-        }
-      };
-      
+    if( currentQuestion == amountQuestions) {
+      // Submit Action Goes Here
+      // First, gather all the values and put them into the objects' 'questionValue' arrays.
+      // Then, check every value to make sure the entire form is filled.
+      // Then perform the submit if all values were conducted
     }
 
     // Again, this hides all the div containers within the '#productContainer'.
@@ -227,7 +225,7 @@ window.onload=function(){
     // This updates the value of the 'currentQuestion' variable based on which identifier is clicked. Within the contraints
     // is also the limit as to the lowest and highest value that currentQuestion could be, that is 0 to symbolize the first
     // question and the value of 'amountQuestions' to demonstrate the total number of questions, which is the last question.
-    if( this.id == 'next' && currentQuestion < amountQuestions ) { 
+    if( this.id == 'next' && currentQuestion < amountQuestions - 1) { 
       currentQuestion++;
     }
     else if ( this.id=='prev' && currentQuestion > 0 ) {
@@ -247,6 +245,14 @@ window.onload=function(){
     /// This only shows the one with the value from the variable 'currentQuestion.' if the variable 'currentQuestion' has the 
     // value 2, then it shows the second '.question' container of the '#productContainer'
     $questions.eq( currentQuestion ).show();
+
+    // If at the last question, then the next button will state "Submit." Otherwise, it will remain as "Next"
+    if( currentQuestion == amountQuestions - 1 ) {
+      $("#next").text("Submit");
+    }
+    else if( currentQuestion != amountQuestions - 1 ) {
+      $("#next").text("Next");
+    }
 
   });
 

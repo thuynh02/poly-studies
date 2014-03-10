@@ -14,7 +14,9 @@
     <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="custom/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="custom/css/survey.css">
+    <link rel="stylesheet" href="custom/css/style.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
   
     <!-- Just for debugging purposes. Don't actually copy this line! -->
@@ -33,57 +35,13 @@
   </head>
 
   <body>
+      <p id="productNav">
+        <a href="#" id="prev" class="btn btn-default">Previous</a>   
+        <a href="#" id="next" class="btn btn-default">Next</a>
+      </p>
 
-    <div class="site-wrapper">
-
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-          <!-- <div class="masthead clearfix">
-            <div class="inner">
-              <h3 class="masthead-brand">Cover</h3>
-              <ul class="nav masthead-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">Features</a></li>
-                <li><a href="#">Contact</a></li>
-              </ul>
-            </div>
-          </div> -->
-
-          <div class="inner cover">
-            
-            <p class="productNav">
-              <a href="#" id="prev" class="btn btn-default">Previous</a>   
-              <a href="#" id="next" class="btn btn-default">Next</a>
-            </p>
-
-            <div id="productContainer">
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- <footer>
-      <div class="container">
-        <p class="pull-right">
-          &copy; 2014 Brooklyn Atlantis 
-        </p>
-        <p>
-          <a href="#">Back to top</a> &middot;
-          <a href="#">Contact Us</a> &middot; 
-          <a href="#">Report A Bug</a>
-        </p>
-      </div>
-    </footer> -->
-
-
+      <form name="rateSurvey" id="productContainer" action="#" method="POST"> 
+      </form>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

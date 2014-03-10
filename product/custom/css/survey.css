@@ -64,10 +64,10 @@ input[type="radio"]{
 	word-spacing: 5px;
 }
 
-#surveyContainer{
+#surveyContainer {
 	background-color: white;
 	padding: 5%;
-	border-radius: 5px;
+	overflow:hidden;
 }
 
 /* The last question is not part of the table. 
