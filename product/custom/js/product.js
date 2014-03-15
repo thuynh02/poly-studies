@@ -1,50 +1,13 @@
-// What still needs to be done:
-// 1. Action listeners to the buttons and the radio buttons, and then assign them to the 'questionValues' of each product 
-//    Object of the 'productItems' array
-// 2. Reformat the last part for the display either as its own function or leave it as it is. However, flexibility still 
-//    needs to be implemented so that it is not based on overall number of questions but the amount of elements in the array
-//    'questionValues' of each product Object of the 'productItems' array
-
-function generateQuestionHTML( name, keyword ) {
-  if ( keyword == 'usage' ){
-    return '\
-    <div class="usage question"> \
-      <p class="lead">Have you ever had a ' + name + '?</p> \
-      <input type="radio" name="usageValue" value="yes" /> Yes \
-      <input type="radio" name="usageValue" value="no" /> No \
-    </div> \
-    '; 
-  }
-
-  else if ( keyword == 'familiarity-slider' ) {
-    return '\
-    <div class="question"> \
-      <p class="lead">On a scale of 1 - 10, how familiar are you with ' + name + '?</p> \
-      <div id="famSlider"></div> \
-      <p>Your slider has a value of <span id="slider-value"></span></p> \
-    </div> \
-    ';
-  }
-
-  else if ( keyword == 'opinion-star' ) {
-    return '\
-    <div class="rating question"> \
-      <p class="lead">On a scale of 1 (very negative) to 5 (very positive), what is your opinion of ' + name + '?</p> \
-      Very Negative \
-      <input type="radio" name="opinionValue" value="0" checked /><span id="hide"></span> \
-      <input type="radio" name="opinionValue" value="1" /><span></span> \
-      <input type="radio" name="opinionValue" value="2" /><span></span> \
-      <input type="radio" name="opinionValue" value="3" /><span></span> \
-      <input type="radio" name="opinionValue" value="4" /><span></span> \
-      <input type="radio" name="opinionValue" value="5" /><span></span> \
-      Very Positive \
-    </div> \
-    ';
-  }
-}
-
-
 window.onload=function(){
+
+  // ----------------------------------------------------------------------------------------------------------------------- GLOBAL VARIABLES
+
+  var currentQuestion = 0,
+      // amountQuestions = 0,
+      currentItem = 0,
+      itemQuestionSize = [];
+
+  // ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
   // 'createProductItem' function is for creating and returning an Object called productItem with the attributes: 
   // productName, imagePath, questionTypes, and questionValues. Given a string for name, a string for path, and an 
@@ -76,7 +39,7 @@ window.onload=function(){
 
     return productItem;
   }
-  
+
   // productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
   var productItems = [];
 
@@ -94,11 +57,6 @@ window.onload=function(){
   productItems.push( createProductItem( "Colin Morgan", "images/normal.jpg", questionTypes ) );
   productItems.push( createProductItem( "Ariel", "images/tempest.png", questionTypes ) );
 
-  var currentQuestion = 0,
-      // amountQuestions = 0,
-      currentItem = 0,
-      itemQuestionSize = [];
-
   // for (var i = 0; i < productItems.length; i++) {
 
   //   // amountQuestions += productItems[i]['questionTypes'].length;
@@ -106,74 +64,102 @@ window.onload=function(){
 
   // };
 
+  // ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
+
+  function generateQuestionHTML( name, keyword ) {
+    if ( keyword == 'usage' ){
+      return '\
+      <div class="usage question"> \
+        <p class="lead">Have you ever had a ' + name + '?</p> \
+        <input type="radio" name="usageValue" value="yes" /> Yes \
+        <input type="radio" name="usageValue" value="no" /> No \
+      </div> \
+      '; 
+    }
+
+    else if ( keyword == 'familiarity-slider' ) {
+      return '\
+      <div class="question"> \
+        <p class="lead">On a scale of 1 - 10, how familiar are you with ' + name + '?</p> \
+        <div id="famSlider"></div> \
+        <p>Your slider has a value of <span id="sliderValue"></span></p> \
+      </div> \
+      ';
+    }
+
+    else if ( keyword == 'opinion-star' ) {
+      return '\
+      <div class="rating question"> \
+        <p class="lead">On a scale of 1 (very negative) to 5 (very positive), what is your opinion of ' + name + '?</p> \
+        Very Negative \
+        <input type="radio" name="opinionValue" value="0" checked /><span id="hide"></span> \
+        <input type="radio" name="opinionValue" value="1" /><span></span> \
+        <input type="radio" name="opinionValue" value="2" /><span></span> \
+        <input type="radio" name="opinionValue" value="3" /><span></span> \
+        <input type="radio" name="opinionValue" value="4" /><span></span> \
+        <input type="radio" name="opinionValue" value="5" /><span></span> \
+        Very Positive \
+      </div> \
+      ';
+    }
+  }
+
   var htmlContainer = generateQuestionHTML( productItems[currentItem]['productName'], productItems[currentItem]['questionTypes'][currentQuestion] );
   $( '#productDesc' ).html( htmlContainer );
   $( '#productImg' ).attr( "src", productItems[currentItem]['imagePath']) ;
-  
+
+
+  // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
+
 
   $("#next, #prev").click(function(){
+
+    console.log(productItems);
 
     // When the 'next' button is pressed and the user has not finished all the items
     if( this.id=='next' && currentItem < productItems.length ) { 
 
       //To determine if the user has submitted a valid answer for the questions.
       //Switch cases are used to gather the results depending on the type of question. 
-      switch( currentQuestion ){
+      
 
-        // Usage question
-        case 0: 
-          try{
+      try{
+        switch( currentQuestion ){
+
+          // Usage question
+          case 0: 
             // Gets the value of the checked radio button and assign it to the corresponding index of questionValues
             productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="usageValue"]:checked' ).value;
             
-            // For debugging
-            // console.log( "Usage value: " + productItems[currentItem].questionValues[currentQuestion] );
-          }
-          catch(err){
-            //If no button is selected, log the NULL exception in console
-            console.log( "Bad input: usageValue == NULL" );
-          }
-          break;
+            break;
 
-        // Familiarity question
-        case 1:
-          try{
+          // Familiarity question
+          case 1:
             // Get the value from the slider object 
             productItems[currentItem].questionValues[currentQuestion] = $("#famSlider" ).slider('value');
+            break;
 
-            // For debugging
-            // console.log( "Slider value: " + productItems[currentItem].questionValues[currentQuestion] );
-          }
-          catch(err){
-            console.log( "Bad input: slider-value == NULL" );
-          }
-          break;
-
-        // Star-rating question
-        case 2:
-          try{
+          // Star-rating question
+          case 2:
             // Get the rating by grabbing the value from the selected input value with the name, opinionValue.
             productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="opinionValue"]:checked' ).value;
-            
-            // For debugging
-            // console.log( "Opinion value: " + productItems[currentItem].questionValues[currentQuestion] );
-          }
-          catch(err){
-            console.log( "Bad input: opinionValue == 0" );
-          }
-          break;
+            break;
 
-        // For any question types that are not handled above
-        default:
-          console.log( "This question type is not recognized!" );
-          break;
+          // For any question types that are not handled above
+          default:
+            console.log( "This question type is not recognized!" );
+            break;
 
+        }
+      } 
+      catch(err){
+          console.log( "INVALID QUESTION." );
       }
 
       // Only proceed to the next questionType/item if the answer is a valid value. (Basically, not 0)
-      // Familiarity sliders can proceed in all cases since all values on the slider are valid. 
-      if( questionTypes[currentQuestion] == 'familiarity-slider'
-          || productItems[currentItem].questionValues[currentQuestion] != 0 ){
+      if( productItems[currentItem].questionValues[currentQuestion] != 0 ){
+
+        if ( $('#next').hasClass('disabled') ) { $('#next').removeClass('disabled'); }
 
         // Increment the currentQuestion if there's still more questions for that particular item
         if( currentQuestion < productItems[currentItem]['questionTypes'].length -1){ currentQuestion++; }
@@ -196,7 +182,6 @@ window.onload=function(){
       }
     }
 
-
     // When the 'prev' button is pressed and the user has not finished all the items
     if( this.id=='prev') { 
 
@@ -214,7 +199,6 @@ window.onload=function(){
         }
         currentQuestion = productItems[currentItem]['questionTypes'].length - 1;
       }
-
     }
 
     // Changing the productDesc container based on currentItem's question type
@@ -225,18 +209,34 @@ window.onload=function(){
     console.log( 'I' + currentItem);
 
     $("#famSlider").slider( {
-      value: 5,
+      value: 0,
       min: 0,
       max: 10,
       step: 1,
       slide: function( event, ui ) {
-        $( '#slider-value' ).html( ui.value );
+        $( '#sliderValue' ).html( ui.value );
       }
     } );
 
-    $( '#slider-value' ).html(  $("#famSlider" ).slider('value') );
+    $( '#sliderValue' ).html(  $("#famSlider" ).slider('value') );
 
     console.log( productItems[currentItem].questionValues );
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   });
 
@@ -300,7 +300,7 @@ window.onload=function(){
   //   // with the 'famSlider0' identifier is here if the product Object was the first element of the 'productItems,' 
   //   // again based on the index of the Object in the array 'productItems.'
   //   // if ( $.inArray( 'familiarity-slider' , productItems[i][questionTypes] ) ){
-  //   //   var valName = '#slider-value' + i;
+  //   //   var valName = '#sliderValue' + i;
 
   //   //   $("#famSlider" + i ).slider( {
   //   //     value: 0,
