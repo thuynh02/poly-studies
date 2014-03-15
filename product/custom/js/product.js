@@ -64,8 +64,8 @@ window.onload=function(){
   function createProductItem( name, path, qTypes ) {
     if ( !$.isArray(qTypes) ) { qTypes = [ qTypes ]; }
 
-    var values = [];
-    for (var i = 0; i < qTypes; i++) { values[i] = 0; }
+    var values = new Array( qTypes.length );
+    for (var i = 0; i < qTypes.length; i++) { values[i] = 0; }
 
     var productItem = {
       productName: name,
@@ -116,23 +116,83 @@ window.onload=function(){
     // When the 'next' button is pressed and the user has not finished all the items
     if( this.id=='next' && currentItem < productItems.length ) { 
 
-      // Increment the currentQuestion if there's still more questions for that particular item
-      if( currentQuestion < productItems[currentItem]['questionTypes'].length -1){ currentQuestion++; }
+      //To determine if the user has submitted a valid answer for the questions.
+      //Switch cases are used to gather the results depending on the type of question. 
+      switch( currentQuestion ){
 
-      // Once you reached the end of the question types for that particular item and you're not
-      // at the last item, reset the current question and go to the next item.
-      else if( currentQuestion == productItems[currentItem]['questionTypes'].length -1
-                && currentItem < productItems.length - 1 ){  
-          currentQuestion = 0;
-          currentItem++;
+        // Usage question
+        case 0: 
+          try{
+            // Gets the value of the checked radio button and assign it to the corresponding index of questionValues
+            productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="usageValue"]:checked' ).value;
+            
+            // For debugging
+            // console.log( "Usage value: " + productItems[currentItem].questionValues[currentQuestion] );
+          }
+          catch(err){
+            //If no button is selected, log the NULL exception in console
+            console.log( "Bad input: usageValue == NULL" );
+          }
+          break;
 
-          // Image path is change only if the current image changes
-          $( '#productImg' ).attr( "src", productItems[currentItem]['imagePath']) ;
+        // Familiarity question
+        case 1:
+          try{
+            // Get the value from the slider object 
+            productItems[currentItem].questionValues[currentQuestion] = $("#famSlider" ).slider('value');
+
+            // For debugging
+            // console.log( "Slider value: " + productItems[currentItem].questionValues[currentQuestion] );
+          }
+          catch(err){
+            console.log( "Bad input: slider-value == NULL" );
+          }
+          break;
+
+        // Star-rating question
+        case 2:
+          try{
+            // Get the rating by grabbing the value from the selected input value with the name, opinionValue.
+            productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="opinionValue"]:checked' ).value;
+            
+            // For debugging
+            // console.log( "Opinion value: " + productItems[currentItem].questionValues[currentQuestion] );
+          }
+          catch(err){
+            console.log( "Bad input: opinionValue == 0" );
+          }
+          break;
+
+        // For any question types that are not handled above
+        default:
+          console.log( "This question type is not recognized!" );
+          break;
+
       }
-      // Once you reached the end of the question types for that particular item and you're at the last item, ...
-      else if( currentQuestion == productItems[currentItem]['questionTypes'].length 
-                && currentItem == productItems.length - 1 ){  
-          // Action to do last question script
+
+      // Only proceed to the next questionType/item if the answer is a valid value. (Basically, not 0)
+      // Familiarity sliders can proceed in all cases since all values on the slider are valid. 
+      if( questionTypes[currentQuestion] == 'familiarity-slider'
+          || productItems[currentItem].questionValues[currentQuestion] != 0 ){
+
+        // Increment the currentQuestion if there's still more questions for that particular item
+        if( currentQuestion < productItems[currentItem]['questionTypes'].length -1){ currentQuestion++; }
+
+        // Once you reached the end of the question types for that particular item and you're not
+        // at the last item, reset the current question and go to the next item.
+        else if( currentQuestion == productItems[currentItem]['questionTypes'].length -1
+                  && currentItem < productItems.length - 1 ){  
+            currentQuestion = 0;
+            currentItem++;
+
+            // Image path is change only if the current image changes
+            $( '#productImg' ).attr( "src", productItems[currentItem]['imagePath']) ;
+        }
+        // Once you reached the end of the question types for that particular item and you're at the last item, ...
+        else if( currentQuestion == productItems[currentItem]['questionTypes'].length 
+                  && currentItem == productItems.length - 1 ){  
+            // Action to do last question script
+        }
       }
     }
 
@@ -165,7 +225,7 @@ window.onload=function(){
     console.log( 'I' + currentItem);
 
     $("#famSlider").slider( {
-      value: 0,
+      value: 5,
       min: 0,
       max: 10,
       step: 1,
@@ -175,6 +235,8 @@ window.onload=function(){
     } );
 
     $( '#slider-value' ).html(  $("#famSlider" ).slider('value') );
+
+    console.log( productItems[currentItem].questionValues );
 
   });
 
