@@ -53,9 +53,19 @@ window.onload=function(){
 
   productItems.push( createProductItem( "Jethro", "images/jethro.jpg", questionTypes ) );
   productItems.push( createProductItem( "Merlin", "images/merlin.jpg", questionTypes ) )
-  productItems.push( createProductItem( "Skinny Luke", "images/mojo.jpg", questionTypes ) );
-  productItems.push( createProductItem( "Colin Morgan", "images/normal.jpg", questionTypes ) );
-  productItems.push( createProductItem( "Ariel", "images/tempest.png", questionTypes ) );
+  // productItems.push( createProductItem( "Skinny Luke", "images/mojo.jpg", questionTypes ) );
+  // productItems.push( createProductItem( "Colin Morgan", "images/normal.jpg", questionTypes ) );
+  // productItems.push( createProductItem( "Ariel", "images/tempest.png", questionTypes ) );
+
+  function checkAllAnswered( unansweredValue ) {
+    var i, j;
+    for ( i = 0; i < productItems.length; i++) {
+      for ( j = 0; j < productItems[i].questionValues.length; j++) {
+        if( productItems[i].questionValues[j] == unansweredValue ) { return [i, j]; }
+      }
+    }
+    return [i, j];
+  }
 
   // ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 
@@ -97,9 +107,9 @@ window.onload=function(){
     }
   }
 
-  var htmlContainer = generateQuestionHTML( productItems[currentItem]['productName'], productItems[currentItem]['questionTypes'][currentQuestion] );
+  var htmlContainer = generateQuestionHTML( productItems[currentItem].productName, productItems[currentItem].questionTypes[currentQuestion] );
   $( '#productDesc' ).html( htmlContainer );
-  $( '#productImg' ).attr( "src", productItems[currentItem]['imagePath']) ;
+  $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
 
 
   // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
@@ -107,7 +117,6 @@ window.onload=function(){
 
   $("#next, #prev").click(function(){
 
-    console.log(productItems);
 
     // When the 'next' button is pressed and the user has not finished all the items
     if( this.id=='next' && currentItem < productItems.length ) { 
@@ -152,25 +161,31 @@ window.onload=function(){
       // Only proceed to the next questionType/item if the answer is a valid value. (Basically, not 0)
       if( productItems[currentItem].questionValues[currentQuestion] != 0 ){
 
-        if ( $('#next').hasClass('disabled') ) { $('#next').removeClass('disabled'); }
-
         // Increment the currentQuestion if there's still more questions for that particular item
-        if( currentQuestion < productItems[currentItem]['questionTypes'].length -1){ currentQuestion++; }
+        if( currentQuestion < productItems[currentItem].questionTypes.length -1){ currentQuestion++; }
 
         // Once you reached the end of the question types for that particular item and you're not
         // at the last item, reset the current question and go to the next item.
-        else if( currentQuestion == productItems[currentItem]['questionTypes'].length -1
+        else if( currentQuestion == productItems[currentItem].questionTypes.length -1
                   && currentItem < productItems.length - 1 ){  
             currentQuestion = 0;
             currentItem++;
 
             // Image path is change only if the current image changes
-            $( '#productImg' ).attr( "src", productItems[currentItem]['imagePath']) ;
+            $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
         }
         // Once you reached the end of the question types for that particular item and you're at the last item, ...
-        else if( currentQuestion == productItems[currentItem]['questionTypes'].length 
+        else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
                   && currentItem == productItems.length - 1 ){  
             // Action to do last question script
+          var arr = checkAllAnswered(0);
+          //console.log( arr );
+          if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
+            //console.log('YES DONE');
+            var jsonItems = JSON.stringify(productItems);
+            console.log( jsonItems );
+          }
+          // else { console.log('NOOOOO'); }
         }
       }
     }
@@ -188,18 +203,18 @@ window.onload=function(){
           currentItem--; 
 
           // Image path is change only if the current image changes
-          $( '#productImg' ).attr( "src", productItems[currentItem]['imagePath']) ;
+          $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
         }
-        currentQuestion = productItems[currentItem]['questionTypes'].length - 1;
+        currentQuestion = productItems[currentItem].questionTypes.length - 1;
       }
     }
 
     // Changing the productDesc container based on currentItem's question type
-    htmlContainer = generateQuestionHTML( productItems[currentItem]['productName'], productItems[currentItem]['questionTypes'][currentQuestion] );
+    htmlContainer = generateQuestionHTML( productItems[currentItem].productName, productItems[currentItem].questionTypes[currentQuestion] );
     $( '#productDesc' ).html( htmlContainer );
 
-    console.log( 'Q' + currentQuestion );
-    console.log( 'I' + currentItem);
+    // console.log( 'Q' + currentQuestion );
+    // console.log( 'I' + currentItem);
 
     $("#famSlider").slider( {
       value: 5,
