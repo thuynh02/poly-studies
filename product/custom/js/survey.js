@@ -1,22 +1,28 @@
 // Validate is used to verify that all survey questions have been answered.
+// 
+// NOTE: A bool can be passed in order to enable alert messages. 
+//		 Alerts will tell the user what questions were left unanswered.
+// 
 // This function is used in survey.html. Form name, "initialSurvey" calls this function from attribute, 'onsubmit'
 // TO BE IMPLEMENTED: Check for valid age and if awareness questions are answered correctly
 // Ex: 	Question 11 asks that the user selects choice 2. 
 //		We need to ensure that choice is selected before moving on.
-function validate(){
+function validate( showMessage ){
 
+	if( showMessage == null ){ showMessage = false; }
+	var message = "";
 	var isValid = true;
 
 	// Check if age was given 
 	// ***MUST CHECK FOR NUMERICAL ANSWER UNDER 99***
 	if( $('input[name="age"]')[0].value == '' ){
-		console.log( "Please fill out your age." );
+		message += "Please fill out your age.\n";
 		isValid = false;
 	}
 
 	// Check if gender is given
 	if( $('input[name="gender"]:checked').length == 0 ){
-		console.log( "Please select your gender." );
+		message += "Please select your gender.\n";
 		isValid = false;
 	}
 
@@ -29,7 +35,7 @@ function validate(){
 		// Likert scale (radio button input) questions
 		if( $('input[name="q' + i + '"]').attr("type") == 'radio' 
 			&& $('input[name="q' + i + '"]:checked').length == 0 ){
-     		console.log('Please select one option for question ' + i);
+     		message += 'Please select one option for question ' + i + '\n';
      		isValid = false;
 
 		}
@@ -37,9 +43,14 @@ function validate(){
 		// Text field question(s) 
 		else if( $('input[name="q' + i + '"]').attr("type") == 'text' 
 				 && $('input[name="q' + i + '"]')[0].value == '' ){
-			console.log('Please fill out question ' + i );
+			message += 'Please fill out question ' + i + '\n';
 			isValid = false;
 		}
+	}
+
+	//
+	if( showMessage && message != ''){
+		alert( message );
 	}
 
 	//If, by the end of all the tests, nothing triggers an invalid answer, the answers are okay to go
@@ -53,7 +64,9 @@ window.onload = function(){
 	// Afterwards, convert the object into a JSON string 
 	$('#surveySubmit').click( function(){
 
-		if( validate() ){
+		// Validate takes a boolean parameter. If true is passed, alerts appear, telling the user what
+		// questions were left unanswered
+		if( validate(true) ){
 			//For every checked radio button and provided text input, add the value to the survey data
 			$('input:checked, input[type="text"]').each( function(){
 				surveyData[$(this)[0].name] = $(this)[0].value;
