@@ -53,12 +53,14 @@ window.onload = function(){
 	// Afterwards, convert the object into a JSON string 
 	$('#surveySubmit').click( function(){
 
-		//For every checked radio button and provided text input, add the value to the survey data
-		$('input:checked, input[type="text"]').each( function(){
-			surveyData[$(this)[0].name] = $(this)[0].value;
-		});
-		var jsonSurveyData = JSON.stringify(surveyData);
-        console.log( jsonSurveyData );
+		if( validate() ){
+			//For every checked radio button and provided text input, add the value to the survey data
+			$('input:checked, input[type="text"]').each( function(){
+				surveyData[$(this)[0].name] = $(this)[0].value;
+			});
+			var jsonSurveyData = JSON.stringify(surveyData);
+	        console.log( jsonSurveyData );
+	    }
 	});
 }
 
