@@ -1,3 +1,8 @@
+body{
+    padding: 5% 5%;
+    background-color: #AAAAAA;
+}
+
 .stroked{
   text-shadow:
     -1px -1px 0 #212121,
@@ -45,13 +50,24 @@
     background-position:0 0;
 }
 
-#productContainer, #productNav {
+.wrapper, #productNav {
     text-align: center;
 }
 
-
-.productItem{
+.productContainer{
     background-color: white;
     padding: 5%;
     overflow:hidden;
+}
+
+.item{
+    border: 1px #cccccc solid;
+    padding: 10px 0;
+    margin: 20px 0;
+
+}
+
+.productImg{
+    padding-top: 8px;
+    padding-bottom: 30px;
 }
