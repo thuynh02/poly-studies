@@ -7,6 +7,8 @@ window.onload=function(){
       currentItem = 0,
       itemQuestionSize = [];
 
+  var DEFAULTVALUE = 0;
+
   // ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
   // 'createProductItem' function is for creating and returning an Object called productItem with the attributes: 
@@ -28,7 +30,7 @@ window.onload=function(){
     if ( !$.isArray(qTypes) ) { qTypes = [ qTypes ]; }
 
     var values = new Array( qTypes.length );
-    for (var i = 0; i < qTypes.length; i++) { values[i] = 0; }
+    for (var i = 0; i < qTypes.length; i++) { values[i] = DEFAULTVALUE; }
 
     var productItem = {
       productName: name,
@@ -51,11 +53,9 @@ window.onload=function(){
   // Here five objects are created with associated index in array 'productItems': Jethro (Index 0), Merlin (Index 1), 
   // Skinny Luke (Index 2), Colin Morgan (Index 3), and Ariel (Index 4)
 
-  productItems.push( createProductItem( "Jethro", "images/jethro.jpg", questionTypes ) );
-  productItems.push( createProductItem( "Merlin", "images/merlin.jpg", questionTypes ) )
-  // productItems.push( createProductItem( "Skinny Luke", "images/mojo.jpg", questionTypes ) );
-  // productItems.push( createProductItem( "Colin Morgan", "images/normal.jpg", questionTypes ) );
-  // productItems.push( createProductItem( "Ariel", "images/tempest.png", questionTypes ) );
+  productItems.push( createProductItem( "iPad Mini", "images/ipad-mini.jpg", questionTypes ) );
+  productItems.push( createProductItem( "Coke", "images/coke.jpg", questionTypes ) );
+  productItems.push( createProductItem( "Twitter", "images/twitter.jpg", questionTypes ) );
 
   function checkAllAnswered( unansweredValue ) {
     var i, j;
@@ -117,14 +117,12 @@ window.onload=function(){
 
   $("#next, #prev").click(function(){
 
-
     // When the 'next' button is pressed and the user has not finished all the items
     if( this.id=='next' && currentItem < productItems.length ) { 
 
       //To determine if the user has submitted a valid answer for the questions.
       //Switch cases are used to gather the results depending on the type of question. 
       
-
       try{
         switch( currentQuestion ){
 
@@ -159,7 +157,7 @@ window.onload=function(){
       }
 
       // Only proceed to the next questionType/item if the answer is a valid value. (Basically, not 0)
-      if( productItems[currentItem].questionValues[currentQuestion] != 0 ){
+      if( productItems[currentItem].questionValues[currentQuestion] != DEFAULTVALUE ){
 
         // Increment the currentQuestion if there's still more questions for that particular item
         if( currentQuestion < productItems[currentItem].questionTypes.length -1){ currentQuestion++; }
@@ -178,14 +176,12 @@ window.onload=function(){
         else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
                   && currentItem == productItems.length - 1 ){  
             // Action to do last question script
-          var arr = checkAllAnswered(0);
+          var arr = checkAllAnswered( DEFAULTVALUE );
           //console.log( arr );
           if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
-            //console.log('YES DONE');
             var jsonItems = JSON.stringify(productItems);
             console.log( jsonItems );
           }
-          // else { console.log('NOOOOO'); }
         }
       }
     }
