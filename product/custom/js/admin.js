@@ -1,6 +1,5 @@
 window.onload=function(){
 
-
 	// ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
 	// 'createProductItem' function is for creating and returning an Object called productItem with the attributes: 
