@@ -39,16 +39,17 @@ CREATE TABLE `users` (
 CREATE TABLE `user_uploads` (
   `upload_id` int(11) NOT NULL AUTO_INCREMENT,
   `image_name` text,
+  `image_path` text NOT NULL,
+  `image_description` text,
   `created` int(11) DEFAULT NULL,
   PRIMARY KEY (`upload_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `user_uploads`
 --
 
-INSERT INTO `user_uploads` (`upload_id`, `image_name`, `created`) VALUES
-(1, '1395884429ipad-mini.jpg', 1395884429),
-(2, '1395884447coke.jpg', 1395884447),
-(3, '1395884451twitter.jpg', 1395884451),
-(7, '1395888755Screen Shot 2014-02-16 at 6.10.29 PM.png', 1395888755);
+INSERT INTO `user_uploads` (`upload_id`, `image_name`, `image_description`, `image_path`, `created`) VALUES
+(1, '', '', '1395884429ipad-mini.jpg', 1395884429),
+(2, '', '', '1395884447coke.jpg', 1395884447),
+(3, '', '', '1395884451twitter.jpg', 1395884451),

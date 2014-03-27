@@ -73,15 +73,15 @@
 				if( in_array( $fileExtension, $allowedImageFormats ) ) {
 
 					if ($size < (MAX_SIZE*1024)) {
-						$imageName = time().$fileName;
+						$imagePath = time().$fileName;
 
-						echo generateForm( $imageDirectory.$imageName );
-						$newFileName = $imageDirectory.$imageName;
+						echo generateForm( $imageDirectory.$imagePath );
+						$newFileName = $imageDirectory.$imagePath;
 
 						if ( move_uploaded_file( $_FILES['images']['tmp_name'][$name], $newFileName ) ) {
 
 						   $time=time();
-						   mysqli_query( $bd, "INSERT INTO user_uploads( image_name, created ) VALUES ( '$imageName', '$time' )");
+						   mysqli_query( $bd, "INSERT INTO user_uploads( image_name, image_description, image_path, created ) VALUES ( '', '', '$imagePath', '$time' )");
 						
 						}
 
