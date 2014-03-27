@@ -25,16 +25,33 @@ window.onload=function(){
 	return productItem;
 	}
 
+	function getImageData(){
+		var productArr = [];
+		var data = $.ajax({
+			type: 'POST',
+			url: 'getImages.php',
+			data: data,
+			dataType: 'json',
+			success : function( data ){
+				for( var i = 0; i < data.length; ++i ){
+					productArr.push( createProductItem( data[i].image_name, "images/"+data[i].image_name ) );
+				}
+			},
+			async: false
+		});
+		return productArr;
+	}
+
 	// productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
-	var productItems = [];
+	var productItems = getImageData();
 
 	// Initialize and push into 'productItems' the Objects created from the function 'createProductItem.'
 	// Here five objects are created with associated index in array 'productItems': Jethro (Index 0), Merlin (Index 1), 
 	// Skinny Luke (Index 2), Colin Morgan (Index 3), and Ariel (Index 4)
-
-	productItems.push( createProductItem( "iPad Mini", "images/ipad-mini.jpg" ) );
-	productItems.push( createProductItem( "Coke", "images/coke.jpg" ) )
-	productItems.push( createProductItem( "Twitter", "images/twitter.jpg" ) );
+	// var productItems = [];
+	// productItems.push( createProductItem( "iPad Mini", "images/ipad-mini.jpg" ) );
+	// productItems.push( createProductItem( "Coke", "images/coke.jpg" ) )
+	// productItems.push( createProductItem( "Twitter", "images/twitter.jpg" ) );
 
 	// ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 

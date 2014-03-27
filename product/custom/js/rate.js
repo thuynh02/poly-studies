@@ -42,20 +42,47 @@ window.onload=function(){
     return productItem;
   }
 
-  // productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
-  var productItems = [];
+  // getImageData will make an ajax call to getImages.php, which queries the database for all
+  // the uploaded images (table: user_uploads). The resulting array of image names are formatted to a
+  // json string and retrieved here. Upon success of retrieval, the array is traversed and productItems
+  // are given the appropriate data. 
+  // **NOTE** Image names for the question have yet to be implemented in the database/image-upload.php!
+  // **NOTE** Questions will display the image name w/ extensions and all. 
+  function getImageData(){
+    var productArr = [];
+    var data = $.ajax({
+      type: 'POST',
+      url: 'getImages.php',
+      data: data,
+      dataType: 'json',
+      success : function( data ){
+        for( var i = 0; i < data.length; ++i ){
+          productArr.push( createProductItem( data[i].image_name, "images/"+data[i].image_name, questionTypes ) );
+        }
+      },
+      async: false
+    });
+    return productArr;
+  }
 
   // questionTypes serves an array of Strings to serve as keywords for each type of rating to be asked.
   // In the sample survey provided, there is a slider for familiarity, opinion for stars, and usage for yes and no.
   var questionTypes = [ 'usage', 'familiarity-slider', 'opinion-star' ];
 
+  // productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
+  var productItems = getImageData();
+
+
+  //*** Hard-coded creation of product items are commented out just as a back up ***//
   // Initialize and push into 'productItems' the Objects created from the function 'createProductItem.'
   // Here five objects are created with associated index in array 'productItems': Jethro (Index 0), Merlin (Index 1), 
   // Skinny Luke (Index 2), Colin Morgan (Index 3), and Ariel (Index 4)
 
-  productItems.push( createProductItem( "iPad Mini", "images/ipad-mini.jpg", questionTypes ) );
-  productItems.push( createProductItem( "Coke", "images/coke.jpg", questionTypes ) );
-  productItems.push( createProductItem( "Twitter", "images/twitter.jpg", questionTypes ) );
+  // var productItems = [];
+  // productItems.push( createProductItem( "iPad Mini", "images/ipad-mini.jpg", questionTypes ) );
+  // productItems.push( createProductItem( "Coke", "images/coke.jpg", questionTypes ) );
+  // productItems.push( createProductItem( "Twitter", "images/twitter.jpg", questionTypes ) );
+  //*** Hard-coded creation of product items are commented out just as a back up ***//
 
   function checkAllAnswered( unansweredValue ) {
     var i, j;

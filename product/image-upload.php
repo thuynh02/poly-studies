@@ -14,7 +14,7 @@
 	}
 
 	function generateForm( $directory, $name ){
-		$i = mysql_query('SELECT COUNT(*) FROM user_uploads');
+		$i = mysqli_query($bd, 'SELECT COUNT(*) FROM user_uploads');
 
 		$htmlContainer = '<div class="item row"> 
 			<img src="'.$directory.$name.'" alt="" id="productImg'.$i.'" class="productImg col-xs-12 col-md-4">
@@ -81,7 +81,7 @@
 						if ( move_uploaded_file( $_FILES['images']['tmp_name'][$name], $newFileName ) ) {
 
 						   $time=time();
-						   mysql_query("INSERT INTO user_uploads( image_name, created ) VALUES ( '$imageName', '$time' )");
+						   mysqli_query( $bd, "INSERT INTO user_uploads( image_name, created ) VALUES ( '$imageName', '$time' )");
 						
 						}
 
