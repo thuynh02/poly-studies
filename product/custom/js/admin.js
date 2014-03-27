@@ -15,14 +15,15 @@ window.onload=function(){
 	//   imagePath: "images/jethro.jpg",
 	// };
 
-	function createProductItem( name, path ) {
+	function createProductItem( id, name, path ) {
 
-	var productItem = {
-	  productName: name,
-	  imagePath: path
-	};
+		var productItem = {
+		  imageID: id,
+		  productName: name,
+		  imagePath: path
+		};
 
-	return productItem;
+		return productItem;
 	}
 
 	function getImageData(){
@@ -34,7 +35,11 @@ window.onload=function(){
 			dataType: 'json',
 			success : function( data ){
 				for( var i = 0; i < data.length; ++i ){
+<<<<<<< HEAD
 					productArr.push( createProductItem( data[i].image_path, "images/"+data[i].image_path ) );
+=======
+					productArr.push( createProductItem( data[i].upload_id, data[i].image_name, "images/"+data[i].image_filename ) );
+>>>>>>> development
 				}
 			},
 			async: false
@@ -55,19 +60,18 @@ window.onload=function(){
 
 	// ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 
-
 	for (var i = 0; i < productItems.length; i++) {
-
 		var htmlContainer = '<div class="item row"> \
 			<img src="" alt="" id="productImg' + i + '" class="productImg col-xs-12 col-md-4"> \
 			<div id="productDesc" class="col-xs-12 col-md-8"> \
 			\
-			<form class="form-horizontal" role="form"> \
+			<form class="form-horizontal" role="form" type="POST"> \
 			\
 			<div class="form-group"> \
 				<label for="imageName' + i + '" class="col-sm-3 control-label">Image Name: </label> \
 				<div class="col-sm-9"> \
-					<input type="text" class="form-control" id="imageName' + i + '" placeholder="Enter Image Name"> \
+					<input type="hidden" name="imageID" value="' + productItems[i]["imageID"] + '"> \
+					<input type="text" class="form-control" id="imageName' + i + '" name="newName" placeholder="Enter Image Name"> \
 				</div> \
 			</div> \
 			\
@@ -104,4 +108,7 @@ window.onload=function(){
 		$( '#productImg' + i ).attr( "src", productItems[i].imagePath) ;
 
 	};
+
+
+
 }
