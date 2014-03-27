@@ -73,28 +73,16 @@
 				if( in_array( $fileExtension, $allowedImageFormats ) ) {
 
 					if ($size < (MAX_SIZE*1024)) {
-<<<<<<< HEAD
 						$imagePath = time().$fileName;
-
-						echo generateForm( $imageDirectory.$imagePath );
-						$newFileName = $imageDirectory.$imagePath;
-=======
 						$imageFilename = time().$fileName;
 
 						echo generateForm( $imageDirectory.$imageFilename );
 						$newFileName = $imageDirectory.$imageFilename;
->>>>>>> development
-
+						
 						if ( move_uploaded_file( $_FILES['images']['tmp_name'][$name], $newFileName ) ) {
-
 						   $time=time();
-<<<<<<< HEAD
-						   mysqli_query( $bd, "INSERT INTO user_uploads( image_name, image_description, image_path, created ) VALUES ( '', '', '$imagePath', '$time' )");
-=======
 						   mysqli_query( $bd, "	INSERT INTO user_uploads( image_name, image_filename, created ) 
 						   						VALUES ( '$imageFilename', '$imageFilename', '$time' )");
->>>>>>> development
-						
 						}
 
 						else { echo '<span class="imgList">You have exceeded the size limit! so moving unsuccessful! </span>'; }

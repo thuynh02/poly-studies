@@ -35,11 +35,7 @@ window.onload=function(){
 			dataType: 'json',
 			success : function( data ){
 				for( var i = 0; i < data.length; ++i ){
-<<<<<<< HEAD
-					productArr.push( createProductItem( data[i].image_path, "images/"+data[i].image_path ) );
-=======
 					productArr.push( createProductItem( data[i].upload_id, data[i].image_name, "images/"+data[i].image_filename ) );
->>>>>>> development
 				}
 			},
 			async: false
