@@ -33,12 +33,12 @@ window.onload=function(){
 			url: 'getImages.php',
 			data: data,
 			dataType: 'json',
+			async: false,
 			success : function( data ){
 				for( var i = 0; i < data.length; ++i ){
-					productArr.push( createProductItem( data[i].upload_id, data[i].image_name, "images/"+data[i].image_filename ) );
+					productArr.push( createProductItem( data[i].upload_id, data[i].image_name, "images/"+data[i].image_path ) );
 				}
-			},
-			async: false
+			}
 		});
 		return productArr;
 	}
@@ -61,12 +61,10 @@ window.onload=function(){
 			<img src="" alt="" id="productImg' + i + '" class="productImg col-xs-12 col-md-4"> \
 			<div id="productDesc" class="col-xs-12 col-md-8"> \
 			\
-			<form class="form-horizontal" role="form" type="POST"> \
-			\
 			<div class="form-group"> \
 				<label for="imageName' + i + '" class="col-sm-3 control-label">Image Name: </label> \
 				<div class="col-sm-9"> \
-					<input type="hidden" name="imageID" value="' + productItems[i]["imageID"] + '"> \
+					<input type="hidden" id="imageNum' + i + '" name="uploadID" value="' + productItems[i]["imageID"] + '"> \
 					<input type="text" class="form-control" id="imageName' + i + '" name="newName" placeholder="Enter Image Name"> \
 				</div> \
 			</div> \
@@ -82,15 +80,13 @@ window.onload=function(){
 				<label  class="col-sm-3 control-label"></label> \
 				<div class="col-sm-9"> \
 					<div class="col-sm-6"> \
-						<button type="submit" class="btn btn-primary btn-block">Update</button> \
+						<button id="update' + i + '" type="submit" name="' + i + '"class="btn btn-primary btn-block">Update</button> \
 					</div> \
 					<div class="col-sm-6"> \
-						<button id="delete" class="btn btn-danger btn-block">Delete</button> \
+						<button id="delete' + i + '" class="btn btn-danger btn-block">Delete</button> \
 					</div> \
 				</div> \
 			</div> \
-			\
-			</form> \
 			\
 			</div> \
 			</div>';
@@ -105,6 +101,49 @@ window.onload=function(){
 
 	};
 
+	for( var i = 0; i < productItems.length; ++i ){
+		$("button[id='update" + i + "']").click( function(event){
+			if( event.target ){
 
+				//Get's the current image's id
+				var currentID = event.target.name;
+				//The page that the form sends information to
+				var url = $("#upload-form").attr("action")
+				// An array of all the input information
+				var imgArr = $('input[id$=' + currentID + ']').serializeArray();
+
+				//Post to the form's designated page with the information to be put into the database
+				$.ajax({
+					type: 'POST',
+					url: url,
+					data: imgArr,
+
+					success: function(info){
+						$("#result").html(info);
+					}
+				});
+			}
+		});
+	}
+
+	// $(document).on( 'click', 'button[id^="update"]', function(){
+	// 	var imgNum = $("#update").attr("name");
+	// 	var url = $("#upload-form").attr("action");
+	// 	var imgArr = $('input[name$=' + imgNum + ']').serializeArray(); // An array of all the input information
+	// 	$.ajax({
+	// 		type: 'POST',
+	// 		url: url, 	// The page that the form will send information to
+	// 		data: imgArr, 
+				
+	// 		// Placing the return value into the "result" div, found in index.html
+	// 		success: function(info){ 
+	// 			$("#result").html(info) 
+	// 		}
+	// 	})
+	// });
+
+	$("#upload-form").submit( function(){
+		return false;
+	});
 
 }

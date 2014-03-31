@@ -13,19 +13,28 @@
 	         return $fileExtension;
 	}
 
-	function generateForm( $directory, $name ){
-		$i = mysqli_query($bd, 'SELECT COUNT(*) FROM user_uploads');
+	function generateForm( $directory, $name ){ 
+
+		//MUST define $bd as a GLOBAL. Otherwise, mysqli connection cannot be established in any of the queries
+		global $bd;
+
+		//Get the current img count
+		$stmt = mysqli_query($bd, "SELECT COUNT(*) FROM user_uploads");
+		$i = mysqli_fetch_assoc( $stmt )["COUNT(*)"];
+
+		//Get the next upload_id
+		$stmt = mysqli_query($bd, "SHOW TABLE STATUS LIKE 'user_uploads'");
+		$imageID = mysqli_fetch_assoc( $stmt )["Auto_increment"];
 
 		$htmlContainer = '<div class="item row"> 
 			<img src="'.$directory.$name.'" alt="" id="productImg'.$i.'" class="productImg col-xs-12 col-md-4">
 			<div id="productDesc" class="col-xs-12 col-md-8">
 		
-			<form class="form-horizontal" role="form" type="POST">
-		
 			<div class="form-group">
 				<label for="imageName'.$i.'" class="col-sm-3 control-label">Image Name: </label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" id="imageName'.$i.'" placeholder="Enter Image Name">
+					<input type="hidden" id="imageNum'.$i.'" name="imageID" value="'.$imageID.'">
+					<input type="text" class="form-control" id="imageName'.$i.'" name="newName" placeholder="Enter Image Name">
 				</div>
 			</div>
 			
@@ -40,15 +49,13 @@
 				<label  class="col-sm-3 control-label"></label>
 				<div class="col-sm-9">
 					<div class="col-sm-6">
-						<button type="submit" class="btn btn-primary btn-block">Update</button>
+						<button id="update" type="submit" name="'.$i.'"class="btn btn-primary btn-block">Update</button>
 					</div>
 					<div class="col-sm-6">
 						<button id="delete" class="btn btn-danger btn-block">Delete</button>
 					</div>
 				</div>
 			</div>
-			
-			</form>
 			
 			</div>
 			</div>';
@@ -81,7 +88,7 @@
 						
 						if ( move_uploaded_file( $_FILES['images']['tmp_name'][$name], $newFileName ) ) {
 						   $time=time();
-						   mysqli_query( $bd, "	INSERT INTO user_uploads( image_name, image_filename, created ) 
+						   mysqli_query( $bd, "	INSERT INTO user_uploads( image_name, image_path, created ) 
 						   						VALUES ( '$imageFilename', '$imageFilename', '$time' )");
 						}
 
@@ -96,15 +103,5 @@
 				else { echo '<span class="imgList">Unknown extension!</span>'; }
 	           
 	    }
-	}
-
-	if(isset($_POST["newName"])) {
-		$imgNameValue = $_POST["newName"];
-		$currentImg = $_POST["uploadID"];
-		if( $stmt = mysqli_prepare( $bd, "UPDATE user_uploads SET image_name=? WHERE upload_id=?" ) ) {
-			mysqli_bind_param( $stmt, "si", $imgNameValue, $currentImg );
-			mysqli_stmt_execute( $stmt );
-			mysqli_stmt_close($stmt);
-		}
 	}
 ?>
