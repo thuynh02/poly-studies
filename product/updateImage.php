@@ -10,7 +10,8 @@
 
 		mysqli_query( $bd, $updateImageQuery );
 
-		var_dump($_POST);
+		// Debugging: If nothing shows up, ajax call in admin.js failed to pass information to this file.
+		// var_dump($_POST);
 	}
 
 ?>
