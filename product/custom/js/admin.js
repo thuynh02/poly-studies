@@ -108,9 +108,10 @@ window.onload=function(){
 				//Get's the current image's id
 				var currentID = event.target.name;
 				//The page that the form sends information to
-				var url = $("#upload-form").attr("action")
+				var url = $("#upload-form").attr("action");
 				// An array of all the input information
-				var imgArr = $('input[id$=' + currentID + ']').serializeArray();
+				var imgArr = $('[id$=' + currentID + ']').serializeArray();
+
 
 				//Post to the form's designated page with the information to be put into the database
 				$.ajax({
