@@ -79,12 +79,12 @@ window.onload=function(){
 			<div class="form-group"> \
 				<label for="imageDesc' + i + '" class="col-sm-3 control-label">Image Caption: </label> \
 				<div class="col-sm-9"> \
-					<textarea class="form-control" id="imageCaption' + i + '" name="imageDesc" rows="3" placeholder="Enter Image Caption"></textarea> \
+					<textarea class="form-control" id="imageDesc' + i + '" name="imageDesc" rows="3" placeholder="Enter Image Description"></textarea> \
 				</div> \
 			</div> \
 			';
 
-			for (var j = 0; j < numberOfQuestionTypes + i; j++) {
+			for (var j = 0; j < numberOfQuestionTypes; j++) {
 				htmlContainer += '<div class="form-group"> \
 					<label class="col-sm-3 control-label">Question #' + j + ': </label> \
 					<div class="col-sm-5"> \
@@ -119,7 +119,7 @@ window.onload=function(){
 
 		$( "#imageName" + i ).val( productItems[i].productName );
 		
-		$( "#imageCaption" + i ).val( productItems[i].productDesc );
+		$( "#imageDesc" + i ).val( productItems[i].productDesc );
 
 		$( '#productImg' + i ).attr( "src", productItems[i].imagePath) ;
 
