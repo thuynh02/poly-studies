@@ -15,11 +15,12 @@ window.onload=function(){
 	//   imagePath: "images/jethro.jpg",
 	// };
 
-	function createProductItem( id, name, path ) {
+	function createProductItem( id, name, desc, path ) {
 
 		var productItem = {
 		  imageID: id,
 		  productName: name,
+		  productDesc: desc,
 		  imagePath: path
 		};
 
@@ -36,7 +37,10 @@ window.onload=function(){
 			async: false,
 			success : function( data ){
 				for( var i = 0; i < data.length; ++i ){
-					productArr.push( createProductItem( data[i].upload_id, data[i].image_name, "images/"+data[i].image_path ) );
+					productArr.push( createProductItem( data[i].upload_id, 
+														data[i].image_name, 
+														data[i].image_description, 
+														"images/"+data[i].image_path ) );
 				}
 			}
 		});
@@ -72,7 +76,7 @@ window.onload=function(){
 			<div class="form-group"> \
 				<label for="imageName' + i + '" class="col-sm-3 control-label">Image Caption: </label> \
 				<div class="col-sm-9"> \
-					<textarea class="form-control" id="imageCaption' + i + '" rows="3" placeholder="Enter Image Caption"></textarea> \
+					<textarea class="form-control" id="imageCaption' + i + '" name="imageDesc" rows="3" placeholder="Enter Image Caption"></textarea> \
 				</div> \
 			</div> \
 			\
@@ -88,6 +92,8 @@ window.onload=function(){
 				</div> \
 			</div> \
 			\
+			<div id="result'+ i + '"></div>\
+			\
 			</div> \
 			</div>';
 
@@ -95,54 +101,66 @@ window.onload=function(){
 
 		$( "#imageName" + i ).val( productItems[i].productName );
 		
-		$( "#imageCaption" + i ).val( "Have you used " + productItems[i].productName + "?" );
+		$( "#imageCaption" + i ).val( productItems[i].productDesc );
 
 		$( '#productImg' + i ).attr( "src", productItems[i].imagePath) ;
 
 	};
 
-	for( var i = 0; i < productItems.length; ++i ){
-		$("button[id='update" + i + "']").click( function(event){
-			if( event.target ){
-
-				//Get's the current image's id
-				var currentID = event.target.name;
-				//The page that the form sends information to
-				var url = $("#upload-form").attr("action");
-				// An array of all the input information
-				var imgArr = $('[id$=' + currentID + ']').serializeArray();
-
-
-				//Post to the form's designated page with the information to be put into the database
-				$.ajax({
-					type: 'POST',
-					url: url,
-					data: imgArr,
-
-					success: function(info){
-						$("#result").html(info);
-					}
-				});
-			}
-		});
+	//This function takes in the idNum of the image being updated and a message
+	//to display in it's respective result div
+	function displayUpdateResult( idNum, resultMsg){
+		$("#result" + idNum).show();
+		$("#result" + idNum).html( 'Status: ' + resultMsg);
+		setTimeout( function(){
+			$("#result" + idNum).fadeOut( 'fast' );
+		}, 2000 );
 	}
 
-	// $(document).on( 'click', 'button[id^="update"]', function(){
-	// 	var imgNum = $("#update").attr("name");
-	// 	var url = $("#upload-form").attr("action");
-	// 	var imgArr = $('input[name$=' + imgNum + ']').serializeArray(); // An array of all the input information
-	// 	$.ajax({
-	// 		type: 'POST',
-	// 		url: url, 	// The page that the form will send information to
-	// 		data: imgArr, 
-				
-	// 		// Placing the return value into the "result" div, found in index.html
-	// 		success: function(info){ 
-	// 			$("#result").html(info) 
-	// 		}
-	// 	})
-	// });
+	//Finds all buttons with pre-fix "update" and attaches the following function
+	//for their click action.
+	$(document.body).on('click', "button[id^='update']", function(event){
+		if( event.target ){
 
+			//Get's the current image's id number. All inputs will have this number attatched to their id!
+			var currentID = event.target.name;
+
+			//The page that the form sends information to
+			var url = $("#upload-form").attr("action");
+
+			// An array of all the input information by finding id's with a suffix of the current id number
+			var imgArr = $('[id$=' + currentID + ']').serializeArray();
+
+
+			//Post to the form's designated page with the information to be put into the database
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: imgArr,
+
+				success: function(info){
+					//If the request goes through successfully and confirmation is received from php file, 
+					//inform the user of the success!
+					if(info){
+						displayUpdateResult(currentID, "Successfully stored!");
+					}
+
+					//Otherwise, inform the user that something went wrong
+					else{
+						displayUpdateResult(currentID, "Failed to update to database.");
+					}
+				},
+
+				//Something really went wrong if the ajax call failed! Tell the user D:
+				fail: function(){
+					$("#result" + currentID).html("Ajax call failed to send request! Look into it ASAP!");
+				}
+
+			});
+		}
+	});
+	
+	//Prevent the form from redirecting
 	$("#upload-form").submit( function(){
 		return false;
 	});

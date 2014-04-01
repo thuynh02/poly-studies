@@ -57,7 +57,9 @@ window.onload=function(){
       dataType: 'json',
       success : function( data ){
         for( var i = 0; i < data.length; ++i ){
-          productArr.push( createProductItem( data[i].image_path, "images/"+data[i].image_path, questionTypes ) );
+          productArr.push( createProductItem( data[i].image_name, 
+                                              "images/"+data[i].image_path, 
+                                              questionTypes ) );
         }
       },
       async: false

@@ -33,7 +33,7 @@
 			<div class="form-group">
 				<label for="imageName'.$i.'" class="col-sm-3 control-label">Image Name: </label>
 				<div class="col-sm-9">
-					<input type="hidden" id="imageNum'.$i.'" name="imageID" value="'.$imageID.'">
+					<input type="hidden" id="imageNum'.$i.'" name="uploadID" value="'.$imageID.'">
 					<input type="text" class="form-control" id="imageName'.$i.'" name="newName" placeholder="Enter Image Name">
 				</div>
 			</div>
@@ -41,7 +41,7 @@
 			<div class="form-group">
 				<label for="imageName'.$i.'" class="col-sm-3 control-label">Image Caption: </label>
 				<div class="col-sm-9">
-					<textarea class="form-control" id="imageCaption'.$i.'" rows="3" placeholder="Enter Image Caption"></textarea>
+					<textarea class="form-control" id="imageCaption'.$i.'" name="imageDesc" rows="3" placeholder="Enter Image Caption"></textarea>
 				</div>
 			</div>
 			
@@ -57,6 +57,8 @@
 				</div>
 			</div>
 			
+			<div id="result'.$i.'"></div>
+
 			</div>
 			</div>';
 
