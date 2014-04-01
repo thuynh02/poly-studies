@@ -232,6 +232,19 @@ window.onload=function(){
           if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
             var jsonItems = JSON.stringify(productItems);
             console.log( jsonItems );
+            $.ajax({
+              type: 'POST',
+              url: 'addAnswers.php',
+              data: jsonItems,
+              dataType: 'json',
+              success : function( data ){
+                console.log( "DOOOD " + data );
+              },
+              error : function(){
+                console.log( "DICK" );
+              }
+            });
+            
           }
         }
       }
@@ -273,33 +286,37 @@ window.onload=function(){
       }
     } );
 
-    // Change the newly formatted productDesc container to select the attributes based on what's currently stored in the object
-    var currentValue = productItems[currentItem].questionValues[currentQuestion];
+    if( currentQuestion != productItems[currentItem].questionTypes.length - 1 
+        && currentItem != productItems.length - 1 ){  
 
-    switch( currentQuestion ){
+      // Change the newly formatted productDesc container to select the attributes based on what's currently stored in the object
+      var currentValue = productItems[currentItem].questionValues[currentQuestion];
 
-      // Usage question
-      case 0: 
-        if( currentValue == 'yes' ){ document.getElementsByName("usageValue")[0].checked = true; }
-        else if( currentValue == 'no' ){ document.getElementsByName("usageValue")[1].checked = true; }
-        break;
+      switch( currentQuestion ){
 
-      // Familiarity question
-      case 1:
-        $( '#famSlider' ).slider( "value", currentValue );
-        $( '#famValue' ).html(  $("#famSlider" ).slider('value') );
-        break;
+        // Usage question
+        case 0: 
+          if( currentValue == 'yes' ){ document.getElementsByName("usageValue")[0].checked = true; }
+          else if( currentValue == 'no' ){ document.getElementsByName("usageValue")[1].checked = true; }
+          break;
 
-      // Star-rating question
-      case 2:
-        document.getElementsByName("opinionValue")[currentValue].checked = true;
-        break;
+        // Familiarity question
+        case 1:
+          $( '#famSlider' ).slider( "value", currentValue );
+          $( '#famValue' ).html(  $("#famSlider" ).slider('value') );
+          break;
 
-      // For any question types that are not handled above
-      default:
-        console.log( "This question type is not recognized!" );
-        break;
+        // Star-rating question
+        case 2:
+          document.getElementsByName("opinionValue")[currentValue].checked = true;
+          break;
 
+        // For any question types that are not handled above
+        default:
+          console.log( "This question type is not recognized!" );
+          break;
+
+      }
     }
 
   });

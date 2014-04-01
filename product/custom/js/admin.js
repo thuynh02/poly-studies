@@ -77,7 +77,7 @@ window.onload=function(){
 			</div> \
 			\
 			<div class="form-group"> \
-				<label for="imageCaption' + i + '" class="col-sm-3 control-label">Image Caption: </label> \
+				<label for="imageDesc' + i + '" class="col-sm-3 control-label">Image Caption: </label> \
 				<div class="col-sm-9"> \
 					<textarea class="form-control" id="imageCaption' + i + '" name="imageDesc" rows="3" placeholder="Enter Image Caption"></textarea> \
 				</div> \
@@ -105,7 +105,7 @@ window.onload=function(){
 						<button id="update' + i + '" type="submit" name="' + i + '"class="btn btn-primary btn-block">Update</button> \
 					</div> \
 					<div class="col-sm-6"> \
-						<button id="delete' + i + '" class="btn btn-danger btn-block">Delete</button> \
+						<button id="delete' + i + '" type="submit" name="' + i + '"class="btn btn-danger btn-block">Delete</button> \
 					</div> \
 				</div> \
 			</div> \
@@ -167,6 +167,48 @@ window.onload=function(){
 					else{
 						displayUpdateResult(currentID, "Failed to update to database.");
 					}
+
+					window.location.reload();
+				},
+
+				//Something really went wrong if the ajax call failed! Tell the user D:
+				fail: function(){
+					$("#result" + currentID).html("Ajax call failed to send request! Look into it ASAP!");
+				}
+
+			});
+		}
+	});
+
+	$(document.body).on('click', "button[id^='delete']", function(event){
+		if( event.target ){
+
+			//Get's the current image's id number. All inputs will have this number attatched to their id!
+			var currentID = event.target.name;
+
+			// An array of all the input information by finding id's with a suffix of the current id number
+			var imgArr = $('[id$=' + currentID + ']').serializeArray();
+
+
+			//Post to the form's designated page with the information to be put into the database
+			$.ajax({
+				type: 'POST',
+				url: 'deleteProduct.php',
+				data: imgArr,
+
+				success: function(info){
+					//If the request goes through successfully and confirmation is received from php file, 
+					//inform the user of the success!
+					if(info){
+						displayUpdateResult(currentID, "Successfully stored!" + info);
+					}
+
+					//Otherwise, inform the user that something went wrong
+					else{
+						displayUpdateResult(currentID, "Failed to update to database.");
+					}
+
+					window.location.reload();
 				},
 
 				//Something really went wrong if the ajax call failed! Tell the user D:

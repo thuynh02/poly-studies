@@ -4,13 +4,8 @@
 	if( isset($_POST) ){
 
 		$uploadID = htmlspecialchars( strip_tags( $_POST['uploadID'] ) );
-		$newName  = htmlspecialchars( strip_tags( $_POST['newName'] ) );
-		$imageDesc = htmlspecialchars( strip_tags( $_POST['imageDesc'] ) );
-
-		$numberOfQuestions = htmlspecialchars( strip_tags( $_POST['numberOfQuestions'] ) );
 		
-		$query = "UPDATE product_images
-				  SET image_name='$newName', image_description='$imageDesc' 
+		$query = "DELETE FROM product_images
 				  WHERE upload_id='$uploadID'";
 
 		mysqli_query( $bd, $query );
