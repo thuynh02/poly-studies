@@ -88,8 +88,8 @@
 						
 						if ( move_uploaded_file( $_FILES['images']['tmp_name'][$name], $newFileName ) ) {
 						   $time=time();
-						   mysqli_query( $bd, "	INSERT INTO product_images( image_name, image_path, created ) 
-						   						VALUES ( '$imageFilename', '$imageFilename', '$time' )");
+						   mysqli_query( $bd, "	INSERT INTO product_images( survey_id, image_name, image_path, created ) 
+						   						VALUES ( 1, '$imageFilename', '$imageFilename', '$time' )");
 						}
 
 						else { echo '<span class="imgList">You have exceeded the size limit! so moving unsuccessful! </span>'; }

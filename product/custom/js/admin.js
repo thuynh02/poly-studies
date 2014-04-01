@@ -67,6 +67,7 @@ window.onload=function(){
 				<label for="imageName' + i + '" class="col-sm-3 control-label">Image Name: </label> \
 				<div class="col-sm-9"> \
 					<input type="hidden" id="imageNum' + i + '" name="uploadID" value="' + productItems[i]["imageID"] + '"> \
+					<input type="hidden" id="numQuestions' + i + '" name="numberOfQuestions" value="' + productItems[i]["imageID"] + '"> \
 					<input type="text" class="form-control" id="imageName' + i + '" name="newName" placeholder="Enter Image Name"> \
 				</div> \
 			</div> \
@@ -83,10 +84,10 @@ window.onload=function(){
 				htmlContainer += '<div class="form-group"> \
 					<label class="col-sm-3 control-label">Question #' + j + ': </label> \
 					<div class="col-sm-5"> \
-							<input type="text" class="form-control" id="questionVoters' + i + '-' + j + '" name="newName" placeholder="Number of Voters"> \
+							<input type="text" class="form-control" id="questionVoters" name="questionVoters' + j + '" placeholder="Number of Voters"> \
 					</div> \
 					<div class="col-sm-4"> \
-						<input type="text" class="form-control" id="questionRatings' + i + '-' + j + '" name="newName" placeholder="Value of Rating"> \
+						<input type="text" class="form-control" id="questionRatings' + j + '" name="questionRatings" placeholder="Value of Rating"> \
 					</div> \
 				</div> \
 				';
