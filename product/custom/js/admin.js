@@ -1,5 +1,7 @@
 window.onload=function(){
 
+	var numberOfQuestionTypes = 3;
+
 	// ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
 	// 'createProductItem' function is for creating and returning an Object called productItem with the attributes: 
@@ -70,13 +72,28 @@ window.onload=function(){
 			</div> \
 			\
 			<div class="form-group"> \
-				<label for="imageName' + i + '" class="col-sm-3 control-label">Image Caption: </label> \
+				<label for="imageCaption' + i + '" class="col-sm-3 control-label">Image Caption: </label> \
 				<div class="col-sm-9"> \
 					<textarea class="form-control" id="imageCaption' + i + '" rows="3" placeholder="Enter Image Caption"></textarea> \
 				</div> \
 			</div> \
-			\
-			<div class="form-group"> \
+			';
+
+			for (var j = 1; j < numberOfQuestionTypes + 1; j++) {
+				htmlContainer += '<div class="form-group"> \
+					<label class="col-sm-3 control-label">Question #' + j + ': </label> \
+					<div class="col-sm-5"> \
+							<input type="text" class="form-control" id="questionVoters' + i + '-' + j + '" name="newName" placeholder="Number of Voters"> \
+					</div> \
+					<div class="col-sm-4"> \
+						<input type="text" class="form-control" id="questionRatings' + i + '-' + j + '" name="newName" placeholder="Value of Rating"> \
+					</div> \
+				</div> \
+				';
+
+			};
+
+			htmlContainer += '<div class="form-group"> \
 				<label  class="col-sm-3 control-label"></label> \
 				<div class="col-sm-9"> \
 					<div class="col-sm-6"> \

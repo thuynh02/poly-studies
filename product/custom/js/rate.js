@@ -191,7 +191,7 @@ window.onload=function(){
           // Star-rating question
           case 2:
             // Get the rating by grabbing the value from the selected input value with the name, opinionValue.
-            productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="opinionValue"]:checked' ).value;
+            productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="opinionValue"]:checked' ).value / 2;
             break;
 
           // For any question types that are not handled above
