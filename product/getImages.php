@@ -1,8 +1,7 @@
 <?php
 	include('db.php');
 
-	$getImageData = "SELECT upload_id, image_name, image_description, image_path FROM user_uploads";
-	
+	$getImageData = "SELECT upload_id, image_name, image_path FROM product_images";	
 	$imgQueryResult = mysqli_query( $bd, $getImageData ) or die( "Failed to fetch image data. ".mysqli_error($bd));
 	$imgArr = [];
 

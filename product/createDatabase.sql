@@ -3,18 +3,12 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 01, 2014 at 05:30 AM
+-- Generation Time: Apr 01, 2014 at 05:02 AM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `demo`
@@ -23,11 +17,70 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `answers`
+--
+
+CREATE TABLE `answers` (
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `survey_id` int(11) NOT NULL,
+  `survey_answers` text NOT NULL,
+  `rating_answers` text,
+  `created` int(11) DEFAULT NULL,
+  KEY `survey_id` (`survey_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_images`
+--
+
+CREATE TABLE `product_images` (
+  `upload_id` int(11) NOT NULL AUTO_INCREMENT,
+  `survey_id` int(11) NOT NULL,
+  `image_name` text,
+  `image_path` text NOT NULL,
+  `image_description` text,
+  `created` int(11) DEFAULT NULL,
+  PRIMARY KEY (`upload_id`,`survey_id`),
+  KEY `survey_id` (`survey_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questions`
+--
+
+CREATE TABLE `questions` (
+  `question_id` int(11) NOT NULL DEFAULT '0',
+  `survey_id` int(11) NOT NULL,
+  `question_type` text NOT NULL,
+  `description` text NOT NULL,
+  `created` int(11) DEFAULT NULL,
+  KEY `survey_id` (`survey_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `surveys`
+--
+
+CREATE TABLE `surveys` (
+  `survey_id` int(11) NOT NULL AUTO_INCREMENT,
+  `survey_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`survey_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
@@ -37,31 +90,25 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `user_uploads`
+-- Constraints for dumped tables
 --
 
-DROP TABLE IF EXISTS `user_uploads`;
-CREATE TABLE IF NOT EXISTS `user_uploads` (
-  `upload_id` int(11) NOT NULL AUTO_INCREMENT,
-  `image_name` text,
-  `image_path` text NOT NULL,
-  `image_description` text,
-  `created` int(11) DEFAULT NULL,
-  PRIMARY KEY (`upload_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+--
+-- Constraints for table `answers`
+--
+ALTER TABLE `answers`
+  ADD CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`);
 
 --
--- Dumping data for table `user_uploads`
+-- Constraints for table `product_images`
 --
+ALTER TABLE `product_images`
+  ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`);
 
-INSERT INTO `user_uploads` (`upload_id`, `image_name`, `image_path`, `image_description`, `created`) VALUES
-(4, 'Coca-Cola', '1395978215coke.jpg', 'Have you had Coca-Cola before?', 1395978215),
-(5, 'iPad-Mini', '1395978215ipad-mini.jpg', 'Have you used an iPad-Mini?', 1395978215),
-(6, 'Twitter', '1395978215twitter.jpg', 'Have you used Twitter?', 1395978215);
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+--
+-- Constraints for table `questions`
+--
+ALTER TABLE `questions`
+  ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`);

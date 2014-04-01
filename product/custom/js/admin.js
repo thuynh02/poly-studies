@@ -1,5 +1,7 @@
 window.onload=function(){
 
+	var numberOfQuestionTypes = 3;
+
 	// ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
 	// 'createProductItem' function is for creating and returning an Object called productItem with the attributes: 
@@ -69,18 +71,34 @@ window.onload=function(){
 				<label for="imageName' + i + '" class="col-sm-3 control-label">Image Name: </label> \
 				<div class="col-sm-9"> \
 					<input type="hidden" id="imageNum' + i + '" name="uploadID" value="' + productItems[i]["imageID"] + '"> \
+					<input type="hidden" id="numQuestions' + i + '" name="numberOfQuestions" value="' + productItems[i]["imageID"] + '"> \
 					<input type="text" class="form-control" id="imageName' + i + '" name="newName" placeholder="Enter Image Name"> \
 				</div> \
 			</div> \
 			\
 			<div class="form-group"> \
-				<label for="imageName' + i + '" class="col-sm-3 control-label">Image Caption: </label> \
+				<label for="imageCaption' + i + '" class="col-sm-3 control-label">Image Caption: </label> \
 				<div class="col-sm-9"> \
 					<textarea class="form-control" id="imageCaption' + i + '" name="imageDesc" rows="3" placeholder="Enter Image Caption"></textarea> \
 				</div> \
 			</div> \
-			\
-			<div class="form-group"> \
+			';
+
+			for (var j = 1; j < numberOfQuestionTypes + 1; j++) {
+				htmlContainer += '<div class="form-group"> \
+					<label class="col-sm-3 control-label">Question #' + j + ': </label> \
+					<div class="col-sm-5"> \
+							<input type="text" class="form-control" id="questionVoters" name="questionVoters' + j + '" placeholder="Number of Voters"> \
+					</div> \
+					<div class="col-sm-4"> \
+						<input type="text" class="form-control" id="questionRatings' + j + '" name="questionRatings" placeholder="Value of Rating"> \
+					</div> \
+				</div> \
+				';
+
+			};
+
+			htmlContainer += '<div class="form-group"> \
 				<label  class="col-sm-3 control-label"></label> \
 				<div class="col-sm-9"> \
 					<div class="col-sm-6"> \
@@ -142,7 +160,7 @@ window.onload=function(){
 					//If the request goes through successfully and confirmation is received from php file, 
 					//inform the user of the success!
 					if(info){
-						displayUpdateResult(currentID, "Successfully stored!");
+						displayUpdateResult(currentID, "Successfully stored!" + info);
 					}
 
 					//Otherwise, inform the user that something went wrong

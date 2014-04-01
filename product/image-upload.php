@@ -19,11 +19,11 @@
 		global $bd;
 
 		//Get the current img count
-		$stmt = mysqli_query($bd, "SELECT COUNT(*) FROM user_uploads");
+		$stmt = mysqli_query($bd, "SELECT COUNT(*) FROM product_images");
 		$i = mysqli_fetch_assoc( $stmt )["COUNT(*)"];
 
 		//Get the next upload_id
-		$stmt = mysqli_query($bd, "SHOW TABLE STATUS LIKE 'user_uploads'");
+		$stmt = mysqli_query($bd, "SHOW TABLE STATUS LIKE 'product_images'");
 		$imageID = mysqli_fetch_assoc( $stmt )["Auto_increment"];
 
 		$htmlContainer = '<div class="item row"> 
@@ -90,8 +90,8 @@
 						
 						if ( move_uploaded_file( $_FILES['images']['tmp_name'][$name], $newFileName ) ) {
 						   $time=time();
-						   mysqli_query( $bd, "	INSERT INTO user_uploads( image_name, image_path, created ) 
-						   						VALUES ( '$imageFilename', '$imageFilename', '$time' )");
+						   mysqli_query( $bd, "	INSERT INTO product_images( survey_id, image_name, image_path, created ) 
+						   						VALUES ( 1, '$imageFilename', '$imageFilename', '$time' )");
 						}
 
 						else { echo '<span class="imgList">You have exceeded the size limit! so moving unsuccessful! </span>'; }
