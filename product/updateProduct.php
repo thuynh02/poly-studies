@@ -14,6 +14,16 @@
 				  WHERE upload_id='$uploadID'";
 
 		mysqli_query( $bd, $query );
+
+		for ($i=0; $i < $numberOfQuestions; $i++) { 
+			$voters = htmlspecialchars( strip_tags( $_POST['questionVotes' + i ] ) );
+			$rating  = htmlspecialchars( strip_tags( $_POST['questionRatings' + i ] ) );
+			$query = "UPDATE ratings 
+				  SET rating='$rating', voters='$rating'
+				  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$i'";
+
+			mysqli_query( $bd, $query );
+		}
 		
 		//Debugging purposes. Ajax call in admin.js should have some parameter like 'info' 
 		//in success:function(info) in order to retrieve the following POST array information.

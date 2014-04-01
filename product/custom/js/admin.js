@@ -84,7 +84,7 @@ window.onload=function(){
 			</div> \
 			';
 
-			for (var j = 1; j < numberOfQuestionTypes + 1; j++) {
+			for (var j = 0; j < numberOfQuestionTypes + i; j++) {
 				htmlContainer += '<div class="form-group"> \
 					<label class="col-sm-3 control-label">Question #' + j + ': </label> \
 					<div class="col-sm-5"> \
