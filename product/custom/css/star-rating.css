@@ -1,0 +1,125 @@
+
+/*
+ * Star-System
+ */
+
+.star-rating {
+    margin: 0 auto;
+    display:inline-block;
+    height: 40px;
+    width: 160px;
+}
+/* radio button stars */
+
+/* you can easily stuff the generation of these repetitive chunks of CSS into a server-side language like ASP */
+.starClass0:checked ~ .rating,
+label.starClass0l:hover ~ .rating {
+    width: 0px; /* no stars */
+} 
+
+.starClass1:checked ~ .rating,
+label.starClass1l:hover ~ .rating
+{
+    width: 16px; /* half a star */
+} 
+
+.starClass2:checked ~ .rating,
+label.starClass2l:hover ~ .rating
+{
+    width: 32px; /* a star */
+} 
+
+.starClass3:checked ~ .rating,
+label.starClass3l:hover ~ .rating
+{
+    width: 48px; /* 1.5 stars */
+}
+
+.starClass4:checked ~ .rating,
+label.starClass4l:hover ~ .rating
+{
+    width: 64px; /* 2 stars */
+}
+.starClass5:checked ~ .rating,
+label.starClass5l:hover ~ .rating
+{
+    width: 80px;
+}
+.starClass6:checked ~ .rating,
+label.starClass6l:hover ~ .rating
+{
+    width: 96px;
+}
+.starClass7:checked ~ .rating,
+label.starClass7l:hover ~ .rating
+{
+    width: 112px;
+}
+.starClass8:checked ~ .rating,
+label.starClass8l:hover ~ .rating
+{
+    width: 128px;
+}
+.starClass9:checked ~ .rating,
+label.starClass9l:hover ~ .rating
+{
+    width: 144px;
+}
+.starClass10:checked ~ .rating,
+label.starClass10l:hover ~ .rating
+{
+    width: 160px; /* 5 stars */
+}
+
+.star-rating label.star {
+    width: 16px; /* half star */
+    left: -16px; /* half star */
+    padding: 0;
+    height: 40px; /* whole star + 2x padding (4px each for top and bottom) */ 
+    position: relative;
+    z-index: 3;
+    float: left;
+}
+
+.star-rating label.star.last {
+    width: 32px;
+}
+
+/* hide inputs (RBs and their labels) */
+.star-rating input[type=radio],
+.star-rating label.starClass
+{
+    display: none;
+}
+
+/* using icons found at http://www.easyicon.cn/language.en/icondetail/523835/ */
+.rating {
+    background: url(http://cdn-img.easyicon.cn/png/5238/523834.gif) repeat-x top left;
+    position: relative;
+    z-index: 2;
+    top: 4px; /* 1x padding */
+    height: 32px; /* whole star */
+    width:0px;
+}
+
+.rating-bg {
+    background: url(http://cdn-img.easyicon.cn/png/5238/523835.gif) repeat-x top left;
+    position: relative;
+    z-index: 1;
+    top: -28px; /* 1 whole star - 1x padding */
+    height: 32px; /* whole star */
+    width: 160px;
+}
+
+/* IE8 fallback to radio buttons */
+.ie8 .star-rating input,
+.ie8 .star-rating label.starClass
+ {
+    display: inline-block;
+}
+
+.ie8 .rating,
+.ie8 .rating-bg,
+.ie8 .star-rating label.star {
+    display: none;
+}

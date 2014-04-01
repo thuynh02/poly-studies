@@ -119,15 +119,37 @@ window.onload=function(){
 
     else if ( keyword == 'opinion-star' ) {
       return '\
-      <div class="rating question"> \
+      <div class="question"> \
         <p class="lead">On a scale of 1 (very negative) to 5 (very positive), what is your opinion of ' + name + '?</p> \
         Very Negative \
-        <input type="radio" name="opinionValue" value="0" checked /><span id="hide"></span> \
-        <input type="radio" name="opinionValue" value="1" /><span></span> \
-        <input type="radio" name="opinionValue" value="2" /><span></span> \
-        <input type="radio" name="opinionValue" value="3" /><span></span> \
-        <input type="radio" name="opinionValue" value="4" /><span></span> \
-        <input type="radio" name="opinionValue" value="5" /><span></span> \
+          <div class="star-rating"> \
+            <input class="starClass0" id="starValue0" name="opinionValue" type="radio" value="0" checked > \
+            <input class="starClass1" id="starValue1" name="opinionValue" type="radio" value="1" /> \
+            <input class="starClass2" id="starValue2" name="opinionValue" type="radio" value="2" /> \
+            <input class="starClass3" id="starValue3" name="opinionValue" type="radio" value="3" /> \
+            <input class="starClass4" id="starValue4" name="opinionValue" type="radio" value="4" /> \
+            <input class="starClass5" id="starValue5" name="opinionValue" type="radio" value="5" /> \
+            <input class="starClass6" id="starValue6" name="opinionValue" type="radio" value="6" /> \
+            <input class="starClass7" id="starValue7" name="opinionValue" type="radio" value="7" /> \
+            <input class="starClass8" id="starValue8" name="opinionValue" type="radio" value="8" /> \
+            <input class="starClass9" id="starValue9" name="opinionValue" type="radio" value="9" /> \
+            <input class="starClass10" id="starValue10" name="opinionValue" type="radio" value="10" /> \
+            \
+            <label for="starValue0" class="star starClass0l" onclick=""></label> \
+            <label for="starValue1" class="star starClass1l" onclick=""></label> \
+            <label for="starValue2" class="star starClass2l" onclick=""></label> \
+            <label for="starValue3" class="star starClass3l" onclick=""></label> \
+            <label for="starValue4" class="star starClass4l" onclick=""></label> \
+            <label for="starValue5" class="star starClass5l" onclick=""></label> \
+            <label for="starValue6" class="star starClass6l" onclick=""></label> \
+            <label for="starValue7" class="star starClass7l" onclick=""></label> \
+            <label for="starValue8" class="star starClass8l" onclick=""></label> \
+            <label for="starValue9" class="star starClass9l" onclick=""></label> \
+            <label for="starValue10" class="star starClass10l last" onclick=""></label> \
+            \
+            <div class="rating"></div> \
+            <div class="rating-bg"></div> \
+          </div> <!-- star-rating --> \
         Very Positive \
       </div> \
       ';
