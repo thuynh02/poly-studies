@@ -52,7 +52,7 @@ window.onload=function(){
     var productArr = [];
     var data = $.ajax({
       type: 'POST',
-      url: 'getImages.php',
+      url: 'custom/php/getImages.php',
       data: data,
       dataType: 'json',
       success : function( data ){
@@ -234,7 +234,7 @@ window.onload=function(){
             console.log( jsonItems );
             $.ajax({
               type: 'POST',
-              url: 'addAnswers.php',
+              url: 'custom/php/addAnswers.php',
               data: jsonItems,
               dataType: 'json',
               success : function( data ){

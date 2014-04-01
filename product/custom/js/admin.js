@@ -33,7 +33,7 @@ window.onload=function(){
 		var productArr = [];
 		var data = $.ajax({
 			type: 'POST',
-			url: 'getImages.php',
+			url: 'custom/php/getImages.php',
 			data: data,
 			dataType: 'json',
 			async: false,
@@ -193,7 +193,7 @@ window.onload=function(){
 			//Post to the form's designated page with the information to be put into the database
 			$.ajax({
 				type: 'POST',
-				url: 'deleteProduct.php',
+				url: 'custom/php/deleteProduct.php',
 				data: imgArr,
 
 				success: function(info){
