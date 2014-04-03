@@ -230,7 +230,7 @@ window.onload=function(){
           var arr = checkAllAnswered( DEFAULTVALUE );
           //console.log( arr );
           if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
-            var jsonItems = (productItems);
+            var jsonItems = JSON.stringify(productItems);
             console.log( jsonItems );
             
             $.ajax({
