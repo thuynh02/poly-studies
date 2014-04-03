@@ -1,7 +1,7 @@
  <?php
 	error_reporting(0);
 	session_start();
-	include('db.php');
+	include('custom/php/db.php');
 
 	define ("MAX_SIZE","9000"); 
 	function getExtension($str)

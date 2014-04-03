@@ -52,7 +52,7 @@ window.onload=function(){
     var productArr = [];
     var data = $.ajax({
       type: 'POST',
-      url: 'getImages.php',
+      url: 'custom/php/getImages.php',
       data: data,
       dataType: 'json',
       success : function( data ){
@@ -232,16 +232,17 @@ window.onload=function(){
           if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
             var jsonItems = JSON.stringify(productItems);
             console.log( jsonItems );
+            
             $.ajax({
               type: 'POST',
-              url: 'addAnswers.php',
+              url: 'custom/php/addAnswers.php',
               data: jsonItems,
               dataType: 'json',
               success : function( data ){
-                console.log( "DOOOD " + data );
+                console.log( "YAY " + data );
               },
               error : function(){
-                console.log( "DICK" );
+                console.log( "NAY" );
               }
             });
             

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 01, 2014 at 05:59 PM
+-- Generation Time: Apr 03, 2014 at 06:01 AM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -45,14 +45,15 @@ CREATE TABLE `product_images` (
   `created` int(11) DEFAULT NULL,
   PRIMARY KEY (`upload_id`,`survey_id`),
   KEY `survey_id` (`survey_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `product_images`
 --
 
 INSERT INTO `product_images` (`upload_id`, `survey_id`, `image_name`, `image_path`, `image_description`, `created`) VALUES
-(3, 1, 'iPad Mini', '1396327325ipad-mini.jpg', '', 1396327325);
+(3, 1, 'iPad Mini', '1396327325ipad-mini.jpg', 'Hello-Ipad', 1396327325),
+(4, 1, 'Coke', '1396388515coke.jpg', 'Hello-Coke', 1396388515);
 
 -- --------------------------------------------------------
 
@@ -69,6 +70,15 @@ CREATE TABLE `questions` (
   PRIMARY KEY (`question_id`,`survey_id`,`question_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`question_id`, `survey_id`, `question_type`, `description`, `created`) VALUES
+(0, 1, 'rating', 'Have you ever had a [id]?', 1396492372),
+(1, 1, 'rating', 'On a scale of 1 - 10, how familiar are you with [id]?', 1396492372),
+(2, 1, 'rating', 'On a scale of 1 (very negative) to 5 (very positive), what is your opinion of [id]?', 1396492392);
+
 -- --------------------------------------------------------
 
 --
@@ -80,11 +90,23 @@ CREATE TABLE `ratings` (
   `upload_id` int(11) NOT NULL,
   `survey_id` int(11) NOT NULL,
   `voters` int(11) DEFAULT NULL,
-  `rating` int(11) DEFAULT NULL,
+  `rating` varchar(11) DEFAULT NULL,
   PRIMARY KEY (`question_id`,`upload_id`,`survey_id`),
   KEY `survey_id` (`survey_id`),
   KEY `upload_id` (`upload_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`question_id`, `upload_id`, `survey_id`, `voters`, `rating`) VALUES
+(0, 3, 1, 123, 'yes'),
+(0, 4, 1, 213, 'no'),
+(1, 3, 1, 14, '6'),
+(1, 4, 1, 421, '3'),
+(2, 3, 1, 142, '4'),
+(2, 4, 1, 421, '2');
 
 -- --------------------------------------------------------
 
@@ -142,6 +164,6 @@ ALTER TABLE `product_images`
 -- Constraints for table `ratings`
 --
 ALTER TABLE `ratings`
-  ADD CONSTRAINT `ratings_ibfk_3` FOREIGN KEY (`upload_id`) REFERENCES `product_images` (`upload_id`),
   ADD CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
-  ADD CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`);
+  ADD CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`),
+  ADD CONSTRAINT `ratings_ibfk_3` FOREIGN KEY (`upload_id`) REFERENCES `product_images` (`upload_id`);

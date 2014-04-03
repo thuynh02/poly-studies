@@ -1,6 +1,6 @@
 window.onload=function(){
 
-	var numberOfQuestionTypes = 3;
+	var numberOfQuestionTypes = 0;
 
 	// ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
@@ -23,7 +23,8 @@ window.onload=function(){
 		  imageID: id,
 		  productName: name,
 		  productDesc: desc,
-		  imagePath: path
+		  imagePath: path,
+		  voterRating: []
 		};
 
 		return productItem;
@@ -33,7 +34,7 @@ window.onload=function(){
 		var productArr = [];
 		var data = $.ajax({
 			type: 'POST',
-			url: 'getImages.php',
+			url: 'custom/php/getImages.php',
 			data: data,
 			dataType: 'json',
 			async: false,
@@ -49,8 +50,43 @@ window.onload=function(){
 		return productArr;
 	}
 
-	// productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
 	var productItems = getImageData();
+
+	function getRatingData(){
+		var ratingArr = [];
+		var data = $.ajax({
+			type: 'POST',
+			url: 'custom/php/getRatings.php',
+			data: data,
+			dataType: 'json',
+			async: false,
+			success : function( data ){
+				console.log( data );
+				for (var i = 0; i < productItems.length; i++) {
+					for (var j = 0; j < data.length; j++) {
+						if( productItems[i].imageID === data[j].upload_id ) {
+							var voterRates = {
+								questionID: data[j].question_id,
+								voters: data[j].voters,
+								rating: data[j].rating
+							};
+
+							productItems[i]['voterRating'].push( voterRates );
+						}
+					};
+					
+				};
+				
+
+			}
+		});
+	}
+
+	// productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
+	
+	getRatingData();
+
+	console.log( productItems );
 
 	// Initialize and push into 'productItems' the Objects created from the function 'createProductItem.'
 	// Here five objects are created with associated index in array 'productItems': Jethro (Index 0), Merlin (Index 1), 
@@ -72,26 +108,27 @@ window.onload=function(){
 				<div class="col-sm-9"> \
 					<input type="hidden" id="imageNum' + i + '" name="uploadID" value="' + productItems[i]["imageID"] + '"> \
 					<input type="hidden" id="numQuestions' + i + '" name="numberOfQuestions" value="' + productItems[i]["imageID"] + '"> \
-					<input type="text" class="form-control" id="imageName' + i + '" name="newName" placeholder="Enter Image Name"> \
+					<input type="text" class="form-control" id="imageName' + i + '" name="newName" value="' + productItems[i]['voterRating'].length + '" placeholder="Enter Image Name"> \
 				</div> \
 			</div> \
 			\
 			<div class="form-group"> \
 				<label for="imageDesc' + i + '" class="col-sm-3 control-label">Image Caption: </label> \
 				<div class="col-sm-9"> \
-					<textarea class="form-control" id="imageCaption' + i + '" name="imageDesc" rows="3" placeholder="Enter Image Caption"></textarea> \
+					<textarea class="form-control" id="imageDesc' + i + '" name="imageDesc" rows="3" placeholder="Enter Image Description"></textarea> \
 				</div> \
 			</div> \
 			';
 
-			for (var j = 0; j < numberOfQuestionTypes; j++) {
+			for (var j = 0; j < productItems[i]['voterRating'].length; j++) {
 				htmlContainer += '<div class="form-group"> \
-					<label class="col-sm-3 control-label">Question #' + j + ': </label> \
+					<label class="col-sm-3 control-label">Question #' + ( j + 1 ) + ': </label> \
+					<input type="hidden" id="questionID' + j + "-" + i + '" name="questionID' + j +'" value="' + productItems[i]['voterRating'][j].questionID + '"> \
 					<div class="col-sm-5"> \
-							<input type="text" class="form-control" id="questionVoters" name="questionVoters' + j + '" placeholder="Number of Voters"> \
+							<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name="questionVoters' + j + '" placeholder="Number of Voters"> \
 					</div> \
 					<div class="col-sm-4"> \
-						<input type="text" class="form-control" id="questionRatings' + j + '" name="questionRatings" placeholder="Value of Rating"> \
+						<input type="text" class="form-control" id="questionRatings' + j + "-" + i + '" name="questionRatings' + j + '" placeholder="Value of Rating"> \
 					</div> \
 				</div> \
 				';
@@ -119,9 +156,14 @@ window.onload=function(){
 
 		$( "#imageName" + i ).val( productItems[i].productName );
 		
-		$( "#imageCaption" + i ).val( productItems[i].productDesc );
+		$( "#imageDesc" + i ).val( productItems[i].productDesc );
 
 		$( '#productImg' + i ).attr( "src", productItems[i].imagePath) ;
+
+		for (var j = 0; j < productItems[i]['voterRating'].length; j++) {
+			$( "#questionVoters" + j + "-" + i ).val( productItems[i]['voterRating'][j].voters );
+			$( "#questionRatings" + j + "-" + i ).val( productItems[i]['voterRating'][j].rating );
+		};
 
 	};
 
@@ -149,7 +191,7 @@ window.onload=function(){
 			// An array of all the input information by finding id's with a suffix of the current id number
 			var imgArr = $('[id$=' + currentID + ']').serializeArray();
 
-
+			console.log( imgArr );
 			//Post to the form's designated page with the information to be put into the database
 			$.ajax({
 				type: 'POST',
@@ -168,7 +210,7 @@ window.onload=function(){
 						displayUpdateResult(currentID, "Failed to update to database.");
 					}
 
-					window.location.reload();
+					// window.location.reload();
 				},
 
 				//Something really went wrong if the ajax call failed! Tell the user D:
@@ -193,7 +235,7 @@ window.onload=function(){
 			//Post to the form's designated page with the information to be put into the database
 			$.ajax({
 				type: 'POST',
-				url: 'deleteProduct.php',
+				url: 'custom/php/deleteProduct.php',
 				data: imgArr,
 
 				success: function(info){
@@ -208,7 +250,7 @@ window.onload=function(){
 						displayUpdateResult(currentID, "Failed to update to database.");
 					}
 
-					window.location.reload();
+					//window.location.reload();
 				},
 
 				//Something really went wrong if the ajax call failed! Tell the user D:

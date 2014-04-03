@@ -14,6 +14,7 @@
 		//in success:function(info) in order to retrieve the following POST array information.
 		print_r($_POST);
 
+
 		// $numOfQuestions  = htmlspecialchars( strip_tags( $_POST['numOfQuestions'] ) );
 
 		// for ($i = 0; $i < $numOfQuestions; $i++) { 
