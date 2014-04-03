@@ -16,9 +16,9 @@
 		mysqli_query( $bd, $query );
 
 		for ($j = 0; $j < $numberOfQuestions; $j++) { 
-			$questionID = htmlspecialchars( strip_tags( $_POST['questionID' + '$j' ] ) );
-			$voters = htmlspecialchars( strip_tags( $_POST['questionVoters' + '$j' ] ) );
-			$rating  = htmlspecialchars( strip_tags( $_POST['questionRatings' + '$j' ] ) );
+			$questionID = htmlspecialchars( strip_tags( $_POST['questionID'.$j ] ) );
+			$voters = htmlspecialchars( strip_tags( $_POST['questionVoters'.$j ] ) );
+			$rating  = htmlspecialchars( strip_tags( $_POST['questionRatings'.$j ] ) );
 			$query = "UPDATE ratings 
 				  SET rating='$rating', voters='$voters'
 				  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$questionID'";
@@ -28,7 +28,7 @@
 		
 		//Debugging purposes. Ajax call in admin.js should have some parameter like 'info' 
 		//in success:function(info) in order to retrieve the following POST array information.
-		print_r($_POST);
+		print_r( $_POST );
 
 
 		// $numOfQuestions  = htmlspecialchars( strip_tags( $_POST['numOfQuestions'] ) );

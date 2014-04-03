@@ -70,7 +70,6 @@ window.onload=function(){
 								voters: data[j].voters,
 								rating: data[j].rating
 							};
-
 							productItems[i]['voterRating'].push( voterRates );
 						}
 					};
@@ -107,8 +106,8 @@ window.onload=function(){
 				<label for="imageName' + i + '" class="col-sm-3 control-label">Image Name: </label> \
 				<div class="col-sm-9"> \
 					<input type="hidden" id="imageNum' + i + '" name="uploadID" value="' + productItems[i]["imageID"] + '"> \
-					<input type="hidden" id="numQuestions' + i + '" name="numberOfQuestions" value="' + productItems[i]["imageID"] + '"> \
-					<input type="text" class="form-control" id="imageName' + i + '" name="newName" value="' + productItems[i]['voterRating'].length + '" placeholder="Enter Image Name"> \
+					<input type="hidden" id="numQuestions' + i + '" name="numberOfQuestions" value="' + productItems[i]['voterRating'].length + '"> \
+					<input type="text" class="form-control" id="imageName' + i + '" name="newName" value="' + productItems[i]["imageID"] + '" placeholder="Enter Image Name"> \
 				</div> \
 			</div> \
 			\
@@ -202,7 +201,7 @@ window.onload=function(){
 					//If the request goes through successfully and confirmation is received from php file, 
 					//inform the user of the success!
 					if(info){
-						displayUpdateResult(currentID, "Successfully stored!" + info);
+						displayUpdateResult(currentID, "Successfully stored! " + info);
 					}
 
 					//Otherwise, inform the user that something went wrong
