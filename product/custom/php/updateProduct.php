@@ -15,12 +15,13 @@
 
 		mysqli_query( $bd, $query );
 
-		for ($i=0; $i < $numberOfQuestions; $i++) { 
-			$voters = htmlspecialchars( strip_tags( $_POST['questionVotes' + i ] ) );
-			$rating  = htmlspecialchars( strip_tags( $_POST['questionRatings' + i ] ) );
+		for ($j = 0; $j < $numberOfQuestions; $j++) { 
+			$questionID = htmlspecialchars( strip_tags( $_POST['questionID' + '$j' ] ) );
+			$voters = htmlspecialchars( strip_tags( $_POST['questionVoters' + '$j' ] ) );
+			$rating  = htmlspecialchars( strip_tags( $_POST['questionRatings' + '$j' ] ) );
 			$query = "UPDATE ratings 
-				  SET rating='$rating', voters='$rating'
-				  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$i'";
+				  SET rating='$rating', voters='$voters'
+				  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$questionID'";
 
 			mysqli_query( $bd, $query );
 		}

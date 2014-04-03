@@ -44,6 +44,7 @@ window.onload=function(){
   }
 
   getQuestionData();
+
   // ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 
   function generateSurveyField( i , question ) {
@@ -51,38 +52,68 @@ window.onload=function(){
         <div class="form-group"> \
           <label for="question'+ i +'" class="col-md-2 control-label">Question #' + ( i + 1 ) + '</label> \
           <div class="col-md-10"> \
-            <input type="text" class="form-control" id="question' + i + '" name="question' + i + '" placeholder="Insert Question Here"> \
+            <input type="text" class="form-control" id="surveyQuestion' + i + '" name="surveyQuestion' + i + '" placeholder="Insert Question Here"> \
           </div> \
         </div>';
 
-    $( '#surveyQuestions' ).append( htmlContainer );
-    $( '#question' + i ).val( question );
+    $( '#surveyWrap' ).append( htmlContainer );
+    $( '#surveyQuestion' + i ).val( question );
 
   }
 
-  for (var i = 0; i < surveyQuestions.length; i++) {
-    generateSurveyField( i, surveyQuestions[i] );
-  };
+  // for (var i = 0; i < surveyQuestions.length; i++) {
+  //   generateSurveyField( i, surveyQuestions[i] );
+  // };
+
+
+  function generateRatingField( i , question ) {
+    var htmlContainer = '\
+        <div class="form-group"> \
+          <label for="question'+ i +'" class="col-md-2 control-label">Question #' + ( i + 1 ) + '</label> \
+          <div class="col-md-10"> \
+            <input type="checkbox"> Usage (Yes/No) \
+            <input type="checkbox"> Familiarity (Slider) \
+            <input type="checkbox"> Opinion (Star) \
+            <input type="text" class="form-control" id="ratingQuestion' + i + '" name="ratingQuestion' + i + '" placeholder="Insert Question Here"> \
+          </div> \
+        </div>';
+
+    $( '#ratingWrap' ).append( htmlContainer );
+    $( '#ratingQuestion' + i ).val( question );
+
+  }
 
   // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
 
-  if( numSurveyQuestions == 0 ) {
+  if( numSurveyQuestions < 1 ) {
     generateSurveyField( numSurveyQuestions++, '' );
   }
+
   $("#addSurveyQuestion").click(function(){
 
-    if( $( '#question' + ( numSurveyQuestions - 1 ) ).val() != "" ) {
+    if( $( '#surveyQuestion' + ( numSurveyQuestions - 1 ) ).val() != "" ) {
       generateSurveyField( numSurveyQuestions++, '' );
     }
 
   });
 
+  $("#addRatingQuestion").click(function(){
+
+    if( $( '#ratingQuestion' + ( numRatingQuestions - 1 ) ).val() != "" ) {
+      generateRatingField( numRatingQuestions++, '' );
+    }
+
+  });
+
+
   $("#submitSurvey").click(function(){
 
-    var htmlContainer = '<input type="hidden" id="numSurveyQuestions" name="numSurveyQuestions" value="' + numSurveyQuestions + '">';
-    $( '#surveyQuestions' ).append( htmlContainer );
+    var htmlContainer = '<input type="hidden" id="numSurveyQuestions" name="numSurveyQuestions" value="' + numSurveyQuestions + '">\
+                        <input type="hidden" id="numRatingQuestions" name="numRatingQuestions" value="' + numRatingQuestions + '">';
 
-    var jsonArr = $("#surveyQuestions").serializeArray();
+    $( '#addQuestions' ).append( htmlContainer );
+
+    var jsonArr = $("#addQuestions").serializeArray();
 
     console.log( jsonArr );
 
