@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 03, 2014 at 06:46 PM
+-- Generation Time: Apr 03, 2014 at 06:54 PM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -45,19 +45,16 @@ CREATE TABLE `product_images` (
   `created` int(11) DEFAULT NULL,
   PRIMARY KEY (`upload_id`,`survey_id`),
   KEY `survey_id` (`survey_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `product_images`
 --
 
 INSERT INTO `product_images` (`upload_id`, `survey_id`, `image_name`, `image_path`, `image_description`, `created`) VALUES
-(3, 1, 'iPad Mini', '1396327325ipad-mini.jpg', 'Hello', 1396327325),
-(4, 1, 'Coke', '1396388515coke.jpg', 'Hello-Coke', 1396388515),
-(5, 1, '1396541694twitter.jpg', '1396541694twitter.jpg', NULL, 1396541694),
-(6, 1, '13965417241396327325ipad-mini.jpg', '13965417241396327325ipad-mini.jpg', NULL, 1396541724),
-(7, 1, '1396541762coke.jpg', '1396541762coke.jpg', NULL, 1396541762),
-(8, 1, '1396543523twitter.jpg', '1396543523twitter.jpg', NULL, 1396543523);
+(9, 1, '1396543983coke.jpg', '1396543983coke.jpg', NULL, 1396543983),
+(10, 1, '1396543990ipad-mini.jpg', '1396543990ipad-mini.jpg', NULL, 1396543990),
+(11, 1, '1396543994twitter.jpg', '1396543994twitter.jpg', NULL, 1396543994);
 
 -- --------------------------------------------------------
 
@@ -105,24 +102,15 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`question_id`, `upload_id`, `survey_id`, `voters`, `rating`) VALUES
-(0, 3, 1, 0, ''),
-(0, 4, 1, 213, 'no'),
-(0, 5, 1, NULL, NULL),
-(0, 6, 1, NULL, NULL),
-(0, 7, 1, NULL, NULL),
-(0, 8, 1, NULL, NULL),
-(1, 3, 1, 0, ''),
-(1, 4, 1, 421, '3'),
-(1, 5, 1, NULL, NULL),
-(1, 6, 1, NULL, NULL),
-(1, 7, 1, NULL, NULL),
-(1, 8, 1, NULL, NULL),
-(2, 3, 1, 0, ''),
-(2, 4, 1, 421, '2'),
-(2, 5, 1, NULL, NULL),
-(2, 6, 1, NULL, NULL),
-(2, 7, 1, NULL, NULL),
-(2, 8, 1, NULL, NULL);
+(0, 9, 1, NULL, NULL),
+(0, 10, 1, NULL, NULL),
+(0, 11, 1, NULL, NULL),
+(1, 9, 1, NULL, NULL),
+(1, 10, 1, NULL, NULL),
+(1, 11, 1, NULL, NULL),
+(2, 9, 1, NULL, NULL),
+(2, 10, 1, NULL, NULL),
+(2, 11, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
