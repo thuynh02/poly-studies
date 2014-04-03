@@ -6,8 +6,9 @@
 		$numSurveyQuestions = htmlspecialchars( strip_tags( $_POST['numSurveyQuestions'] ) );
 		
 		$query = "SELECT COUNT(*) FROM questions WHERE survey_id=1";	
+		$stmt = mysqli_query($bd, $query);
 	
-		$oldQuestions = mysqli_fetch_assoc( $query )["COUNT(*)"];
+		$oldQuestions = mysqli_fetch_assoc( $stmt )["COUNT(*)"];
 
 		$time = time();
 
