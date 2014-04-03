@@ -3,7 +3,7 @@
 
 	$getImageData = "SELECT upload_id, image_name, image_path, image_description FROM product_images";	
 	$imgQueryResult = mysqli_query( $bd, $getImageData ) or die( "Failed to fetch image data. ".mysqli_error($bd));
-	$imgArr = [];
+	$imgArr = array();
 
 	//Retrieve all the uploaded image names
 	while( $row = mysqli_fetch_assoc($imgQueryResult) ){
