@@ -24,35 +24,22 @@ $(document).ready(function() {
 
 	// });
 
-	$("#submitForm").click(function(){
-	   
-	    var data = $("#imageForm").serializeArray();
-
-	    console.log( data);
-	    
-		// $.ajax({
-		// 	type: 'POST',
-		// 	url: "image-upload.php",
-		// 	data: data,
-
-		// 	success: function(info){
-		// 		//If the request goes through successfully and confirmation is received from php file, 
-		// 		//inform the user of the success!
-				
-
-		// 		console.log(info);
-
-		// 		// $('#productItems').append(info);
-		// 		// window.location.reload();
-		// 	},
-
-		// 	//Something really went wrong if the ajax call failed! Tell the user D:
-		// 	fail: function(){
-		// 		$("#result" + currentID).html("Ajax call failed to send request! Look into it ASAP!");
-		// 	}
-
-		// });
-	});
+   	$("#imageForm").on('submit',(function(e){
+		e.preventDefault();
+		$.ajax({
+		url: "image-upload.php",
+		type: "POST",
+		data:  new FormData(this),
+		contentType: false,
+		cache: false,
+		processData:false,
+		success: function(data){
+			//$("#productItems").html(data);
+			window.location.reload();
+		},
+		error: function(){} 	        
+		});
+	}));
 
 	// $("#imageForm").submit( function(){
 	// 	return false;

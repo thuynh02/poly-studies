@@ -82,17 +82,23 @@
 				if( in_array( $fileExtension, $allowedImageFormats ) ) {
 
 					if ($size < (MAX_SIZE*1024)) {
+
+						// Gets the image path and file name
 						$imagePath = time().$fileName;
 						$imageFilename = time().$fileName;
 
-						echo generateForm( $imageDirectory.$imageFilename );
+						// Echo back the html container for the ajax call
+						// echo generateForm( $imageDirectory.$imageFilename );
 						$newFileName = $imageDirectory.$imageFilename;
 						
 						if ( move_uploaded_file( $_FILES['images']['tmp_name'][$name], $newFileName ) ) {
 						   $time=time();
-						   mysqli_query( $bd, "	INSERT INTO product_images( survey_id, image_name, image_path, created ) 
+
+						   // Inserts into the product_images table the new image that as just uploaded
+						   	mysqli_query( $bd, "INSERT INTO product_images( survey_id, image_name, image_path, created ) 
 						   						VALUES ( 1, '$imageFilename', '$imageFilename', '$time' )");
 
+						   	// Uploading corresponding ratings in the ratings table
 						   	$uploadQuery = mysqli_query( $bd, "SELECT upload_id FROM product_images ORDER BY upload_id DESC LIMIT 1");
 
 						   	$upload_id = mysqli_fetch_assoc( $uploadQuery )["upload_id"];
