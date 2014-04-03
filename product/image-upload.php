@@ -92,6 +92,19 @@
 						   $time=time();
 						   mysqli_query( $bd, "	INSERT INTO product_images( survey_id, image_name, image_path, created ) 
 						   						VALUES ( 1, '$imageFilename', '$imageFilename', '$time' )");
+
+						   	$uploadQuery = mysqli_query( $bd, "SELECT upload_id FROM product_images ORDER BY upload_id DESC LIMIT 1");
+
+						   	$upload_id = mysqli_fetch_assoc( $uploadQuery )["upload_id"];
+
+							$queryResult = mysqli_query( $bd, "SELECT question_id FROM questions WHERE survey_id=1 AND question_type='rating'");
+
+						   	while( $row = mysqli_fetch_assoc($queryResult) ){
+								$question_id = $row['question_id'];
+								$query = "INSERT INTO ratings(question_id, upload_id, survey_id) VALUES ( '$question_id', '$upload_id', 1 )";
+								mysqli_query( $bd, $query );
+							}
+						   
 						}
 
 						else { echo '<span class="imgList">You have exceeded the size limit! so moving unsuccessful! </span>'; }

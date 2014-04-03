@@ -16,7 +16,6 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="custom/css/style.css">
-    <link rel="stylesheet" href="custom/css/star-rating.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
   
     <!-- Just for debugging purposes. Don't actually copy this line! -->
@@ -39,12 +38,13 @@
 
       <h1>Upload/Edit Images</h1>
 
-      <form id="imageForm" class="form-inline" role="form" method="post" enctype="multipart/form-data" action="image-upload.php">
+      <form id="imageForm" class="form-inline" role="form" method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label for="images">Upload Image</label>
           <input type="file" id="images" name="images[]" multiple>
           <p class="help-block">Select the image file.</p>
         </div>
+        <button type="submit" id="submitForm" class="btn btn-default">Upload</button>
         <div id='imageloadstatus' style='display:none'><img src="loader.gif" alt="Uploading...."/></div>
       </form>
 
@@ -67,7 +67,6 @@
 
     <!-- Internal -->
     <script src="bootstrap/dist/js/bootstrap.js"></script>
-    <script src="custom/js/jquery.form.js"></script>
     <script src="custom/js/admin.js"></script>
     <script src="custom/js/image-upload.js"></script>
     
