@@ -5,27 +5,46 @@
 
 		$numSurveyQuestions = htmlspecialchars( strip_tags( $_POST['numSurveyQuestions'] ) );
 		
-		$query = "SELECT COUNT(*) FROM questions WHERE survey_id=1";	
-		$stmt = mysqli_query($bd, $query);
+		$stmtSurvey = mysqli_query($bd, "SELECT COUNT(*) FROM questions WHERE survey_id=1 AND question_type='survey'");
+		$stmtRating = mysqli_query($bd, "SELECT COUNT(*) FROM questions WHERE survey_id=1 AND question_type='rating'");
 	
-		$oldQuestions = mysqli_fetch_assoc( $stmt )["COUNT(*)"];
+		$oldSurvey = mysqli_fetch_assoc( $stmtSurvey )["COUNT(*)"];
+		$oldRating = mysqli_fetch_assoc( $stmtRating )["COUNT(*)"];
 
 		$time = time();
 
+
+
 		for ($i=0; $i < $numSurveyQuestions; $i++) { 
 
-			$description = htmlspecialchars( strip_tags( $_POST['surveyQuestion' + $i] ) );
-			
-			if(  $i < $oldQuestions) {
+			$description = htmlspecialchars( strip_tags( $_POST['surveyQuestion'.$i] ) );
+			if(  $i < $oldSurvey) {
 				$query = "UPDATE questions
 					  SET description='$description', created='$time'
 					  WHERE question_type='survey' AND survey_id=1 AND question_id='$i'";
 			}
 			else {
 				$query = "INSERT INTO questions (question_id, survey_id, question_type, description, created)
-						  VALUES ( '$i', 1, 'survey', '$description', '$time' )";
+						  VALUES ( $i, 1, 'survey', '$description', '$time' )";
 			}
 
+			mysqli_query( $bd, $query );
+		}
+
+		for ($i=0; $i < $numRatingQuestions; $i++) { 
+
+			$description = htmlspecialchars( strip_tags( $_POST['ratingQuestion'.$i] ) );
+
+			if(  $i < $oldRating) {
+				$query = "UPDATE questions
+					  SET description='$description', created='$time'
+					  WHERE question_type='rating' AND survey_id=1 AND question_id='$i'";
+			}
+			else {
+				$query = "INSERT INTO questions (question_id, survey_id, question_type, description, created)
+						  VALUES ( $i, 1, 'rating', '$description', '$time' )";
+			}
+			
 			mysqli_query( $bd, $query );
 		}
 		

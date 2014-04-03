@@ -53,7 +53,6 @@ window.onload=function(){
 	var productItems = getImageData();
 
 	function getRatingData(){
-		var ratingArr = [];
 		var data = $.ajax({
 			type: 'POST',
 			url: 'custom/php/getRatings.php',
