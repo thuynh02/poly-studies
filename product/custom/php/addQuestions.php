@@ -4,6 +4,7 @@
 	if( isset($_POST) ){
 
 		$numSurveyQuestions = htmlspecialchars( strip_tags( $_POST['numSurveyQuestions'] ) );
+		$numRatingQuestions = htmlspecialchars( strip_tags( $_POST['numRatingQuestions'] ) );
 		
 		$stmtSurvey = mysqli_query($bd, "SELECT COUNT(*) FROM questions WHERE survey_id=1 AND question_type='survey'");
 		$stmtRating = mysqli_query($bd, "SELECT COUNT(*) FROM questions WHERE survey_id=1 AND question_type='rating'");
@@ -33,7 +34,7 @@
 
 		for ($i=0; $i < $numRatingQuestions; $i++) { 
 
-			$description = htmlspecialchars( strip_tags( $_POST['ratingQuestion'.$i] ) );
+			$description = strip_tags( $_POST['ratingQuestion'.$i] );
 
 			if(  $i < $oldRating) {
 				$query = "UPDATE questions

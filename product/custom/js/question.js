@@ -9,42 +9,6 @@ window.onload=function(){
 
   // ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
-  // getImageData will make an ajax call to getImages.php, which queries the database for all
-  // the uploaded images (table: user_uploads). The resulting array of image names are formatted to a
-  // json string and retrieved here. Upon success of retrieval, the array is traversed and productItems
-  // are given the appropriate data. 
-  // **NOTE** Image names for the question have yet to be implemented in the database/image-upload.php!
-  // **NOTE** Questions will display the image name w/ extensions and all. 
-  // function getQuestionData(){
-
-  //   var data = $.ajax({
-  //     type: 'POST',
-  //     url: 'custom/php/getQuestions.php',
-  //     data: data,
-  //     dataType: 'json',
-  //     success : function( data ){
-  //       console.log(data);
-  //       // for( var i = 0; i < data.length; ++i ){
-  //       //   if( data[i].question_type == "survey" ){
-  //       //     console.log( data[i].description );
-  //       //     surveyQuestions.push( data[i].description );
-  //       //   }
-  //       //   else if( data[i].question_type == "rating" ){
-  //       //     ratingQuestions.push( data[i].description );
-  //       //   }
-  //       // }
-
-  //       // numSurveyQuestions = surveyQuestions.length;
-  //       // numRatingQuestions = ratingQuestions.length;
-
-  //     },
-  //     error: function(){ console.log("NAY"); },
-  //     async: false
-
-  //   });
-
-  // }
-
   function getQuestionData(){
     var data = $.ajax({
       type: 'POST',
@@ -56,7 +20,6 @@ window.onload=function(){
         console.log( data );
         for( var i = 0; i < data.length; ++i ){
           if( data[i].question_type == "survey" ){
-            console.log( data[i].description );
             surveyQuestions.push( data[i].description );
           }
           else if( data[i].question_type == "rating" ){
@@ -101,6 +64,8 @@ window.onload=function(){
   var questionTypes = [ 'usage', 'familiarity-slider', 'opinion-star' ];
 
   function generateRatingField( i , question ) {
+    var obj = JSON.parse( question );
+
     var htmlContainer = '\
         <div class="form-group"> \
           <label for="question'+ i +'" class="col-md-2 control-label">Rating Question #' + ( i + 1 ) + '</label> \
@@ -151,7 +116,8 @@ window.onload=function(){
         </div>';
 
     $( '#ratingWrap' ).append( htmlContainer );
-    $( '#ratingQuestion' + i ).val( question );
+     $('input[name="questionType' + i + '"][value="'+ obj[0] +'"]').attr("checked",true);
+    $( '#ratingQuestion' + i ).val( obj[1] );
 
   }
 
@@ -203,7 +169,7 @@ window.onload=function(){
       $( '#ratingQuestion' + i ).val( 
         JSON.stringify(ratingSet)
       );
-      // console.log($( '#ratingQuestion' + i ).val());
+      console.log($( '#ratingQuestion' + i ).val());
     };
 
     var jsonArr = $("#addQuestions").serializeArray();
