@@ -23,7 +23,7 @@ window.onload=function(){
             surveyQuestions.push( data[i].description );
           }
           else if( data[i].question_type == "rating" ){
-            ratingQuestions.push( data[i].description );
+            ratingQuestions.push( JSON.parse( data[i].description ) );
           }
         }
 
@@ -63,8 +63,7 @@ window.onload=function(){
 
   var questionTypes = [ 'usage', 'familiarity-slider', 'opinion-star' ];
 
-  function generateRatingField( i , question ) {
-    var obj = JSON.parse( question );
+  function generateRatingField( i , obj ) {
 
     var htmlContainer = '\
         <div class="form-group"> \
@@ -137,15 +136,15 @@ window.onload=function(){
     generateRatingField( i, ratingQuestions[i] );
   };
 
-  $("#addSurveyQuestion").click(function(){
+  $("#addSurveyQuestion").bind('click',function(){
 
-    if( $( '#surveyQuestion' + ( numSurveyQuestions - 1 ) ).val() != "" ) {
+    //if( $( '#surveyQuestion' + ( numSurveyQuestions - 1 ) ).val() != "" ) {
       generateSurveyField( numSurveyQuestions++, '' );
-    }
+    //}
 
   });
 
-  $("#addRatingQuestion").click(function(){
+  $("#addRatingQuestion").bind('click',function(){
 
     if( $( '#ratingQuestion' + ( numRatingQuestions - 1 ) ).val() != "" ) {
       generateRatingField( numRatingQuestions++, '' );
@@ -190,6 +189,8 @@ window.onload=function(){
         }
 
       });
+
+    window.location.reload();
 
   });
 

@@ -9,6 +9,13 @@ window.onload=function(){
 
   var DEFAULTVALUE = 0;
 
+  var surveyQuestions = [];
+  var ratingQuestions = [];
+
+  // questionTypes serves an array of Strings to serve as keywords for each type of rating to be asked.
+  // In the sample survey provided, there is a slider for familiarity, opinion for stars, and usage for yes and no.
+  var questionTypes = [];
+
   // ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
   // 'createProductItem' function is for creating and returning an Object called productItem with the attributes: 
@@ -67,13 +74,39 @@ window.onload=function(){
     return productArr;
   }
 
-  // questionTypes serves an array of Strings to serve as keywords for each type of rating to be asked.
-  // In the sample survey provided, there is a slider for familiarity, opinion for stars, and usage for yes and no.
-  var questionTypes = [ 'usage', 'familiarity-slider', 'opinion-star' ];
+  function getQuestionData(){
+    var data = $.ajax({
+      type: 'POST',
+      url: 'custom/php/getQuestions.php',
+      dataType: 'json',
+      data: data,
+      async: false,
+      success : function( data ){
+        console.log( data );
+        for( var i = 0; i < data.length; ++i ){
+          if( data[i].question_type == "survey" ){
+            surveyQuestions.push( data[i].description );
+          }
+          else if( data[i].question_type == "rating" ){
+            ratingQuestions.push( JSON.parse( data[i].description ) );
+          }
+        }
+
+        for (var i = 0; i < ratingQuestions.length; i++) {
+          questionTypes.push( ratingQuestions[i][0] );
+        };
+      },
+      error: function () { console.log("NAY"); }
+    });
+
+  }
+
+  
+  getQuestionData();
+  console.log( questionTypes );
 
   // productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
   var productItems = getImageData();
-
 
   //*** Hard-coded creation of product items are commented out just as a back up ***//
   // Initialize and push into 'productItems' the Objects created from the function 'createProductItem.'
