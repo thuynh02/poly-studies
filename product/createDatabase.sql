@@ -165,6 +165,15 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`) VALUES
+(-1);
+
+-- --------------------------------------------------------
+
+--
 -- Constraints for dumped tables
 --
 
