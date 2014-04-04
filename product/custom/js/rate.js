@@ -33,18 +33,22 @@ window.onload=function(){
   //   questionValues: [ 0, 0, 0 ]
   // };
 
-  function createProductItem( name, path, qTypes ) {
+  function createProductItem( id, name, desc, path, qTypes ) {
     if ( !$.isArray(qTypes) ) { qTypes = [ qTypes ]; }
 
     var values = new Array( qTypes.length );
     for (var i = 0; i < qTypes.length; i++) { values[i] = DEFAULTVALUE; }
 
     var productItem = {
+      imageID: id,
       productName: name,
+      productDesc: desc,
       imagePath: path,
       questionTypes: qTypes,
-      questionValues: values
+      questionValues: values,
+      voterRating: []
     };
+
 
     return productItem;
   }
@@ -62,17 +66,20 @@ window.onload=function(){
       url: 'custom/php/getImages.php',
       data: data,
       dataType: 'json',
+      async: false,
       success : function( data ){
         for( var i = 0; i < data.length; ++i ){
-          productArr.push( createProductItem( data[i].image_name, 
-                                              "images/"+data[i].image_path, 
-                                              questionTypes ) );
+          productArr.push( createProductItem( data[i].upload_id, 
+                            data[i].image_name, 
+                            data[i].image_description, 
+                            "images/"+data[i].image_path,
+                            questionTypes) );
         }
-      },
-      async: false
+      }
     });
     return productArr;
   }
+
 
   function getQuestionData(){
     var data = $.ajax({
@@ -82,7 +89,6 @@ window.onload=function(){
       data: data,
       async: false,
       success : function( data ){
-        console.log( data );
         for( var i = 0; i < data.length; ++i ){
           if( data[i].question_type == "survey" ){
             surveyQuestions.push( data[i].description );
@@ -101,12 +107,41 @@ window.onload=function(){
 
   }
 
-  
+
+  function getRatingData(){
+    var data = $.ajax({
+      type: 'POST',
+      url: 'custom/php/getRatings.php',
+      data: data,
+      dataType: 'json',
+      async: false,
+      success : function( data ){
+        console.log( data );
+        for (var i = 0; i < productItems.length; i++) {
+          for (var j = 0; j < data.length; j++) {
+            if( productItems[i].imageID === data[j].upload_id ) {
+              var voterRates = {
+                questionID: data[j].question_id,
+                voters: data[j].voters,
+                rating: data[j].rating
+              };
+              productItems[i]['voterRating'].push( voterRates );
+            }
+          };
+          
+        };
+
+      }
+    });
+  }
   getQuestionData();
-  console.log( questionTypes );
 
   // productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
   var productItems = getImageData();
+
+  getRatingData();
+
+  console.log( productItems );
 
   //*** Hard-coded creation of product items are commented out just as a back up ***//
   // Initialize and push into 'productItems' the Objects created from the function 'createProductItem.'
@@ -131,10 +166,25 @@ window.onload=function(){
 
   // ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 
-  function generateQuestionHTML( name, keyword ) {
+  function generateQuestionHTML( item, question ) {
+    console.log( "I: " + item );
+    console.log( "Q: " + question );
+
+    var name = productItems[item].productName;
+    var keyword = productItems[item].questionTypes[question];
+    var voters = productItems[item]['voterRating'][question].voters;
+    var rating = productItems[item]['voterRating'][question].rating;
+
+    var html = '<p class="lead">' + voters + ' people voted ' + rating + '.</p>';
+    if( voters == "" || rating == "" || voters == null || rating == null  ) {
+      html = '';
+    }
+
+
     if ( keyword == 'usage' ){
       return '\
       <div class="usage question"> \
+        ' + html + ' \
         <p class="lead">Have you ever had a ' + name + '?</p> \
         <input type="radio" name="usageValue" value="yes" /> Yes \
         <input type="radio" name="usageValue" value="no" /> No \
@@ -145,6 +195,7 @@ window.onload=function(){
     else if ( keyword == 'familiarity-slider' ) {
       return '\
       <div class="question"> \
+        ' + html + ' \
         <p class="lead">On a scale of 1 - 10, how familiar are you with ' + name + '?</p> \
         <div id="famSlider"></div> \
         <p>Your slider has a value of <span id="famValue"></span></p> \
@@ -155,6 +206,7 @@ window.onload=function(){
     else if ( keyword == 'opinion-star' ) {
       return '\
       <div class="question"> \
+        ' + html + ' \
         <p class="lead">On a scale of 1 (very negative) to 5 (very positive), what is your opinion of ' + name + '?</p> \
         Very Negative \
           <div class="star-rating"> \
@@ -191,7 +243,7 @@ window.onload=function(){
     }
   }
 
-  var htmlContainer = generateQuestionHTML( productItems[currentItem].productName, productItems[currentItem].questionTypes[currentQuestion] );
+  var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
   $( '#productDesc' ).html( htmlContainer );
   $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
 
@@ -307,7 +359,8 @@ window.onload=function(){
     }
 
     // Changing the productDesc container based on currentItem's question type
-    htmlContainer = generateQuestionHTML( productItems[currentItem].productName, productItems[currentItem].questionTypes[currentQuestion] );
+   
+    var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
     $( '#productDesc' ).html( htmlContainer );
 
     // console.log( 'Q' + currentQuestion );
