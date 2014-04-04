@@ -229,17 +229,20 @@ window.onload=function(){
             // Action to do last question script
           var arr = checkAllAnswered( DEFAULTVALUE );
           //console.log( arr );
+
           if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
-            var jsonItems = JSON.stringify(productItems);
-            console.log( jsonItems );
+            
+            //POST can only read in the: "key = value" format. 
+            var jsonItems = "productAnswers=" + JSON.stringify( productItems );
+            // console.log( productItems );
             
             $.ajax({
               type: 'POST',
               url: 'custom/php/addAnswers.php',
               data: jsonItems,
-              dataType: 'json',
+
               success : function( data ){
-                console.log( "YAY " + data );
+                console.log( data );
               },
               error : function(){
                 console.log( "NAY" );
