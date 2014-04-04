@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 03, 2014 at 06:54 PM
+-- Generation Time: Apr 04, 2014 at 03:31 AM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -52,7 +52,7 @@ CREATE TABLE `product_images` (
 --
 
 INSERT INTO `product_images` (`upload_id`, `survey_id`, `image_name`, `image_path`, `image_description`, `created`) VALUES
-(9, 1, '1396543983coke.jpg', '1396543983coke.jpg', NULL, 1396543983),
+(9, 1, 'Coke', '1396543983coke.jpg', 'A can', 1396543983),
 (10, 1, '1396543990ipad-mini.jpg', '1396543990ipad-mini.jpg', NULL, 1396543990),
 (11, 1, '1396543994twitter.jpg', '1396543994twitter.jpg', NULL, 1396543994);
 
@@ -76,9 +76,26 @@ CREATE TABLE `questions` (
 --
 
 INSERT INTO `questions` (`question_id`, `survey_id`, `question_type`, `description`, `created`) VALUES
-(0, 1, 'rating', 'Have you ever had a [id]?', 1396492372),
-(1, 1, 'rating', 'On a scale of 1 - 10, how familiar are you with [id]?', 1396492372),
-(2, 1, 'rating', 'On a scale of 1 (very negative) to 5 (very positive), what is your opinion of [id]?', 1396492392);
+(0, 1, 'rating', '["usage","Have you ever had a [id]?"]', 1396568805),
+(0, 1, 'survey', 'I describe myself as extraverted, enthusiastic.', 1396568805),
+(1, 1, 'rating', '["familiarity-slider","On a scale of 1 - 10, how familiar are you with [id]?"]', 1396568805),
+(1, 1, 'survey', 'I seldom feel blue.', 1396568805),
+(2, 1, 'rating', '["opinion-star","On a scale of 1 (very negative) to 5 (very positive), what is your opinion of [id]?"]', 1396568805),
+(2, 1, 'survey', 'I describe myself as critical, quarrelsome.', 1396568805),
+(3, 1, 'survey', 'I describe myself as dependable, self-disciplined.', 1396568805),
+(4, 1, 'survey', 'Please select option six, then write az in question 18.', 1396568805),
+(5, 1, 'survey', 'I describe myself as anxious, easily upset.', 1396568805),
+(6, 1, 'survey', 'I feel comfortable with myself.', 1396568805),
+(7, 1, 'survey', 'I describe myself as open to new experiences, complex.', 1396568805),
+(8, 1, 'survey', 'I look at the bright side of life.', 1396568805),
+(9, 1, 'survey', 'I describe myself as reserved, quiet.', 1396568805),
+(10, 1, 'survey', 'Please select option two.', 1396568805),
+(11, 1, 'survey', 'I describe myself as sympathetic, warm.', 1396568805),
+(12, 1, 'survey', 'I often feel blue.', 1396568805),
+(13, 1, 'survey', 'I describe myself as disorganized, careless.', 1396568805),
+(14, 1, 'survey', 'I describe myself as calm, emotionally stable.', 1396568805),
+(15, 1, 'survey', 'I worry about things.', 1396568805),
+(16, 1, 'survey', 'I describe myself as conventional, uncreative.', 1396568805);
 
 -- --------------------------------------------------------
 
@@ -102,13 +119,13 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`question_id`, `upload_id`, `survey_id`, `voters`, `rating`) VALUES
-(0, 9, 1, NULL, NULL),
+(0, 9, 1, 12, 'yes'),
 (0, 10, 1, NULL, NULL),
 (0, 11, 1, NULL, NULL),
-(1, 9, 1, NULL, NULL),
+(1, 9, 1, 14, ''),
 (1, 10, 1, NULL, NULL),
 (1, 11, 1, NULL, NULL),
-(2, 9, 1, NULL, NULL),
+(2, 9, 1, 1, '4'),
 (2, 10, 1, NULL, NULL),
 (2, 11, 1, NULL, NULL);
 
