@@ -57,8 +57,61 @@ function validate( showMessage ){
 	return isValid;
 }
 
+var surveyQuestions = [];
+var ratingQuestions = [];
+var numSurveyQuestions = 0;
+var numRatingQuestions = 0;
+
+  // ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
+
+function getQuestionData(){
+    var data = $.ajax({
+      type: 'POST',
+      url: 'custom/php/getQuestions.php',
+      dataType: 'json',
+      data: data,
+      async: false,
+      success : function( data ){
+        console.log( data );
+        for( var i = 0; i < data.length; ++i ){
+          if( data[i].question_type == "survey" ){
+            surveyQuestions.push( data[i].description );
+          }
+          else if( data[i].question_type == "rating" ){
+            ratingQuestions.push( JSON.parse( data[i].description ) );
+          }
+        }
+
+      },
+      error: function () { console.log("NAY"); }
+    });
+
+}
+
+function generateSurveyHTML( n, question ){
+	return '<tr> \
+				<td>' + ( n + 1 ) + '.</td> \
+				<td>' + question + '</td> \
+				<td><input type="radio" name="q' + n + '" value="1">1</td> \
+				<td><input type="radio" name="q' + n + '" value="2">2</td> \
+				<td><input type="radio" name="q' + n + '" value="3">3</td> \
+				<td><input type="radio" name="q' + n + '" value="4">4</td> \
+				<td><input type="radio" name="q' + n + '" value="5">5</td> \
+				<td><input type="radio" name="q' + n + '" value="6">6</td> \
+				<td><input type="radio" name="q' + n + '" value="7">7</td> \
+			</tr>';
+
+}
+
 window.onload = function(){
+
 	var surveyData = new Object();
+
+	getQuestionData();
+
+	for (var i = 0; i < surveyQuestions.length; i++) {
+		$( '#scaleSurvey' ).append( generateSurveyHTML( i, surveyQuestions[i] ) )
+	};
 
 	// Once the user clicks submit, begin to fill the survey data object with the answers
 	// Afterwards, convert the object into a JSON string 
