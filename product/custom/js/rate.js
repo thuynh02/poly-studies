@@ -2,7 +2,7 @@ window.onload=function(){
 
   // ----------------------------------------------------------------------------------------------------------------------- GLOBAL VARIABLES
 
-  var currentQuestion = 0,
+  var currentQuestion = -1,
       // amountQuestions = 0,
       currentItem = 0,
       itemQuestionSize = [];
@@ -242,71 +242,121 @@ window.onload=function(){
     }
   }
 
-  var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
-  $( '#productDesc' ).html( htmlContainer );
-  $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
-  $( '#productCaption' ).html( productItems[currentItem].productDesc );
 
 
   // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
 
 
   $("#next, #prev").click(function(){
+    if( this.id=='next' && currentItem == -1 ) { 
+      currentQuestion = 0;
+      $('input[name="user_id"]').val();
+      
+    }
 
     // When the 'next' button is pressed and the user has not finished all the items
-    if( this.id=='next' && currentItem < productItems.length ) { 
+    else {
+      if( this.id=='next' && currentItem < productItems.length ) { 
 
-      //To determine if the user has submitted a valid answer for the questions.
-      //Switch cases are used to gather the results depending on the type of question. 
-      
-      try{
-        switch( currentQuestion ){
+        //To determine if the user has submitted a valid answer for the questions.
+        //Switch cases are used to gather the results depending on the type of question. 
+        
+        try{
+          switch( currentQuestion ){
 
-          // Usage question
-          case 0: 
-            // Gets the value of the checked radio button and assign it to the corresponding index of questionValues
-            productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="usageValue"]:checked' ).value;
-            
-            break;
+            // Usage question
+            case 0: 
+              // Gets the value of the checked radio button and assign it to the corresponding index of questionValues
+              productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="usageValue"]:checked' ).value;
+              
+              break;
 
-          // Familiarity question
-          case 1:
-            // Get the value from the slider object 
-            productItems[currentItem].questionValues[currentQuestion] = $("#famSlider" ).slider('value');
-            break;
+            // Familiarity question
+            case 1:
+              // Get the value from the slider object 
+              productItems[currentItem].questionValues[currentQuestion] = $("#famSlider" ).slider('value');
+              break;
 
-          // Star-rating question
-          case 2:
-            // Get the rating by grabbing the value from the selected input value with the name, opinionValue.
-            productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="opinionValue"]:checked' ).value / 2;
-            break;
+            // Star-rating question
+            case 2:
+              // Get the rating by grabbing the value from the selected input value with the name, opinionValue.
+              productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="opinionValue"]:checked' ).value / 2;
+              break;
 
-          // For any question types that are not handled above
-          default:
-            console.log( "This question type is not recognized!" );
-            break;
+            // For any question types that are not handled above
+            default:
+              console.log( "This question type is not recognized!" );
+              break;
 
+          }
+        } 
+        catch(err){
+            console.log( "INVALID QUESTION." );
         }
-      } 
-      catch(err){
-          console.log( "INVALID QUESTION." );
+
+        // Only proceed to the next questionType/item if the answer is a valid value. (Basically, not 0)
+        if( productItems[currentItem].questionValues[currentQuestion] != DEFAULTVALUE ){
+
+          // Increment the currentQuestion if there's still more questions for that particular item
+          if( currentQuestion < productItems[currentItem].questionTypes.length -1){ currentQuestion++; }
+
+          // Once you reached the end of the question types for that particular item and you're not
+          // at the last item, reset the current question and go to the next item.
+          else if( currentQuestion == productItems[currentItem].questionTypes.length -1
+                    && currentItem < productItems.length - 1 ){  
+              currentQuestion = 0;
+              currentItem++;
+
+              // Image path is change only if the current image changes
+              $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
+          }
+          // Once you reached the end of the question types for that particular item and you're at the last item, ...
+          else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
+                    && currentItem == productItems.length - 1 ){  
+              // Action to do last question script
+            var arr = checkAllAnswered( DEFAULTVALUE );
+            //console.log( arr );
+
+            if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
+              
+              //POST can only read in the: "key = value" format. 
+              var jsonItems = "productAnswers=" + JSON.stringify( productItems );
+              // console.log( productItems );
+              
+              $.ajax({
+                type: 'POST',
+                url: 'custom/php/addRatingAnswers.php',
+                data: jsonItems,
+
+                success : function( data ){
+                  console.log( data );
+                  window.location.replace("confirmation.html");
+                },
+                error : function(){
+                  console.log( "NAY" );
+                }
+              });
+              
+            }
+          }
+        }
       }
 
-      // Only proceed to the next questionType/item if the answer is a valid value. (Basically, not 0)
-      if( productItems[currentItem].questionValues[currentQuestion] != DEFAULTVALUE ){
+      // When the 'prev' button is pressed and the user has not finished all the items
+      if( this.id=='prev') { 
 
-        // Increment the currentQuestion if there's still more questions for that particular item
-        if( currentQuestion < productItems[currentItem].questionTypes.length -1){ currentQuestion++; }
+        // Decrement the currentQuestion if there's still more questions for that particular item
+        if( currentQuestion > 0 ){ currentQuestion--; }
 
         // Once you reached the end of the question types for that particular item and you're not
-        // at the last item, reset the current question and go to the next item.
-        else if( currentQuestion == productItems[currentItem].questionTypes.length -1
-                  && currentItem < productItems.length - 1 ){  
-            currentQuestion = 0;
-            currentItem++;
+        // at the last item, reset the current question as the last question of the previous item.
+        else if( currentQuestion == 0 && currentItem > 0 ){  
+          if( currentItem > 0 ){ 
+            currentItem--; 
 
             // Image path is change only if the current image changes
             $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
+<<<<<<< HEAD
         }
 
         // Once you reached the end of the question types for that particular item and you're at the last item, ...
@@ -336,81 +386,69 @@ window.onload=function(){
               }
             });
             
+=======
+>>>>>>> 4e5a351763f6413f073e4b03fbda7dd40784576c
           }
+          currentQuestion = productItems[currentItem].questionTypes.length - 1;
         }
       }
-    }
 
-    // When the 'prev' button is pressed and the user has not finished all the items
-    if( this.id=='prev') { 
+      // Changing the productDesc container based on currentItem's question type
+     
+      var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
+      $( '#productDesc' ).html( htmlContainer );
 
-      // Decrement the currentQuestion if there's still more questions for that particular item
-      if( currentQuestion > 0 ){ currentQuestion--; }
+      if( currentQuestion == 0 && currentItem == 0 ) { $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ; }
 
-      // Once you reached the end of the question types for that particular item and you're not
-      // at the last item, reset the current question as the last question of the previous item.
-      else if( currentQuestion == 0 && currentItem > 0 ){  
-        if( currentItem > 0 ){ 
-          currentItem--; 
+      // console.log( 'Q' + currentQuestion );
+      // console.log( 'I' + currentItem);
 
-          // Image path is change only if the current image changes
-          $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
+      $("#famSlider").slider( {
+        value: 5,
+        min: 1,
+        max: 10,
+        step: 1,
+        slide: function( event, ui ) {
+          $( '#famValue' ).html( ui.value );
         }
-        currentQuestion = productItems[currentItem].questionTypes.length - 1;
+      } );
+
+      if( currentQuestion != productItems[currentItem].questionTypes.length - 1 
+          && currentItem != productItems.length - 1 ){  
+
+        // Change the newly formatted productDesc container to select the attributes based on what's currently stored in the object
+        var currentValue = productItems[currentItem].questionValues[currentQuestion];
+
+        switch( currentQuestion ){
+
+          // Usage question
+          case 0: 
+            if( currentValue == 'yes' ){ document.getElementsByName("usageValue")[0].checked = true; }
+            else if( currentValue == 'no' ){ document.getElementsByName("usageValue")[1].checked = true; }
+            break;
+
+          // Familiarity question
+          case 1:
+            $( '#famSlider' ).slider( "value", currentValue );
+            $( '#famValue' ).html(  $("#famSlider" ).slider('value') );
+            break;
+
+          // Star-rating question
+          case 2:
+            document.getElementsByName("opinionValue")[currentValue].checked = true;
+            break;
+
+          // For any question types that are not handled above
+          default:
+            console.log( "This question type is not recognized!" );
+            break;
+
+        }
       }
+
     }
+  }
+  );
 
-    // Changing the productDesc container based on currentItem's question type
-   
-    var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
-    $( '#productDesc' ).html( htmlContainer );
-
-    // console.log( 'Q' + currentQuestion );
-    // console.log( 'I' + currentItem);
-
-    $("#famSlider").slider( {
-      value: 5,
-      min: 1,
-      max: 10,
-      step: 1,
-      slide: function( event, ui ) {
-        $( '#famValue' ).html( ui.value );
-      }
-    } );
-
-    if( currentQuestion != productItems[currentItem].questionTypes.length - 1 
-        && currentItem != productItems.length - 1 ){  
-
-      // Change the newly formatted productDesc container to select the attributes based on what's currently stored in the object
-      var currentValue = productItems[currentItem].questionValues[currentQuestion];
-
-      switch( currentQuestion ){
-
-        // Usage question
-        case 0: 
-          if( currentValue == 'yes' ){ document.getElementsByName("usageValue")[0].checked = true; }
-          else if( currentValue == 'no' ){ document.getElementsByName("usageValue")[1].checked = true; }
-          break;
-
-        // Familiarity question
-        case 1:
-          $( '#famSlider' ).slider( "value", currentValue );
-          $( '#famValue' ).html(  $("#famSlider" ).slider('value') );
-          break;
-
-        // Star-rating question
-        case 2:
-          document.getElementsByName("opinionValue")[currentValue].checked = true;
-          break;
-
-        // For any question types that are not handled above
-        default:
-          console.log( "This question type is not recognized!" );
-          break;
-
-      }
-    }
-
-  });
 
 }

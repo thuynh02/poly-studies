@@ -19,7 +19,6 @@ window.onload=function(){
 	//   imagePath: "images/cola.jpg",
 	//   voterRating: []
 	// };
-
 	function createProductItem( id, name, desc, path ) {
 
 		var productItem = {
@@ -35,6 +34,7 @@ window.onload=function(){
 
 	// Fetch all the basic image data from getImages.php and store them as productItem objects, which are
 	// pushed into an array. 
+	// Gets inforation via the getImages.php file and returns a populated array of Product objects.
 	function getImageData(){
 		var productArr = [];
 		var data = $.ajax({
@@ -92,7 +92,7 @@ window.onload=function(){
 	// <questionID> ties the specific question to how many <voters> gave the question the specified <rating> value. 
 	getRatingData( productItems );
 	//console.log( productItems );
-
+	
 	// ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 
 	//Will build all the product displays based on the information in the productItems array.
@@ -150,14 +150,19 @@ window.onload=function(){
 			</div> \
 			</div>';
 
+		// Add the htmlContainer into the container with the identifier #productItems
 		$( '#productItems' ).append( htmlContainer );
 
+		// Change the identifier imageName+i's value to the new value after its been added onto the container #productImages
 		$( "#imageName" + i ).val( productItems[i].productName );
 		
+		// Change the identifier imageDesc+i's value to the new value after its been added onto the container #productItems
 		$( "#imageDesc" + i ).val( productItems[i].productDesc );
 
+		// Change the identifier productImage+i value to the new url after a new product item is reached
 		$( '#productImg' + i ).attr( "src", productItems[i].imagePath) ;
 
+		// Change the voters and ratings accordingly to what is stored in the table ratings.
 		for (var j = 0; j < productItems[i]['voterRating'].length; j++) {
 			$( "#questionVoters" + j + "-" + i ).val( productItems[i]['voterRating'][j].voters );
 			$( "#questionRatings" + j + "-" + i ).val( productItems[i]['voterRating'][j].rating );
