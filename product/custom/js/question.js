@@ -6,9 +6,11 @@ window.onload=function(){
   var ratingQuestions = [];
   var numSurveyQuestions = 0;
   var numRatingQuestions = 0;
+  var questionTypes = [ 'usage', 'familiarity-slider', 'opinion-star' ];
 
   // ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
+  // Retrieve a json string of the attributes: <question_id>, <question_type>, and <description> from the questions table 
   function getQuestionData(){
     var data = $.ajax({
       type: 'POST',
@@ -18,6 +20,7 @@ window.onload=function(){
       async: false,
       success : function( data ){
         console.log( data );
+        
         for( var i = 0; i < data.length; ++i ){
           if( data[i].question_type == "survey" ){
             surveyQuestions.push( data[i].description );
@@ -52,6 +55,7 @@ window.onload=function(){
           </div> \
         </div>';
 
+    // Elements found in question.html
     $( '#surveyWrap' ).append( htmlContainer );
     $( '#surveyQuestion' + i ).val( question );
 
@@ -61,15 +65,12 @@ window.onload=function(){
   //   generateSurveyField( i, surveyQuestions[i] );
   // };
 
-  var questionTypes = [ 'usage', 'familiarity-slider', 'opinion-star' ];
-
   function generateRatingField( i , obj ) {
-
     var htmlContainer = '\
         <div class="form-group"> \
           <label for="question'+ i +'" class="col-md-2 control-label">Rating Question #' + ( i + 1 ) + '</label> \
           <div class="col-md-10"> \
-          '; 
+        '; 
 
 
     for (var j = 0; j < questionTypes.length; j++) {
@@ -77,7 +78,8 @@ window.onload=function(){
 
           // Usage question
           case 'usage': 
-            htmlContainer += '<div class="radio"> \
+            htmlContainer += '\
+            <div class="radio"> \
               <input type="radio" name="questionType' + i + '" value="' + questionTypes[j] + '"> Usage \
             </div> \
             ';
@@ -85,7 +87,8 @@ window.onload=function(){
 
           // Familiarity question
           case 'familiarity-slider':
-            htmlContainer += '<div class="radio"> \
+            htmlContainer += '\
+            <div class="radio"> \
               <input type="radio" name="questionType' + i + '" value="' + questionTypes[j] + '"> Familiarity (Slider) \
             </div> \
             ';
@@ -93,7 +96,8 @@ window.onload=function(){
 
           // Star-rating question
           case 'opinion-star':
-            htmlContainer += '<div class="radio"> \
+            htmlContainer += '\
+            <div class="radio"> \
               <input type="radio" name="questionType' + i +'" value="' + questionTypes[j] + '"> Opinion (Stars) \
             </div> \
             ';
@@ -113,9 +117,13 @@ window.onload=function(){
             <input type="text" class="form-control" id="ratingQuestion' + i + '" name="ratingQuestion' + i + '" placeholder="Insert Question Here"> \
           </div> \
         </div>';
+    // End of <div class="col-md-10">
+    // End of <div class="form-group">
 
+
+    // These elements are found in question.html
     $( '#ratingWrap' ).append( htmlContainer );
-     $('input[name="questionType' + i + '"][value="'+ obj[0] +'"]').attr("checked",true);
+    $('input[name="questionType' + i + '"][value="'+ obj[0] +'"]').attr("checked",true);
     $( '#ratingQuestion' + i ).val( obj[1] );
 
   }
@@ -156,24 +164,26 @@ window.onload=function(){
   $("#submitSurvey").click(function(){
 
     var htmlContainer = '<input type="hidden" id="numSurveyQuestions" name="numSurveyQuestions" value="' + numSurveyQuestions + '">\
-                        <input type="hidden" id="numRatingQuestions" name="numRatingQuestions" value="' + numRatingQuestions + '">';
+                         <input type="hidden" id="numRatingQuestions" name="numRatingQuestions" value="' + numRatingQuestions + '">';
 
     $( '#addQuestions' ).append( htmlContainer );
 
+
+    //============ Not used yet - Probably used for debugging only ==============
     for (var i = 0; i < numRatingQuestions; i++) {
-      var ratingSet = [
-        $('input[name="questionType' + i + '"]:checked').val(),
-        $( '#ratingQuestion' + i ).val( )
-      ];
-      $( '#ratingQuestion' + i ).val( 
-        JSON.stringify(ratingSet)
-      );
+      var ratingSet = [ 
+                        $('input[name="questionType' + i + '"]:checked').val(),
+                        $( '#ratingQuestion' + i ).val() 
+                      ];
+      $( '#ratingQuestion' + i ).val( JSON.stringify(ratingSet) );
+
       console.log($( '#ratingQuestion' + i ).val());
     };
+    //============ Not used yet - Probably used for debugging only ==============
+
 
     var jsonArr = $("#addQuestions").serializeArray();
-
-    console.log( jsonArr );
+    // console.log( jsonArr );
 
     $.ajax({
         type: 'POST',

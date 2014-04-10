@@ -21,7 +21,6 @@ $(document).ready(function() {
 	// 		$("#uploadButton").show();
 	// 		} }).submit();
 
-
 	// });
 
    	$("#imageForm").on('submit',(function(e){

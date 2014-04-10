@@ -57,8 +57,6 @@ window.onload=function(){
   // the uploaded images (table: user_uploads). The resulting array of image names are formatted to a
   // json string and retrieved here. Upon success of retrieval, the array is traversed and productItems
   // are given the appropriate data. 
-  // **NOTE** Image names for the question have yet to be implemented in the database/image-upload.php!
-  // **NOTE** Questions will display the image name w/ extensions and all. 
   function getImageData(){
     var productArr = [];
     var data = $.ajax({
@@ -69,11 +67,12 @@ window.onload=function(){
       async: false,
       success : function( data ){
         for( var i = 0; i < data.length; ++i ){
-          productArr.push( createProductItem( data[i].upload_id, 
-                            data[i].image_name, 
-                            data[i].image_description, 
-                            "images/"+data[i].image_path,
-                            questionTypes) );
+          productArr.push( createProductItem( 
+                              data[i].upload_id, 
+                              data[i].image_name, 
+                              data[i].image_description, 
+                              "images/"+data[i].image_path,
+                              questionTypes) );
         }
       }
     });
@@ -309,10 +308,12 @@ window.onload=function(){
             // Image path is change only if the current image changes
             $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
         }
+
         // Once you reached the end of the question types for that particular item and you're at the last item, ...
         else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
                   && currentItem == productItems.length - 1 ){  
-            // Action to do last question script
+
+          // Action to do last question script
           var arr = checkAllAnswered( DEFAULTVALUE );
           //console.log( arr );
 
@@ -320,7 +321,7 @@ window.onload=function(){
             
             //POST can only read in the: "key = value" format. 
             var jsonItems = "productAnswers=" + JSON.stringify( productItems );
-            // console.log( productItems );
+            console.log( jsonItems );
             
             $.ajax({
               type: 'POST',

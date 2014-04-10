@@ -10,6 +10,7 @@
 		array_push( $questionArr, $row );
 	}
 
+	//This json string is currently received only in question.js
 	echo( json_encode($questionArr) );
 	
 ?>
