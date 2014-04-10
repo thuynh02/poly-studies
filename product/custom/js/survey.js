@@ -10,19 +10,22 @@
 function validate( showMessage ){
 
 	if( showMessage == null ){ showMessage = false; }
-	var message = "";
+
+	$( ".question" ).removeClass( "has-errored" );
+	$( ".question" ).removeClass( "has-error" );
+
 	var isValid = true;
 
 	// Check if age was given 
 	// ***MUST CHECK FOR NUMERICAL ANSWER UNDER 99***
 	if( $('input[name="age"]')[0].value == '' ){
-		message += "Please fill out your age.\n";
+		$('#age').addClass( "has-error" );
 		isValid = false;
 	}
 
 	// Check if gender is given
 	if( $('input[name="gender"]:checked').length == 0 ){
-		message += "Please select your gender.\n";
+		$('#gender').addClass( "has-error" );
 		isValid = false;
 	}
 
@@ -30,12 +33,13 @@ function validate( showMessage ){
 	// ***MUST CHECK FOR QUESTION 11. ANSWER MUST BE CHOICE 2***
 	var numOfLikertQuestions = 18;
 	var currentQuestion;
-	for( var i = 1; i <= numOfLikertQuestions; ++i ){
+	for( var i = 0; i < numOfLikertQuestions; ++i ){
 
 		// Likert scale (radio button input) questions
 		if( $('input[name="q' + i + '"]').attr("type") == 'radio' 
 			&& $('input[name="q' + i + '"]:checked').length == 0 ){
-     		message += 'Please select one option for question ' + i + '\n';
+     		// message += 'Please select one option for question ' + i + '\n';
+     		$('#q' + i ).addClass( "has-errored" );
      		isValid = false;
 
 		}
@@ -43,15 +47,16 @@ function validate( showMessage ){
 		// Text field question(s) 
 		else if( $('input[name="q' + i + '"]').attr("type") == 'text' 
 				 && $('input[name="q' + i + '"]')[0].value == '' ){
-			message += 'Please fill out question ' + i + '\n';
+			// message += 'Please fill out question ' + i + '\n';
+			$('#q' + i ).addClass( "has-errored" );
 			isValid = false;
 		}
 	}
 
 	//
-	if( showMessage && message != ''){
-		alert( message );
-	}
+	// if( showMessage && message != ''){
+	// 	// salert( message );
+	// }
 
 	//If, by the end of all the tests, nothing triggers an invalid answer, the answers are okay to go
 	return isValid;
@@ -72,7 +77,6 @@ function getQuestionData(){
       data: data,
       async: false,
       success : function( data ){
-        console.log( data );
         for( var i = 0; i < data.length; ++i ){
           if( data[i].question_type == "survey" ){
             surveyQuestions.push( data[i].description );
@@ -89,7 +93,7 @@ function getQuestionData(){
 }
 
 function generateSurveyHTML( n, question ){
-	return '<tr> \
+	return '<tr class="question" id="q' + n + '"> \
 				<td>' + ( n + 1 ) + '.</td> \
 				<td>' + question + '</td> \
 				<td><input type="radio" name="q' + n + '" value="1">1</td> \
@@ -113,6 +117,16 @@ window.onload = function(){
 		$( '#scaleSurvey' ).append( generateSurveyHTML( i, surveyQuestions[i] ) )
 	};
 
+	// for (var i = 0; i < surveyQuestions.length; i++) {
+	// 	$('input[name="q' + i + '"][value=1]').attr("checked",true);
+	// };
+
+	// $('input[name="age"]').val( 18 );
+	// $('input[name="gender"][value="male"]').attr("checked",true);
+	// $('input[name="q4"][value=6]').attr("checked",true);
+	// $('input[name="q10"][value=2]').attr("checked",true);
+	// $('input[name="q18"]').val( "az" );
+
 	// Once the user clicks submit, begin to fill the survey data object with the answers
 	// Afterwards, convert the object into a JSON string 
 	$('#surveySubmit').click( function(){
@@ -124,9 +138,45 @@ window.onload = function(){
 			$('input:checked, input[type="text"]').each( function(){
 				surveyData[$(this)[0].name] = $(this)[0].value;
 			});
-			var jsonSurveyData = JSON.stringify(surveyData);
-	        console.log( jsonSurveyData );
+			// var jsonSurveyData = JSON.stringify(surveyData);
+	        console.log( surveyData );
+
+	        //POST can only read in the: "key = value" format. 
+            var jsonSurveyData = "surveyAnswers=" + JSON.stringify( surveyData );
+            console.log( jsonSurveyData );
+
+            $.ajax({
+              type: 'POST',
+              url: 'custom/php/addSurveyAnswers.php',
+              data: jsonSurveyData,
+
+              success : function( data ){
+                console.log( data );
+              },
+              error : function(){
+                console.log( "NAY" );
+              }
+            });
 	    }
+	});
+
+	$('#fillAll').click( function(){
+		
+
+		for (var i = 0; i < surveyQuestions.length; i++) {
+			$('input[name="q' + i + '"][value=1]').attr("checked",true);
+		};
+
+		$('input[name="age"]').val( 18 );
+		$('input[name="gender"][value="male"]').attr("checked",true);
+		$('input[name="q4"][value=6]').attr("checked",true);
+		$('input[name="q10"][value=2]').attr("checked",true);
+		$('input[name="q18"]').val( "az" );
+
+	});
+
+	$("#initialSurvey").submit( function(){
+		return false;
 	});
 }
 

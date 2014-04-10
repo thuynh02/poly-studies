@@ -79,6 +79,10 @@ Padding-left used to align this question with the others */
 	text-align: center;
 }
 
+.has-errored{
+	border: 2px red solid;
+}
+
 /*================================ "Responsive" Table ================================*/
 
 @media(max-width:979px){

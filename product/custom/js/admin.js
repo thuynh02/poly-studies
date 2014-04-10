@@ -4,19 +4,10 @@ window.onload=function(){
 
 	// ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
-	// 'createProductItem' function is for creating and returning an Object called productItem with the attributes: 
-	// productName, imagePath, questionTypes, and questionValues. Given a string for name, a string for path, and an 
-	// array of strings for qTypes in its parameters, the function does an initial check of the parameter using jQuery's 
-	// isArray() function to test if the parameter value truly is an array. If it isn't an array, then an array is 
-	// created where the first element of the array is the passed in value. An array for questionValues is created 
-	// under the array values with a default value of 0 for each of the element in the qTypes.
-
-	// An example of a product made from such function would be: (with values)
-	// var productItem = {
-	//   productName: "Jethro",
-	//   imagePath: "images/jethro.jpg",
-	// };
-
+	// Creates a Product Object with the imageID correlated to the table product_image's upload_id, the productName correlated
+	// to the table product_image's image_name, the productDesc related to the table product_image's image_description, and the
+	// imagePath correlating to the table product_image's image_path. These values are filled in their creation using the 
+	// getImageData() function while the voterRating attribute is fulfuled in the getRatingData() function. 
 	function createProductItem( id, name, desc, path ) {
 
 		var productItem = {
@@ -29,6 +20,8 @@ window.onload=function(){
 
 		return productItem;
 	}
+
+	// Gets inforation via the getImages.php file and returns a populated array of Product objects.
 
 	function getImageData(){
 		var productArr = [];
@@ -51,6 +44,8 @@ window.onload=function(){
 	}
 
 	var productItems = getImageData();
+
+	// Populates the voterRatings of each of the productArray's element.
 
 	function getRatingData(){
 		var data = $.ajax({
@@ -79,20 +74,9 @@ window.onload=function(){
 			}
 		});
 	}
-
-	// productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
 	
+	// Activate the getRatingData() function.
 	getRatingData();
-
-	console.log( productItems );
-
-	// Initialize and push into 'productItems' the Objects created from the function 'createProductItem.'
-	// Here five objects are created with associated index in array 'productItems': Jethro (Index 0), Merlin (Index 1), 
-	// Skinny Luke (Index 2), Colin Morgan (Index 3), and Ariel (Index 4)
-	// var productItems = [];
-	// productItems.push( createProductItem( "iPad Mini", "images/ipad-mini.jpg" ) );
-	// productItems.push( createProductItem( "Coke", "images/coke.jpg" ) )
-	// productItems.push( createProductItem( "Twitter", "images/twitter.jpg" ) );
 
 	// ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 
@@ -150,14 +134,19 @@ window.onload=function(){
 			</div> \
 			</div>';
 
+		// Add the htmlContainer into the container with the identifier #productItems
 		$( '#productItems' ).append( htmlContainer );
 
+		// Change the identifier imageName+i's value to the new value after its been added onto the container #productImages
 		$( "#imageName" + i ).val( productItems[i].productName );
 		
+		// Change the identifier imageDesc+i's value to the new value after its been added onto the container #productItems
 		$( "#imageDesc" + i ).val( productItems[i].productDesc );
 
+		// Change the identifier productImage+i value to the new url after a new product item is reached
 		$( '#productImg' + i ).attr( "src", productItems[i].imagePath) ;
 
+		// Change the voters and ratings accordingly to what is stored in the table ratings.
 		for (var j = 0; j < productItems[i]['voterRating'].length; j++) {
 			$( "#questionVoters" + j + "-" + i ).val( productItems[i]['voterRating'][j].voters );
 			$( "#questionRatings" + j + "-" + i ).val( productItems[i]['voterRating'][j].rating );
@@ -165,8 +154,7 @@ window.onload=function(){
 
 	};
 
-	//This function takes in the idNum of the image being updated and a message
-	//to display in it's respective result div
+	//This function takes in the idNum of the image being updated and a message to display in it's respective result div.
 	function displayUpdateResult( idNum, resultMsg){
 		$("#result" + idNum).show();
 		$("#result" + idNum).html( 'Status: ' + resultMsg);
@@ -175,8 +163,7 @@ window.onload=function(){
 		}, 2000 );
 	}
 
-	//Finds all buttons with pre-fix "update" and attaches the following function
-	//for their click action.
+	//Finds all buttons with pre-fix "update" and attaches the following function for their click action.
 	$(document.body).on('click', "button[id^='update']", function(event){
 		if( event.target ){
 

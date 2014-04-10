@@ -115,7 +115,7 @@ window.onload=function(){
         </div>';
 
     $( '#ratingWrap' ).append( htmlContainer );
-     $('input[name="questionType' + i + '"][value="'+ obj[0] +'"]').attr("checked",true);
+    $('input[name="questionType' + i + '"][value="'+ obj[0] +'"]').attr("checked",true);
     $( '#ratingQuestion' + i ).val( obj[1] );
 
   }
