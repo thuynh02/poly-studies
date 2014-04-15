@@ -23,6 +23,7 @@ function validateFilled( warn ){
 	// ***MUST CHECK FOR QUESTION 11. ANSWER MUST BE CHOICE 2***
 	var numOfLikertQuestions = 18;
 	var currentQuestion;
+	var validTextValue = 'az'
 	for( var i = 1; i <= numOfLikertQuestions; ++i ){
 
 		// Likert scale (radio button input) questions
@@ -36,7 +37,7 @@ function validateFilled( warn ){
 
 		// Text field question(s) 
 		else if( $('input[name="q' + i + '"]').attr("type") == 'text' 
-				 && $('input[name="q' + i + '"]')[0].value == '' ){
+				 && $('input[name="q' + i + '"]')[0].value != validTextValue ){
 			// message += 'Please fill out question ' + i + '\n';
 			if( warn ) $('#q' + i ).addClass( "has-errored" );
 			isValid = false;
@@ -154,9 +155,18 @@ $(document).ready(function() {
 									<td></td> \
 									<td></td> \
 								</tr>' );
-	
 
-	// $('#surveySubmit').addClass( "disabled" );
+
+	//Listen for all mouse clicks on the page. 
+	//Each click will check if all inputs have been filled & are valid before enabling the submit button
+	$(document).on('click', function(){
+		if( validateInput() && validateFilled() ){
+			$( '#surveySubmit' ).attr( 'class', 'btn btn-default' );
+		}
+		else{
+			$( '#surveySubmit' ).attr( 'class', 'btn btn-default disabled' );
+		}
+	});
 
 	// Once the user clicks submit, begin to fill the survey data object with the answers
 	// Afterwards, convert the object into a JSON string 
