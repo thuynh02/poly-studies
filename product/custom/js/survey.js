@@ -60,11 +60,11 @@ function validateInput( ){
 
 	var isValid = validateFilled( true );
 
-	if( $('input[name="q5"]').val() != 6 ) { 
+	if( $('input[name="q5"]:checked').val() != 6 ) { 
 		$('#q5' ).addClass( "has-errored" );
 		isValid = false; 
 	}
-	if ( $('input[name="q11"]').val() != 2 ) { 
+	if ( $('input[name="q11"]:checked').val() != 2 ) { 
 		$('#q11' ).addClass( "has-errored" );
 		isValid = false; 
 	}
@@ -137,6 +137,17 @@ window.onload = function(){
 	for (var i = 0; i < surveyQuestions.length; i++) {
 		$( '#scaleSurvey' ).append( generateSurveyHTML( i, surveyQuestions[i] ) )
 	};
+
+	//Listen for all mouse clicks on the page. 
+	//Each click will check if all inputs have been filled & are valid before enabling the submit button
+	$(document).on('click', function(){
+		if( validateFilled() && validateInput() ){
+			$( '#surveySubmit' ).attr( 'class', 'btn btn-default' );
+		}
+		else{
+			$( '#surveySubmit' ).attr( 'class', 'btn btn-default disabled' );
+		}
+	});
 
 	// $('#surveySubmit').addClass( "disabled" );
 

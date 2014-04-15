@@ -245,7 +245,7 @@ window.onload=function(){
 
 
   // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
-
+  
 
   $("#next, #prev").click(function(){
     if( this.id=='next' && currentItem == -1 ) { 
@@ -356,38 +356,6 @@ window.onload=function(){
 
             // Image path is change only if the current image changes
             $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
-<<<<<<< HEAD
-        }
-
-        // Once you reached the end of the question types for that particular item and you're at the last item, ...
-        else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
-                  && currentItem == productItems.length - 1 ){  
-
-          // Action to do last question script
-          var arr = checkAllAnswered( DEFAULTVALUE );
-          //console.log( arr );
-
-          if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
-            
-            //POST can only read in the: "key = value" format. 
-            var jsonItems = "productAnswers=" + JSON.stringify( productItems );
-            console.log( jsonItems );
-            
-            $.ajax({
-              type: 'POST',
-              url: 'custom/php/addAnswers.php',
-              data: jsonItems,
-
-              success : function( data ){
-                console.log( data );
-              },
-              error : function(){
-                console.log( "NAY" );
-              }
-            });
-            
-=======
->>>>>>> 4e5a351763f6413f073e4b03fbda7dd40784576c
           }
           currentQuestion = productItems[currentItem].questionTypes.length - 1;
         }
