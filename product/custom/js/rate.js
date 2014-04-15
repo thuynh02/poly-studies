@@ -2,7 +2,7 @@ window.onload=function(){
 
   // ----------------------------------------------------------------------------------------------------------------------- GLOBAL VARIABLES
 
-  var currentQuestion = -1,
+  var currentQuestion = 0,
       // amountQuestions = 0,
       currentItem = 0,
       itemQuestionSize = [];
@@ -179,7 +179,6 @@ window.onload=function(){
       html = '';
     }
 
-
     if ( keyword == 'usage' ){
       return '\
       <div class="usage question"> \
@@ -248,14 +247,14 @@ window.onload=function(){
 
 
   $("#next, #prev").click(function(){
-    if( this.id=='next' && currentItem == -1 ) { 
-      currentQuestion = 0;
-      $('input[name="user_id"]').val();
+    // if( this.id=='next' && currentItem == -1 ) { 
+    //   currentQuestion = 0;
+    //   $('input[name="user_id"]').val();
       
-    }
+    // }
 
     // When the 'next' button is pressed and the user has not finished all the items
-    else {
+    // else {
       if( this.id=='next' && currentItem < productItems.length ) { 
 
         //To determine if the user has submitted a valid answer for the questions.
@@ -288,8 +287,8 @@ window.onload=function(){
               console.log( "This question type is not recognized!" );
               break;
 
-          }
-        } 
+          } // End of switch statement
+        } // End of try statement
         catch(err){
             console.log( "INVALID QUESTION." );
         }
@@ -339,8 +338,8 @@ window.onload=function(){
               
             }
           }
-        }
-      }
+        } // End of if statement to check for valid answer
+      } // End of if statement of next button
 
       // When the 'prev' button is pressed and the user has not finished all the items
       if( this.id=='prev') { 
@@ -356,42 +355,42 @@ window.onload=function(){
 
             // Image path is change only if the current image changes
             $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
-<<<<<<< HEAD
-        }
 
-        // Once you reached the end of the question types for that particular item and you're at the last item, ...
-        else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
-                  && currentItem == productItems.length - 1 ){  
-
-          // Action to do last question script
-          var arr = checkAllAnswered( DEFAULTVALUE );
-          //console.log( arr );
-
-          if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
-            
-            //POST can only read in the: "key = value" format. 
-            var jsonItems = "productAnswers=" + JSON.stringify( productItems );
-            console.log( jsonItems );
-            
-            $.ajax({
-              type: 'POST',
-              url: 'custom/php/addAnswers.php',
-              data: jsonItems,
-
-              success : function( data ){
-                console.log( data );
-              },
-              error : function(){
-                console.log( "NAY" );
-              }
-            });
-            
-=======
->>>>>>> 4e5a351763f6413f073e4b03fbda7dd40784576c
           }
-          currentQuestion = productItems[currentItem].questionTypes.length - 1;
-        }
-      }
+
+          // Once you reached the end of the question types for that particular item and you're at the last item, ...
+          else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
+                    && currentItem == productItems.length - 1 ){  
+
+            // Action to do last question script
+            var arr = checkAllAnswered( DEFAULTVALUE );
+            //console.log( arr );
+
+            if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
+              
+              //POST can only read in the: "key = value" format. 
+              var jsonItems = "productAnswers=" + JSON.stringify( productItems );
+              console.log( jsonItems );
+              
+              $.ajax({
+                type: 'POST',
+                url: 'custom/php/addAnswers.php',
+                data: jsonItems,
+
+                success : function( data ){
+                  console.log( data );
+                },
+                error : function(){
+                  console.log( "NAY" );
+                }
+              });
+         
+            }
+            currentQuestion = productItems[currentItem].questionTypes.length - 1;
+          }
+        } 
+
+      } // End of if statement to check previous button when clicked
 
       // Changing the productDesc container based on currentItem's question type
      
@@ -444,10 +443,10 @@ window.onload=function(){
             break;
 
         }
-      }
+      } // end of if statement while still in survey
 
     }
-  }
+  // }
   );
 
 
