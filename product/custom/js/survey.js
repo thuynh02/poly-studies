@@ -23,6 +23,7 @@ function validateFilled( warn ){
 	// ***MUST CHECK FOR QUESTION 11. ANSWER MUST BE CHOICE 2***
 	var numOfLikertQuestions = 18;
 	var currentQuestion;
+	var validTextValue = 'az'
 	for( var i = 1; i <= numOfLikertQuestions; ++i ){
 
 		// Likert scale (radio button input) questions
@@ -36,7 +37,7 @@ function validateFilled( warn ){
 
 		// Text field question(s) 
 		else if( $('input[name="q' + i + '"]').attr("type") == 'text' 
-				 && $('input[name="q' + i + '"]')[0].value == '' ){
+				 && $('input[name="q' + i + '"]')[0].value != validTextValue ){
 			// message += 'Please fill out question ' + i + '\n';
 			if( warn ) $('#q' + i ).addClass( "has-errored" );
 			isValid = false;
@@ -60,11 +61,16 @@ function validateInput( ){
 
 	var isValid = validateFilled( true );
 
-	if( $('input[name="q5"]:checked').val() != 6 ) { 
+	if( $('input[name="age"]').val() < 18 ) {
+		alert( "You're under the required age." );
+		isValid = false;
+	}
+
+	if( !$('input[name="q5"][value=6]').is( ':checked' ) ) { 
 		$('#q5' ).addClass( "has-errored" );
 		isValid = false; 
 	}
-	if ( $('input[name="q11"]:checked').val() != 2 ) { 
+	if( !$('input[name="q11"][value=2]').is( ':checked' ) ) { 
 		$('#q11' ).addClass( "has-errored" );
 		isValid = false; 
 	}
@@ -128,28 +134,39 @@ function generateSurveyHTML( n, question ){
 
 }
 
-window.onload = function(){
+$(document).ready(function() {
 
 	var surveyData = new Object();
 
 	getQuestionData();
 
 	for (var i = 0; i < surveyQuestions.length; i++) {
-		$( '#scaleSurvey' ).append( generateSurveyHTML( i, surveyQuestions[i] ) )
+		$( '#scaleSurvey' ).append( generateSurveyHTML( i, surveyQuestions[i] ) );
 	};
+
+	$( '#scaleSurvey' ).append( '<tr class="question" id="q18"> \
+									<td>18</td> \
+									<td><input type="text" name="q18"> </td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+								</tr>' );
+
 
 	//Listen for all mouse clicks on the page. 
 	//Each click will check if all inputs have been filled & are valid before enabling the submit button
 	$(document).on('click', function(){
-		if( validateFilled() && validateInput() ){
+		if( validateInput() && validateFilled() ){
 			$( '#surveySubmit' ).attr( 'class', 'btn btn-default' );
 		}
 		else{
 			$( '#surveySubmit' ).attr( 'class', 'btn btn-default disabled' );
 		}
 	});
-
-	// $('#surveySubmit').addClass( "disabled" );
 
 	// Once the user clicks submit, begin to fill the survey data object with the answers
 	// Afterwards, convert the object into a JSON string 
@@ -186,8 +203,8 @@ window.onload = function(){
 
 	$('#fillAll').click( function(){
 		
-		for (var i = 0; i < surveyQuestions.length; i++) {
-			$('input[name="q' + (i + 1) + '"][value=1]').attr("checked",true);
+		for (var i = 1; i < surveyQuestions.length + 1; i++) {
+			$('input[name="q' + i + '"][value=1]').attr("checked",true);
 		};
 
 		$('input[name="age"]').val( 18 );
@@ -198,10 +215,22 @@ window.onload = function(){
 
 	});
 
+	$('#resetAll').click( function(){
+		
+		for (var i = 1; i < surveyQuestions.length + 1; i++) {
+			$('input[name="q' + i + '"]').attr("checked",false);
+		};
+
+		$('input[name="age"]').val( "" );
+		$('input[name="q18"]').val( "" );
+
+	});
+
+
 	$("#initialSurvey").submit( function(e){
 		return false;
 	});
-}
+} );
 
 
 

@@ -93,6 +93,30 @@ window.onload=function(){
 	getRatingData( productItems );
 	//console.log( productItems );
 	
+	var ratingQuestions = [];
+
+	function getQuestionData(){
+	    var data = $.ajax({
+	      type: 'POST',
+	      url: 'custom/php/getQuestions.php',
+	      dataType: 'json',
+	      data: data,
+	      async: false,
+	      success : function( data ){
+	        for( var i = 0; i < data.length; ++i ){
+	          if( data[i].question_type == "rating" ){
+	          	console.log(JSON.parse( data[i].description ) );
+	            ratingQuestions.push( JSON.parse( data[i].description ) );
+	          }
+	        }
+
+	      },
+	      error: function () { console.log("NAY"); }
+	    });
+
+	}
+
+	getQuestionData();
 	// ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 
 	//Will build all the product displays based on the information in the productItems array.
@@ -122,11 +146,20 @@ window.onload=function(){
 				htmlContainer += '<div class="form-group"> \
 					<label class="col-sm-3 control-label">Question #' + ( j + 1 ) + ': </label> \
 					<input type="hidden" id="questionID' + j + "-" + i + '" name="questionID' + j +'" value="' + productItems[i]['voterRating'][j].questionID + '"> \
-					<div class="col-sm-5"> \
-							<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name="questionVoters' + j + '" placeholder="Number of Voters"> \
-					</div> \
-					<div class="col-sm-4"> \
-						<input type="text" class="form-control" id="questionRatings' + j + "-" + i + '" name="questionRatings' + j + '" placeholder="Value of Rating"> \
+					<div class="col-sm-9"> \
+						<div class="col-sm-12 form-control-static">' + ratingQuestions[j][1].replace('[id]', productItems[i].productName ) + '</div> \
+						<div class="col-sm-6"> \
+							<div class="input-group"> \
+								<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name="questionVoters' + j + '" placeholder="Number of Prior Voters"> \
+								<span class="input-group-addon">Voters</span> \
+							</div> \
+						</div> \
+						<div class="col-sm-6"> \
+							<div class="input-group"> \
+								<span class="input-group-addon">Rating</span> \
+								<input type="text" class="form-control" id="questionRatings' + j + "-" + i + '" name="questionRatings' + j + '" placeholder="Value of Rating"> \
+							</div> \
+						</div> \
 					</div> \
 				</div> \
 				';

@@ -2,7 +2,7 @@ window.onload=function(){
 
   // ----------------------------------------------------------------------------------------------------------------------- GLOBAL VARIABLES
 
-  var currentQuestion = -1,
+  var currentQuestion = 0,
       // amountQuestions = 0,
       currentItem = 0,
       itemQuestionSize = [];
@@ -87,6 +87,7 @@ window.onload=function(){
       dataType: 'json',
       data: data,
       async: false,
+
       success : function( data ){
         for( var i = 0; i < data.length; ++i ){
           if( data[i].question_type == "survey" ){
@@ -101,44 +102,46 @@ window.onload=function(){
           questionTypes.push( ratingQuestions[i][0] );
         };
       },
-      error: function () { console.log("NAY"); }
-    });
 
+      error: function () { console.log("NAY"); }
+
+    });
   }
 
-
-  function getRatingData(){
+  function getRatingData( array ){
     var data = $.ajax({
       type: 'POST',
       url: 'custom/php/getRatings.php',
       data: data,
       dataType: 'json',
       async: false,
+
       success : function( data ){
         console.log( data );
-        for (var i = 0; i < productItems.length; i++) {
+        for (var i = 0; i < array.length; i++) {
           for (var j = 0; j < data.length; j++) {
-            if( productItems[i].imageID === data[j].upload_id ) {
+            if( array[i].imageID === data[j].upload_id ) {
               var voterRates = {
                 questionID: data[j].question_id,
                 voters: data[j].voters,
                 rating: data[j].rating
               };
-              productItems[i]['voterRating'].push( voterRates );
+              array[i]['voterRating'].push( voterRates );
             }
           };
-          
         };
-
       }
+
     });
   }
+
+
   getQuestionData();
 
   // productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
   var productItems = getImageData();
 
-  getRatingData();
+  getRatingData( productItems );
 
   console.log( productItems );
 
@@ -178,7 +181,6 @@ window.onload=function(){
     if( voters == "" || rating == "" || voters == null || rating == null  ) {
       html = '';
     }
-
 
     if ( keyword == 'usage' ){
       return '\
@@ -248,14 +250,14 @@ window.onload=function(){
   
 
   $("#next, #prev").click(function(){
-    if( this.id=='next' && currentItem == -1 ) { 
-      currentQuestion = 0;
-      $('input[name="user_id"]').val();
+    // if( this.id=='next' && currentItem == -1 ) { 
+    //   currentQuestion = 0;
+    //   $('input[name="user_id"]').val();
       
-    }
+    // }
 
     // When the 'next' button is pressed and the user has not finished all the items
-    else {
+    // else {
       if( this.id=='next' && currentItem < productItems.length ) { 
 
         //To determine if the user has submitted a valid answer for the questions.
@@ -288,8 +290,8 @@ window.onload=function(){
               console.log( "This question type is not recognized!" );
               break;
 
-          }
-        } 
+          } // End of switch statement
+        } // End of try statement
         catch(err){
             console.log( "INVALID QUESTION." );
         }
@@ -339,8 +341,8 @@ window.onload=function(){
               
             }
           }
-        }
-      }
+        } // End of if statement to check for valid answer
+      } // End of if statement of next button
 
       // When the 'prev' button is pressed and the user has not finished all the items
       if( this.id=='prev') { 
@@ -357,9 +359,40 @@ window.onload=function(){
             // Image path is change only if the current image changes
             $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
           }
-          currentQuestion = productItems[currentItem].questionTypes.length - 1;
-        }
-      }
+
+          // Once you reached the end of the question types for that particular item and you're at the last item, ...
+          else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
+                    && currentItem == productItems.length - 1 ){  
+
+            // Action to do last question script
+            var arr = checkAllAnswered( DEFAULTVALUE );
+            //console.log( arr );
+
+            if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
+              
+              //POST can only read in the: "key = value" format. 
+              var jsonItems = "productAnswers=" + JSON.stringify( productItems );
+              console.log( jsonItems );
+              
+              $.ajax({
+                type: 'POST',
+                url: 'custom/php/addAnswers.php',
+                data: jsonItems,
+
+                success : function( data ){
+                  console.log( data );
+                },
+                error : function(){
+                  console.log( "NAY" );
+                }
+              });
+         
+            }
+            currentQuestion = productItems[currentItem].questionTypes.length - 1;
+          }
+        } 
+
+      } // End of if statement to check previous button when clicked
 
       // Changing the productDesc container based on currentItem's question type
      
@@ -412,10 +445,10 @@ window.onload=function(){
             break;
 
         }
-      }
+      } // end of if statement while still in survey
 
     }
-  }
+  // }
   );
 
 

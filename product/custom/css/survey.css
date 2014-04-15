@@ -10,8 +10,20 @@ tr{
 	height: 50px;
 }
 
+tr:nth-child(odd){
+	background-color: #f5f3f5;
+}
+
 tr:nth-child(even){
 	background-color: #ebe7eb;
+}
+
+tr:nth-child(odd).has-errored {
+	background-color: #fae8eb;
+}
+
+tr:nth-child(even).has-errored {
+	background-color: #faabb9;
 }
 
 th, td{
@@ -77,10 +89,6 @@ Padding-left used to align this question with the others */
 #submit{
 	width: 100%;
 	text-align: center;
-}
-
-.has-errored{
-	border: 2px red solid;
 }
 
 /*================================ "Responsive" Table ================================*/
