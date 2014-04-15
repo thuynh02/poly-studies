@@ -60,11 +60,16 @@ function validateInput( ){
 
 	var isValid = validateFilled( true );
 
-	if( $('input[name="q5"]').val() != 6 ) { 
+	if( $('input[name="age"]').val() < 18 ) {
+		alert( "You're under the required age." );
+		isValid = false;
+	}
+
+	if( !$('input[name="q5"][value=6]').is( ':checked' ) ) { 
 		$('#q5' ).addClass( "has-errored" );
 		isValid = false; 
 	}
-	if ( $('input[name="q11"]').val() != 2 ) { 
+	if( !$('input[name="q11"][value=2]').is( ':checked' ) ) { 
 		$('#q11' ).addClass( "has-errored" );
 		isValid = false; 
 	}
@@ -128,15 +133,28 @@ function generateSurveyHTML( n, question ){
 
 }
 
-window.onload = function(){
+$(document).ready(function() {
 
 	var surveyData = new Object();
 
 	getQuestionData();
 
 	for (var i = 0; i < surveyQuestions.length; i++) {
-		$( '#scaleSurvey' ).append( generateSurveyHTML( i, surveyQuestions[i] ) )
+		$( '#scaleSurvey' ).append( generateSurveyHTML( i, surveyQuestions[i] ) );
 	};
+
+	$( '#scaleSurvey' ).append( '<tr class="question" id="q18"> \
+									<td>18</td> \
+									<td><input type="text" name="q18"> </td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+									<td></td> \
+								</tr>' );
+	
 
 	// $('#surveySubmit').addClass( "disabled" );
 
@@ -175,8 +193,8 @@ window.onload = function(){
 
 	$('#fillAll').click( function(){
 		
-		for (var i = 0; i < surveyQuestions.length; i++) {
-			$('input[name="q' + (i + 1) + '"][value=1]').attr("checked",true);
+		for (var i = 1; i < surveyQuestions.length + 1; i++) {
+			$('input[name="q' + i + '"][value=1]').attr("checked",true);
 		};
 
 		$('input[name="age"]').val( 18 );
@@ -187,10 +205,22 @@ window.onload = function(){
 
 	});
 
+	$('#resetAll').click( function(){
+		
+		for (var i = 1; i < surveyQuestions.length + 1; i++) {
+			$('input[name="q' + i + '"]').attr("checked",false);
+		};
+
+		$('input[name="age"]').val( "" );
+		$('input[name="q18"]').val( "" );
+
+	});
+
+
 	$("#initialSurvey").submit( function(e){
 		return false;
 	});
-}
+} );
 
 
 
