@@ -22,12 +22,15 @@
 			$questionID = htmlspecialchars( strip_tags( $_POST['questionID'.$j ] ) );
 			$voters = htmlspecialchars( strip_tags( $_POST['questionVoters'.$j ] ) );
 			$rating  = htmlspecialchars( strip_tags( $_POST['questionRatings'.$j ] ) );
-			$query = "UPDATE ratings 
-				  SET rating='$rating', voters='$voters'
-				  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$questionID'";
+			
+			if( $voters > 0 && $rating > 0 ) { 
+				$query = "UPDATE ratings 
+					  SET rating='$rating', voters='$voters'
+					  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$questionID'";
 
-			//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
-			mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
+				//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
+				mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
+			}
 		}
 
 		// If no errors were logged, then the queries worked just fine!
