@@ -241,7 +241,10 @@ window.onload=function(){
     }
   }
 
-
+  var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
+  $( '#productDesc' ).html( htmlContainer );
+  $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
+  $( '#productCaption' ).html( productItems[currentItem].productDesc );
 
   // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
 
