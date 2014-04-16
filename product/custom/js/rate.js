@@ -302,28 +302,28 @@ window.onload=function(){
       //Switch cases are used to gather the results depending on the type of question. 
       
       try{
-        switch( currentQuestion ){
+        switch( productItems[currentItem].questionTypes[currentQuestion] ){
 
           // Usage question
-          case 0: 
+          case 'usage': 
             // Gets the value of the checked radio button and assign it to the corresponding index of questionValues
             productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="usageValue"]:checked' ).value;
             break;
 
           // Familiarity question
-          case 1:
+          case 'familiarity-slider':
             // Get the value from the slider object 
             productItems[currentItem].questionValues[currentQuestion] = $("#famSlider" ).slider('value');
             break;
 
           // Star-rating question
-          case 2:
+          case 'star-rating':
             // Get the rating by grabbing the value from the selected input value with the name, opinionValue.
             productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="opinionValue"]:checked' ).value / 2;
             break;
 
           // Like-rating question
-          case 3:
+          case 'like-rating':
             // Get the rating by grabbing the value from the selected input value with the name, opinionValue.
             productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="likeValue"]:checked' ).value;
             break;
@@ -463,27 +463,27 @@ window.onload=function(){
       // Change the newly formatted productDesc container to select the attributes based on what's currently stored in the object
       var currentValue = productItems[currentItem].questionValues[currentQuestion];
 
-      switch( currentQuestion ){
+      switch( productItems[currentItem].questionTypes[currentQuestion] ){
 
         // Usage question
-        case 0: 
+        case 'usage': 
           if( currentValue == 'yes' ){ document.getElementsByName("usageValue")[0].checked = true; }
           else if( currentValue == 'no' ){ document.getElementsByName("usageValue")[1].checked = true; }
           break;
 
         // Familiarity question
-        case 1:
+        case 'familiarity-slider':
           $( '#famSlider' ).slider( "value", currentValue );
           $( '#famValue' ).html(  $("#famSlider" ).slider('value') );
           break;
 
         // Star-rating question
-        case 2:
+        case 'star-rating':
           document.getElementsByName("opinionValue")[currentValue * 2].checked = true;
           break;
 
         // Like/Dislike question
-        case 3: 
+        case 'like-rating': 
           if( currentValue == 'like' ){ document.getElementsByName("likeValue")[0].checked = true; }
           else if( currentValue == 'dislike' ){ document.getElementsByName("likeValue")[1].checked = true; }
           else if( currentValue == 'unsure' ){ document.getElementsByName("likeValue")[2].checked = true; }
