@@ -71,18 +71,15 @@
 		}
 
 		$stmtItems = mysqli_query($bd, "SELECT upload_id FROM product_images WHERE survey_id=1") or die( "Failed to fetch question data. ".mysqli_error($bd));
-		echo $stmtItems;
+
 		// Update/Insert rating questions
 		for ($i = $oldRating; $i < $numRatingQuestions; $i++) { 
-
 			while( $row = mysqli_fetch_assoc($stmtItems) ){
-
 				$query = "INSERT INTO ratings (question_id, survey_id, upload_id)
-					  VALUES ( $i, 1, '$row')";
+					  VALUES ( '$i', 1, '".$row['upload_id']."')";
 
-				mysqli_query( $bd, $query );
+				mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
 			}
-			
 
 
 		}

@@ -159,8 +159,8 @@ $(document).ready(function() {
 
 	//Listen for all mouse clicks on the page. 
 	//Each click will check if all inputs have been filled & are valid before enabling the submit button
-	$(document).on('click', function(){
-		if( validateInput() && validateFilled() ){
+	$('input').on('click', function(){
+		if( validateFilled() ){
 			$( '#surveySubmit' ).attr( 'class', 'btn btn-default' );
 		}
 		else{
