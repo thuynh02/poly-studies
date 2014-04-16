@@ -33,6 +33,13 @@ body{
     padding-bottom: 30px;
 }
 
-.nearlyDisabled{
-    opacity: 0.30;
+.like-rate > input[type=radio]{
+  display:none;
+}
+input[type=radio] + img{
+  cursor:pointer;
+  border:2px solid transparent;
+}
+input[type=radio]:checked + img{
+  border:2px solid #f00;
 }

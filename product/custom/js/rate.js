@@ -247,9 +247,18 @@ window.onload=function(){
       <div class="like-rating question"> \
         ' + html + ' \
         <p class="lead">' + question + '</p> \
-        <input type="radio" name="likeValue" value="like" /> Like \
-        <input type="radio" name="likeValue" value="dislike" /> Dislike \
-        <input type="radio" name="likeValue" value="unsure" /> Not Sure \
+        <label class="like-rate" for="like"> \
+          <input id="like" type="radio" name="likeValue" value="like"/> \
+          <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-up-icon.png"> \
+        </label> \
+        <label class="like-rate" for="dislike"> \
+          <input id="dislike" type="radio" name="likeValue" value="dislike"/> \
+          <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-down-icon.png"> \
+        </label> \
+        <label class="like-rate" for="unsure"> \
+          <input id="unsure" type="radio" name="likeValue" value="unsure"/> \
+          Not Sure \
+        </label> \
       </div> \
       '; 
     }
@@ -375,6 +384,7 @@ window.onload=function(){
         else if( currentQuestion == 0 && currentItem > 0 ){  
           if( currentItem > 0 ){ 
             currentItem--; 
+            currentQuestion = productItems[currentItem].questionTypes.length - 1;
 
             // Image path is change only if the current image changes
             $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
@@ -456,7 +466,7 @@ window.onload=function(){
 
           // Star-rating question
           case 2:
-            document.getElementsByName("opinionValue")[currentValue].checked = true;
+            document.getElementsByName("opinionValue")[currentValue*2].checked = true;
             break;
 
           // Like/Dislike question

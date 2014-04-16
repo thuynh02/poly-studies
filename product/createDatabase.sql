@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 04, 2014 at 03:31 AM
+-- Generation Time: Apr 16, 2014 at 02:36 AM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -76,26 +76,27 @@ CREATE TABLE `questions` (
 --
 
 INSERT INTO `questions` (`question_id`, `survey_id`, `question_type`, `description`, `created`) VALUES
-(0, 1, 'rating', '["usage","Have you ever had a [id]?"]', 1396568805),
-(0, 1, 'survey', 'I describe myself as extraverted, enthusiastic.', 1396568805),
-(1, 1, 'rating', '["familiarity-slider","On a scale of 1 - 10, how familiar are you with [id]?"]', 1396568805),
-(1, 1, 'survey', 'I seldom feel blue.', 1396568805),
-(2, 1, 'rating', '["opinion-star","On a scale of 1 (very negative) to 5 (very positive), what is your opinion of [id]?"]', 1396568805),
-(2, 1, 'survey', 'I describe myself as critical, quarrelsome.', 1396568805),
-(3, 1, 'survey', 'I describe myself as dependable, self-disciplined.', 1396568805),
-(4, 1, 'survey', 'Please select option six, then write az in question 18.', 1396568805),
-(5, 1, 'survey', 'I describe myself as anxious, easily upset.', 1396568805),
-(6, 1, 'survey', 'I feel comfortable with myself.', 1396568805),
-(7, 1, 'survey', 'I describe myself as open to new experiences, complex.', 1396568805),
-(8, 1, 'survey', 'I look at the bright side of life.', 1396568805),
-(9, 1, 'survey', 'I describe myself as reserved, quiet.', 1396568805),
-(10, 1, 'survey', 'Please select option two.', 1396568805),
-(11, 1, 'survey', 'I describe myself as sympathetic, warm.', 1396568805),
-(12, 1, 'survey', 'I often feel blue.', 1396568805),
-(13, 1, 'survey', 'I describe myself as disorganized, careless.', 1396568805),
-(14, 1, 'survey', 'I describe myself as calm, emotionally stable.', 1396568805),
-(15, 1, 'survey', 'I worry about things.', 1396568805),
-(16, 1, 'survey', 'I describe myself as conventional, uncreative.', 1396568805);
+(0, 1, 'rating', '["usage","Have you ever had a [id]?"]', 1397606469),
+(0, 1, 'survey', 'I describe myself as extraverted, enthusiastic.', 1397606469),
+(1, 1, 'rating', '["familiarity-slider","On a scale of 1 - 10, how familiar are you with [id]?"]', 1397606469),
+(1, 1, 'survey', 'I seldom feel blue.', 1397606469),
+(2, 1, 'rating', '["opinion-star","On a scale of 1 (very negative) to 5 (very positive), what is your opinion of [id]?"]', 1397606469),
+(2, 1, 'survey', 'I describe myself as critical, quarrelsome.', 1397606469),
+(3, 1, 'rating', '["like-rating","Do you like [id]?"]', 1397606469),
+(3, 1, 'survey', 'I describe myself as dependable, self-disciplined.', 1397606469),
+(4, 1, 'survey', 'Please select option six, then write az in question 18.', 1397606469),
+(5, 1, 'survey', 'I describe myself as anxious, easily upset.', 1397606469),
+(6, 1, 'survey', 'I feel comfortable with myself.', 1397606469),
+(7, 1, 'survey', 'I describe myself as open to new experiences, complex.', 1397606469),
+(8, 1, 'survey', 'I look at the bright side of life.', 1397606469),
+(9, 1, 'survey', 'I describe myself as reserved, quiet.', 1397606469),
+(10, 1, 'survey', 'Please select option two.', 1397606469),
+(11, 1, 'survey', 'I describe myself as sympathetic, warm.', 1397606469),
+(12, 1, 'survey', 'I often feel blue.', 1397606469),
+(13, 1, 'survey', 'I describe myself as disorganized, careless.', 1397606469),
+(14, 1, 'survey', 'I describe myself as calm, emotionally stable.', 1397606469),
+(15, 1, 'survey', 'I worry about things.', 1397606469),
+(16, 1, 'survey', 'I describe myself as conventional, uncreative.', 1397606469);
 
 -- --------------------------------------------------------
 
@@ -127,7 +128,10 @@ INSERT INTO `ratings` (`question_id`, `upload_id`, `survey_id`, `voters`, `ratin
 (1, 11, 1, NULL, NULL),
 (2, 9, 1, 1, '4'),
 (2, 10, 1, NULL, NULL),
-(2, 11, 1, NULL, NULL);
+(2, 11, 1, NULL, NULL),
+(3, 9, 1, NULL, NULL),
+(3, 10, 1, NULL, NULL),
+(3, 11, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -168,10 +172,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`) VALUES
-(-1);
-
--- --------------------------------------------------------
+INSERT INTO `users` (`user_id`, `username`, `password`, `email`) VALUES
+(-1, NULL, NULL, NULL);
 
 --
 -- Constraints for dumped tables
