@@ -479,7 +479,7 @@ window.onload=function(){
 
         // Star-rating question
         case 2:
-          document.getElementsByName("opinionValue")[currentValue].checked = true;
+          document.getElementsByName("opinionValue")[currentValue * 2].checked = true;
           break;
 
         // Like/Dislike question
