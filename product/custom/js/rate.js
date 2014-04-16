@@ -471,9 +471,9 @@ window.onload=function(){
 
           // Like/Dislike question
           case 0: 
-            if( currentValue == 'like' ){ document.getElementsByName("usageValue")[0].checked = true; }
-            else if( currentValue == 'dislike' ){ document.getElementsByName("usageValue")[1].checked = true; }
-            else if( currentValue == 'unsure' ){ document.getElementsByName("usageValue")[2].checked = true; }
+            if( currentValue == 'like' ){ document.getElementsByName("likeValue")[0].checked = true; }
+            else if( currentValue == 'dislike' ){ document.getElementsByName("likeValue")[1].checked = true; }
+            else if( currentValue == 'unsure' ){ document.getElementsByName("likeValue")[2].checked = true; }
             break;
 
           // For any question types that are not handled above
