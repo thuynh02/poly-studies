@@ -40,18 +40,51 @@
 		for ($i=0; $i < $numRatingQuestions; $i++) { 
 
 			$description = strip_tags( $_POST['ratingQuestion'.$i] );
-			if(  $i < $oldRating) {
+			if( $i < $oldRating) {
 				$query = "UPDATE questions
 					  	  SET description='$description', created='$time'
 					  	  WHERE question_type='rating' AND survey_id=1 AND question_id='$i'";
+
+				//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
+				mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
 			}
 			else {
 				$query = "INSERT INTO questions (question_id, survey_id, question_type, description, created)
 						  VALUES ( $i, 1, 'rating', '$description', '$time' )";
+
+				//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
+				mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
+
+				// $stmtItems = mysqli_query($bd, "SELECT upload_id FROM product_images WHERE survey_id=1");
+
+				// while( $row = mysqli_fetch_assoc($stmtItems) ){
+
+				// 	$query = "INSERT INTO ratings (question_id, survey_id, upload_id)
+				// 		  VALUES ( $i, 1, $row)";
+
+				// 	mysqli_query( $bd, $query );
+				// }
+				
 			}
 
-			//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
-			mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
+
+		}
+
+		$stmtItems = mysqli_query($bd, "SELECT upload_id FROM product_images WHERE survey_id=1") or die( "Failed to fetch question data. ".mysqli_error($bd));
+		echo $stmtItems;
+		// Update/Insert rating questions
+		for ($i = $oldRating; $i < $numRatingQuestions; $i++) { 
+
+			while( $row = mysqli_fetch_assoc($stmtItems) ){
+
+				$query = "INSERT INTO ratings (question_id, survey_id, upload_id)
+					  VALUES ( $i, 1, '$row')";
+
+				mysqli_query( $bd, $query );
+			}
+			
+
+
 		}
 
 		// Will be received by question.js to now how many errors were encountered during database updates/insertions
