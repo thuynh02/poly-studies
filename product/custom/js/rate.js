@@ -317,7 +317,7 @@ window.onload=function(){
             break;
 
           // Star-rating question
-          case 'star-rating':
+          case 'opinion-star':
             // Get the rating by grabbing the value from the selected input value with the name, opinionValue.
             productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="opinionValue"]:checked' ).value / 2;
             break;
@@ -478,7 +478,7 @@ window.onload=function(){
           break;
 
         // Star-rating question
-        case 'star-rating':
+        case 'opinion-star':
           document.getElementsByName("opinionValue")[currentValue * 2].checked = true;
           break;
 
