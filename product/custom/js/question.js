@@ -6,7 +6,7 @@ window.onload=function(){
   var ratingQuestions = [];
   var numSurveyQuestions = 0;
   var numRatingQuestions = 0;
-  var questionTypes = [ 'usage', 'familiarity-slider', 'opinion-star' ];
+  var questionTypes = [ 'usage', 'familiarity-slider', 'opinion-star', 'like-rating' ];
 
   // ----------------------------------------------------------------------------------------------------------------------- PRODUCT INITIALIZATION
 
@@ -99,6 +99,15 @@ window.onload=function(){
             htmlContainer += '\
             <div class="radio"> \
               <input type="radio" name="questionType' + i +'" value="' + questionTypes[j] + '"> Opinion (Stars) \
+            </div> \
+            ';
+            break;
+
+          // Like-rating question
+          case 'like-rating':
+            htmlContainer += '\
+            <div class="radio"> \
+              <input type="radio" name="questionType' + i +'" value="' + questionTypes[j] + '"> Like/Dislike \
             </div> \
             ';
             break;
@@ -200,7 +209,7 @@ window.onload=function(){
 
       });
 
-    window.location.reload();
+    // window.location.reload();
 
   });
 

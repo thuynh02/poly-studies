@@ -29,8 +29,8 @@ window.onload=function(){
   // var productItem = {
   //   productName: "Jethro",
   //   imagePath: "images/jethro.jpg",
-  //   questionTypes: [ 'familiarity-slider', 'star-rating', 'usage' ]
-  //   questionValues: [ 0, 0, 0 ]
+  //   questionTypes: [ 'familiarity-slider', 'star-rating', 'usage', 'like-rating' ]
+  //   questionValues: [ 0, 0, 0, 0 ]
   // };
 
   function createProductItem( id, name, desc, path, qTypes ) {
@@ -168,14 +168,14 @@ window.onload=function(){
 
   // ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 
-  function generateQuestionHTML( item, question ) {
+  function generateQuestionHTML( item, questionIndex ) {
     console.log( "I: " + item );
-    console.log( "Q: " + question );
+    console.log( "Q: " + questionIndex );
 
-    var name = productItems[item].productName;
-    var keyword = productItems[item].questionTypes[question];
-    var voters = productItems[item]['voterRating'][question].voters;
-    var rating = productItems[item]['voterRating'][question].rating;
+    var question = ratingQuestions[questionIndex][1].replace('[id]', productItems[item].productName );
+    var keyword = productItems[item].questionTypes[questionIndex];
+    var voters = productItems[item]['voterRating'][questionIndex].voters;
+    var rating = productItems[item]['voterRating'][questionIndex].rating;
 
     var html = '<p class="lead">' + voters + ' people voted ' + rating + '.</p>';
     if( voters == "" || rating == "" || voters == null || rating == null  ) {
@@ -186,7 +186,7 @@ window.onload=function(){
       return '\
       <div class="usage question"> \
         ' + html + ' \
-        <p class="lead">Have you ever had a ' + name + '?</p> \
+        <p class="lead">' + question + '</p> \
         <input type="radio" name="usageValue" value="yes" /> Yes \
         <input type="radio" name="usageValue" value="no" /> No \
       </div> \
@@ -197,7 +197,7 @@ window.onload=function(){
       return '\
       <div class="question"> \
         ' + html + ' \
-        <p class="lead">On a scale of 1 - 10, how familiar are you with ' + name + '?</p> \
+        <p class="lead">' + question + '</p> \
         <div id="famSlider"></div> \
         <p>Your slider has a value of <span id="famValue"></span></p> \
       </div> \
@@ -208,7 +208,7 @@ window.onload=function(){
       return '\
       <div class="question"> \
         ' + html + ' \
-        <p class="lead">On a scale of 1 (very negative) to 5 (very positive), what is your opinion of ' + name + '?</p> \
+        <p class="lead">' + question + '</p> \
         Very Negative \
           <div class="star-rating"> \
             <input class="starClass0" id="starValue0" name="opinionValue" type="radio" value="0" checked > \
@@ -241,6 +241,26 @@ window.onload=function(){
         Very Positive \
       </div> \
       ';
+    }
+    else if ( keyword == 'like-rating' ){
+      return '\
+      <div class="like-rating question"> \
+        ' + html + ' \
+        <p class="lead">' + question + '</p> \
+        <label class="like-rate" for="like"> \
+          <input id="like" type="radio" name="likeValue" value="like"/> \
+          <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-up-icon.png"> \
+        </label> \
+        <label class="like-rate" for="dislike"> \
+          <input id="dislike" type="radio" name="likeValue" value="dislike"/> \
+          <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-down-icon.png"> \
+        </label> \
+        <label class="like-rate" for="unsure"> \
+          <input id="unsure" type="radio" name="likeValue" value="unsure"/> \
+          Not Sure \
+        </label> \
+      </div> \
+      '; 
     }
   }
 
@@ -275,6 +295,7 @@ window.onload=function(){
   $("#next, #prev").click(function(){
 
     // When the 'next' button is pressed and the user has not finished all the items
+    // else {
     if( this.id=='next' && currentItem < productItems.length ) { 
 
       //To determine if the user has submitted a valid answer for the questions.
@@ -301,6 +322,12 @@ window.onload=function(){
             productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="opinionValue"]:checked' ).value / 2;
             break;
 
+          // Like-rating question
+          case 3:
+            // Get the rating by grabbing the value from the selected input value with the name, opinionValue.
+            productItems[currentItem].questionValues[currentQuestion] = document.querySelector( 'input[name="likeValue"]:checked' ).value;
+            break;
+
           // For any question types that are not handled above
           default:
             console.log( "This question type is not recognized!" );
@@ -316,17 +343,15 @@ window.onload=function(){
       if( productItems[currentItem].questionValues[currentQuestion] != DEFAULTVALUE ){
 
         // Increment the currentQuestion if there's still more questions for that particular item
-        if( currentQuestion < productItems[currentItem].questionTypes.length -1){ currentQuestion++; }
+        if( currentQuestion < productItems[currentItem].questionTypes.length - 1 ){ currentQuestion++; }
 
         // Once you reached the end of the question types for that particular item and you're not
-        // at the last item, reset the current question and go to the next item.
-        else if( currentQuestion == productItems[currentItem].questionTypes.length -1
-                  && currentItem < productItems.length - 1 ){  
-            currentQuestion = 0;
-            currentItem++;
-
-            // Image path is change only if the current image changes
-            $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
+        // at the last item, reset the current question as the last question of the previous item.
+        else if( currentItem < productItems.length - 1 ){  
+          currentItem++;
+          currentQuestion = 0; 
+          // Image path is change only if the current image changes
+          $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
         }
         // Once you reached the end of the question types for that particular item and you're at the last item, ...
         else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
@@ -373,7 +398,7 @@ window.onload=function(){
       else if( currentQuestion == 0 && currentItem > 0 ){  
         if( currentItem > 0 ){ 
           currentItem--; 
-
+          currentQuestion = productItems[currentItem].questionTypes.length - 1;
           // Image path is change only if the current image changes
           $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
         }
@@ -457,6 +482,13 @@ window.onload=function(){
           document.getElementsByName("opinionValue")[currentValue].checked = true;
           break;
 
+        // Like/Dislike question
+        case 3: 
+          if( currentValue == 'like' ){ document.getElementsByName("likeValue")[0].checked = true; }
+          else if( currentValue == 'dislike' ){ document.getElementsByName("likeValue")[1].checked = true; }
+          else if( currentValue == 'unsure' ){ document.getElementsByName("likeValue")[2].checked = true; }
+          break;
+
         // For any question types that are not handled above
         default:
           console.log( "This question type is not recognized!" );
@@ -464,7 +496,6 @@ window.onload=function(){
 
       }
     } // end of if statement while still in survey
-  }); // end of #next & #prev click functions
-
+  });
 
 }
