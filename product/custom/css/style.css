@@ -1,6 +1,11 @@
-body{
+.body{
     padding: 5% 5%;
     background-color: #AAAAAA;
+}
+
+.navbar{
+  margin-bottom: 0px;
+
 }
 
 .stroked{
