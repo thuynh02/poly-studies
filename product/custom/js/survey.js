@@ -35,13 +35,14 @@ function validateFilled( warn ){
 
 		}
 
-		// Text field question(s) 
-		else if( $('input[name="q' + i + '"]').attr("type") == 'text' 
-				 && $('input[name="q' + i + '"]')[0].value != validTextValue ){
-			// message += 'Please fill out question ' + i + '\n';
-			if( warn ) $('#q' + i ).addClass( "has-errored" );
-			isValid = false;
-		}
+		// // Text field question(s)
+		// *** DEPRECATED: Specifications state user should be allowed to submit anything in text field to determine if they were being aware ***
+		// else if( $('input[name="q' + i + '"]').attr("type") == 'text' 
+		// 		 && $('input[name="q' + i + '"]')[0].value != validTextValue ){
+		// 	// message += 'Please fill out question ' + i + '\n';
+		// 	if( warn ) $('#q' + i ).addClass( "has-errored" );
+		// 	isValid = false;
+		// }
 	}
 
 	//If, by the end of all the tests, nothing triggers an invalid answer, the answers are okay to go
@@ -74,9 +75,11 @@ function validateInput( ){
 		$('#q11' ).addClass( "has-errored" );
 		isValid = false; 
 	}
-	if( $('input[name="q18"]').val() != "az" ) { 
-		isValid = false; 
-	}
+
+	// ** DEPRECATED: Specifications state user should be allowed to submit anything in text field to determine if they were being aware ***
+	// if( $('input[name="q18"]').val() != "az" ) { 
+	// 	isValid = false; 
+	// }
 
 
 	//
@@ -212,6 +215,13 @@ $(document).ready(function() {
 		$('input[name="q5"][value=6]').attr("checked",true);
 		$('input[name="q11"][value=2]').attr("checked",true);
 		$('input[name="q18"]').val( "az" );
+
+		if( validateFilled() ){
+			$( '#surveySubmit' ).attr( 'class', 'btn btn-default' );
+		}
+		else{
+			$( '#surveySubmit' ).attr( 'class', 'btn btn-default disabled' );
+		}
 
 	});
 
