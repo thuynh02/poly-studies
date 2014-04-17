@@ -177,16 +177,20 @@ window.onload=function(){
     var voters = productItems[item]['voterRating'][questionIndex].voters;
     var rating = productItems[item]['voterRating'][questionIndex].rating;
 
-    var html = '<p class="lead">' + voters + ' people voted ' + rating + '.</p>';
-    if( voters == "" || rating == "" || voters == null || rating == null  ) {
-      html = '';
+    var voteFeedback = "";
+
+    if( !( voters == "" || rating == "" || voters == null || rating == null ) ) {
+      if( keyword == 'usage'){ voteFeedback = voters + ' people voted ' + rating + '.'; }
+      else if( keyword == 'familiarity-slider'){}
+      else if( keyword == 'opinion-star'){  }
+      else if( keyword == 'like-rating'){ voteFeedback = rating + ' likes'; }
     }
 
     if ( keyword == 'usage' ){
       return '\
       <div class="usage question"> \
-        ' + html + ' \
         <p class="lead">' + question + '</p> \
+        <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
         <input type="radio" name="usageValue" value="yes" /> Yes \
         <input type="radio" name="usageValue" value="no" /> No \
       </div> \
@@ -196,8 +200,8 @@ window.onload=function(){
     else if ( keyword == 'familiarity-slider' ) {
       return '\
       <div class="question"> \
-        ' + html + ' \
         <p class="lead">' + question + '</p> \
+        <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
         <div id="famSlider"></div> \
         <p>Your slider has a value of <span id="famValue"></span></p> \
       </div> \
@@ -207,9 +211,39 @@ window.onload=function(){
     else if ( keyword == 'opinion-star' ) {
       return '\
       <div class="question"> \
-        ' + html + ' \
         <p class="lead">' + question + '</p> \
+        <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
         Very Negative \
+          <div class="star-rating"> \
+            <input class="starClass0" id="vstarValue0" name="voterValue" type="radio" value="0" checked > \
+            <input class="starClass1" id="vstarValue1" name="voterValue" type="radio" value="1" /> \
+            <input class="starClass2" id="vstarValue2" name="voterValue" type="radio" value="2" /> \
+            <input class="starClass3" id="vstarValue3" name="voterValue" type="radio" value="3" /> \
+            <input class="starClass4" id="vstarValue4" name="voterValue" type="radio" value="4" /> \
+            <input class="starClass5" id="vstarValue5" name="voterValue" type="radio" value="5" /> \
+            <input class="starClass6" id="vstarValue6" name="voterValue" type="radio" value="6" /> \
+            <input class="starClass7" id="vstarValue7" name="voterValue" type="radio" value="7" /> \
+            <input class="starClass8" id="vstarValue8" name="voterValue" type="radio" value="8" /> \
+            <input class="starClass9" id="vstarValue9" name="voterValue" type="radio" value="9" /> \
+            <input class="starClass10" id="vstarValue10" name="voterValue" type="radio" value="10" /> \
+            \
+            <label for="vstarValue0" class="star starClass0l" ></label> \
+            <label for="vstarValue1" class="star starClass1l" ></label> \
+            <label for="vstarValue2" class="star starClass2l" ></label> \
+            <label for="vstarValue3" class="star starClass3l" ></label> \
+            <label for="vstarValue4" class="star starClass4l" ></label> \
+            <label for="vstarValue5" class="star starClass5l" ></label> \
+            <label for="vstarValue6" class="star starClass6l" ></label> \
+            <label for="vstarValue7" class="star starClass7l" ></label> \
+            <label for="vstarValue8" class="star starClass8l" ></label> \
+            <label for="vstarValue9" class="star starClass9l" ></label> \
+            <label for="vstarValue10" class="star starClass10l last" ></label> \
+            \
+            <div class="rating"></div> \
+            <div class="rating-bg"></div> \
+          </div> <!-- star-rating --> \
+          \
+          \
           <div class="star-rating"> \
             <input class="starClass0" id="starValue0" name="opinionValue" type="radio" value="0" checked > \
             <input class="starClass1" id="starValue1" name="opinionValue" type="radio" value="1" /> \
@@ -245,8 +279,8 @@ window.onload=function(){
     else if ( keyword == 'like-rating' ){
       return '\
       <div class="like-rating question"> \
-        ' + html + ' \
         <p class="lead">' + question + '</p> \
+        <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
         <label class="like-rate" for="like"> \
           <input id="like" type="radio" name="likeValue" value="like"/> \
           <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-up-icon.png"> \
@@ -268,6 +302,9 @@ window.onload=function(){
   $( '#productDesc' ).html( htmlContainer );
   $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
   $( '#productCaption' ).html( productItems[currentItem].productDesc );
+  // $( '#voteFeedback' ).html( voteFeedback );
+
+  // document.getElementsByName("voterValue")[rating * 2].checked = true;
 
   // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
 

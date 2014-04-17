@@ -143,26 +143,56 @@ window.onload=function(){
 			';
 
 			for (var j = 0; j < productItems[i]['voterRating'].length; j++) {
-				htmlContainer += '<div class="form-group"> \
-					<label class="col-sm-3 control-label">Question #' + ( j + 1 ) + ': </label> \
-					<input type="hidden" id="questionID' + j + "-" + i + '" name="questionID' + j +'" value="' + productItems[i]['voterRating'][j].questionID + '"> \
-					<div class="col-sm-9"> \
-						<div class="col-sm-12 form-control-static">' + ratingQuestions[j][1].replace('[id]', productItems[i].productName ) + '</div> \
-						<div class="col-sm-6"> \
-							<div class="input-group"> \
-								<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name="questionVoters' + j + '" placeholder="Number of Prior Voters"> \
-								<span class="input-group-addon">Voters</span> \
+				if( ratingQuestions[j][0] != 'like-rating' ) {
+					htmlContainer += '<div class="form-group"> \
+						<label class="col-sm-3 control-label">Question #' + ( j + 1 ) + ': </label> \
+						<input type="hidden" id="questionID' + j + "-" + i + '" name="questionID' + j +'" value="' + productItems[i]['voterRating'][j].questionID + '"> \
+						<div class="col-sm-9"> \
+							<div class="col-sm-12 form-control-static">' + ratingQuestions[j][1].replace('[id]', productItems[i].productName ) + '</div> \
+							<div class="col-sm-6"> \
+								<div class="input-group"> \
+									<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name="questionVoters' + j + '" placeholder="Number of Prior Voters"> \
+									<span class="input-group-addon">Voters</span> \
+								</div> \
 							</div> \
-						</div> \
-						<div class="col-sm-6"> \
-							<div class="input-group"> \
-								<span class="input-group-addon">Rating</span> \
-								<input type="text" class="form-control" id="questionRatings' + j + "-" + i + '" name="questionRatings' + j + '" placeholder="Value of Rating"> \
+							<div class="col-sm-6"> \
+								<div class="input-group"> \
+									<span class="input-group-addon">Rating</span> \
+									<input type="text" class="form-control" id="questionRatings' + j + "-" + i + '" name="questionRatings' + j + '" placeholder="Value of Rating"> \
+								</div> \
 							</div> \
 						</div> \
 					</div> \
-				</div> \
-				';
+					';
+				}
+				else {
+					htmlContainer += '<div class="form-group"> \
+						<label class="col-sm-3 control-label">Question #' + ( j + 1 ) + ': </label> \
+						<input type="hidden" id="questionID' + j + "-" + i + '" name="questionID' + j +'" value="' + productItems[i]['voterRating'][j].questionID + '"> \
+						<div class="col-sm-9"> \
+							<div class="col-sm-12 form-control-static">' + ratingQuestions[j][1].replace('[id]', productItems[i].productName ) + '</div> \
+							<div class="col-sm-4"> \
+								<div class="input-group"> \
+									<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name="likeVoters' + j + '" placeholder="Number of Likes"> \
+									<span class="input-group-addon">Likes</span> \
+								</div> \
+							</div> \
+							<div class="col-sm-4"> \
+								<div class="input-group"> \
+									<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name=unsureVoters' + j + '" placeholder="Number of Dislikes"> \
+									<span class="input-group-addon">Unsure</span> \
+								</div> \
+							</div> \
+							<div class="col-sm-4"> \
+								<div class="input-group"> \
+									<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name="dislikeVoters' + j + '" placeholder="Number of Unsure"> \
+									<span class="input-group-addon">Dislikes</span> \
+								</div> \
+							</div> \
+						</div> \
+					</div> \
+					';
+				}
 
 			};
 
