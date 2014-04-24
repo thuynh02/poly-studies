@@ -31,6 +31,18 @@
 			mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
 		}
 
+		$questionID = htmlspecialchars( strip_tags( $_POST['questionID'.($numberOfQuestions-1)] ) );
+		$likes[0] = htmlspecialchars( strip_tags( $_POST['likeVoters'.($numberOfQuestions-1)] ) );
+		$likes[1] = htmlspecialchars( strip_tags( $_POST['unsureVoters'.($numberOfQuestions-1)] ) );
+		$likes[2] = htmlspecialchars( strip_tags( $_POST['dislikeVoters'.($numberOfQuestions-1)] ) );
+		$likes = json_encode($likes);
+		
+		$query = "UPDATE ratings 
+				  SET rating='$likes', voters='like-rating'
+				  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$questionID'";
+
+		mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
+
 		// If no errors were logged, then the queries worked just fine!
 		if( $numOfErrors === 0 ){ 
 			print_r( "Success! " ); 

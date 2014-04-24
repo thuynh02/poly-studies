@@ -138,6 +138,7 @@ function generateSurveyHTML( n, question ){
 }
 
 $(document).ready(function() {
+	var timeOpened = new Date();
 
 	var surveyData = new Object();
 
@@ -178,6 +179,11 @@ $(document).ready(function() {
 		// Validate takes a boolean parameter. If true is passed, alerts appear, telling the user what
 		// questions were left unanswered
 		if( validateInput() ){
+			var timeEnded = new Date();
+			var htmlContainer = '<input type="hidden" id="timeElapsed" name="timeElapsed" value="' + (timeOpened - timeEnded) + '">'
+
+   	 		$( '#initialSurvey' ).append( htmlContainer );
+
 			//For every checked radio button and provided text input, add the value to the survey data
 			$('input:checked, input[type="text"]').each( function(){
 				surveyData[$(this)[0].name] = $(this)[0].value;

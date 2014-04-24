@@ -179,11 +179,53 @@ window.onload=function(){
 
     var voteFeedback = "";
 
-    if( !( voters == "" || rating == "" || voters == null || rating == null ) ) {
-      if( keyword == 'usage'){ voteFeedback = voters + ' people voted ' + rating + '.'; }
+    if( !( voters == "" || voters == 0 || rating == "" || voters == null || rating == null ) ) {
+      if( keyword == 'usage' || keyword == 'familiarity-slider'){ 
+        voteFeedback = voters;
+        if( voteFeedback == 1 ){ voteFeedback += ' person voted '; }
+        else{ voteFeedback += ' people voted '; }
+        voteFeedback += rating; 
+        if( keyword == 'familiarity-slider' ) { voteFeedback += " on how familiarity they were with the product.";}
+        else { voteFeedback += " on if they had the item."; }
+      }
       else if( keyword == 'familiarity-slider'){}
-      else if( keyword == 'opinion-star'){  }
-      else if( keyword == 'like-rating'){ voteFeedback = rating + ' likes'; }
+      else if( keyword == 'opinion-star'){  
+        voteFeedback = ''
+        for (var i = 0; i < 11; i++) {
+          if( rating*2 == i ){
+            voteFeedback += '<input class="starClass'+i+'" id="vstarValue'+i+'" name="voterValue" type="radio" value="'+i+'" checked disabled/>';
+          }
+          else { 
+            voteFeedback += '<input class="starClass'+i+'" id="vstarValue'+i+'" name="voterValue" type="radio" value="'+i+'" disabled/>';
+          }
+          
+        };
+
+        voteFeedback += '\
+            <label for="vstarValue0" class="star starClass0l" ></label> \
+            <label for="vstarValue1" class="star starClass1l" ></label> \
+            <label for="vstarValue2" class="star starClass2l" ></label> \
+            <label for="vstarValue3" class="star starClass3l" ></label> \
+            <label for="vstarValue4" class="star starClass4l" ></label> \
+            <label for="vstarValue5" class="star starClass5l" ></label> \
+            <label for="vstarValue6" class="star starClass6l" ></label> \
+            <label for="vstarValue7" class="star starClass7l" ></label> \
+            <label for="vstarValue8" class="star starClass8l" ></label> \
+            <label for="vstarValue9" class="star starClass9l" ></label> \
+            <label for="vstarValue10" class="star starClass10l last" ></label> \
+            \
+            <div class="rating"></div> \
+            <div class="rating-bg"></div>';
+      }
+      else if( keyword == 'like-rating' ){ 
+        rating = JSON.parse(rating);
+        if( !(rating[0] == "" || rating[2] == "") ) {
+          voteFeedback += '<img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-up-icon.png">';
+          voteFeedback += rating[0]; 
+          voteFeedback += ', <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-up-icon.png">';
+          voteFeedback += rating[2]; 
+        }
+      }
     }
 
     if ( keyword == 'usage' ){
@@ -191,8 +233,12 @@ window.onload=function(){
       <div class="usage question"> \
         <p class="lead">' + question + '</p> \
         <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
-        <input type="radio" name="usageValue" value="yes" /> Yes \
-        <input type="radio" name="usageValue" value="no" /> No \
+        <label class="radio-rate" for="yes"> \
+          <input type="radio" name="usageValue" value="yes"/> Yes\
+        </label> \
+        <label class="radio-rate" for="no"> \
+          <input type="radio" name="usageValue" value="no"/> No\
+        </label> \
       </div> \
       '; 
     }
@@ -212,38 +258,9 @@ window.onload=function(){
       return '\
       <div class="question"> \
         <p class="lead">' + question + '</p> \
-        <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
+        <div class="star-rating" id="voteFeedback">' + voteFeedback + '</div> \
+        <p>('+ voters +' Reviews)</p><p></p> \
         Very Negative \
-          <div class="star-rating"> \
-            <input class="starClass0" id="vstarValue0" name="voterValue" type="radio" value="0" checked > \
-            <input class="starClass1" id="vstarValue1" name="voterValue" type="radio" value="1" /> \
-            <input class="starClass2" id="vstarValue2" name="voterValue" type="radio" value="2" /> \
-            <input class="starClass3" id="vstarValue3" name="voterValue" type="radio" value="3" /> \
-            <input class="starClass4" id="vstarValue4" name="voterValue" type="radio" value="4" /> \
-            <input class="starClass5" id="vstarValue5" name="voterValue" type="radio" value="5" /> \
-            <input class="starClass6" id="vstarValue6" name="voterValue" type="radio" value="6" /> \
-            <input class="starClass7" id="vstarValue7" name="voterValue" type="radio" value="7" /> \
-            <input class="starClass8" id="vstarValue8" name="voterValue" type="radio" value="8" /> \
-            <input class="starClass9" id="vstarValue9" name="voterValue" type="radio" value="9" /> \
-            <input class="starClass10" id="vstarValue10" name="voterValue" type="radio" value="10" /> \
-            \
-            <label for="vstarValue0" class="star starClass0l" ></label> \
-            <label for="vstarValue1" class="star starClass1l" ></label> \
-            <label for="vstarValue2" class="star starClass2l" ></label> \
-            <label for="vstarValue3" class="star starClass3l" ></label> \
-            <label for="vstarValue4" class="star starClass4l" ></label> \
-            <label for="vstarValue5" class="star starClass5l" ></label> \
-            <label for="vstarValue6" class="star starClass6l" ></label> \
-            <label for="vstarValue7" class="star starClass7l" ></label> \
-            <label for="vstarValue8" class="star starClass8l" ></label> \
-            <label for="vstarValue9" class="star starClass9l" ></label> \
-            <label for="vstarValue10" class="star starClass10l last" ></label> \
-            \
-            <div class="rating"></div> \
-            <div class="rating-bg"></div> \
-          </div> <!-- star-rating --> \
-          \
-          \
           <div class="star-rating"> \
             <input class="starClass0" id="starValue0" name="opinionValue" type="radio" value="0" checked > \
             <input class="starClass1" id="starValue1" name="opinionValue" type="radio" value="1" /> \
@@ -281,15 +298,15 @@ window.onload=function(){
       <div class="like-rating question"> \
         <p class="lead">' + question + '</p> \
         <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
-        <label class="like-rate" for="like"> \
+        <label class="radio-rate" for="like"> \
           <input id="like" type="radio" name="likeValue" value="like"/> \
           <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-up-icon.png"> \
         </label> \
-        <label class="like-rate" for="dislike"> \
+        <label class="radio-rate" for="dislike"> \
           <input id="dislike" type="radio" name="likeValue" value="dislike"/> \
           <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-down-icon.png"> \
         </label> \
-        <label class="like-rate" for="unsure"> \
+        <label class="radio-rate" for="unsure"> \
           <input id="unsure" type="radio" name="likeValue" value="unsure"/> \
           Not Sure \
         </label> \
@@ -331,6 +348,7 @@ window.onload=function(){
 
   $("#next, #prev").click(function(){
 
+    console.log( productItems );
     // When the 'next' button is pressed and the user has not finished all the items
     // else {
     if( this.id=='next' && currentItem < productItems.length ) { 
