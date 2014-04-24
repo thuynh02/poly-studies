@@ -108,7 +108,7 @@ CREATE TABLE `ratings` (
   `question_id` int(11) NOT NULL DEFAULT '0',
   `upload_id` int(11) NOT NULL,
   `survey_id` int(11) NOT NULL,
-  `voters` int(11) DEFAULT NULL,
+  `voters` varchar(11) DEFAULT NULL,
   `rating` varchar(11) DEFAULT NULL,
   PRIMARY KEY (`question_id`,`upload_id`,`survey_id`),
   KEY `survey_id` (`survey_id`),

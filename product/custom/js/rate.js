@@ -177,18 +177,68 @@ window.onload=function(){
     var voters = productItems[item]['voterRating'][questionIndex].voters;
     var rating = productItems[item]['voterRating'][questionIndex].rating;
 
-    var html = '<p class="lead">' + voters + ' people voted ' + rating + '.</p>';
-    if( voters == "" || rating == "" || voters == null || rating == null  ) {
-      html = '';
+    var voteFeedback = "";
+
+    if( !( voters == "" || voters == 0 || rating == "" || voters == null || rating == null ) ) {
+      if( keyword == 'usage' || keyword == 'familiarity-slider'){ 
+        voteFeedback = voters;
+        if( voteFeedback == 1 ){ voteFeedback += ' person voted '; }
+        else{ voteFeedback += ' people voted '; }
+        voteFeedback += rating; 
+        if( keyword == 'familiarity-slider' ) { voteFeedback += " on how familiarity they were with the product.";}
+        else { voteFeedback += " on if they had the item."; }
+      }
+      else if( keyword == 'familiarity-slider'){}
+      else if( keyword == 'opinion-star'){  
+        voteFeedback = ''
+        for (var i = 0; i < 11; i++) {
+          if( rating*2 == i ){
+            voteFeedback += '<input class="starClass'+i+'" id="vstarValue'+i+'" name="voterValue" type="radio" value="'+i+'" checked disabled/>';
+          }
+          else { 
+            voteFeedback += '<input class="starClass'+i+'" id="vstarValue'+i+'" name="voterValue" type="radio" value="'+i+'" disabled/>';
+          }
+          
+        };
+
+        voteFeedback += '\
+            <label for="vstarValue0" class="star starClass0l" ></label> \
+            <label for="vstarValue1" class="star starClass1l" ></label> \
+            <label for="vstarValue2" class="star starClass2l" ></label> \
+            <label for="vstarValue3" class="star starClass3l" ></label> \
+            <label for="vstarValue4" class="star starClass4l" ></label> \
+            <label for="vstarValue5" class="star starClass5l" ></label> \
+            <label for="vstarValue6" class="star starClass6l" ></label> \
+            <label for="vstarValue7" class="star starClass7l" ></label> \
+            <label for="vstarValue8" class="star starClass8l" ></label> \
+            <label for="vstarValue9" class="star starClass9l" ></label> \
+            <label for="vstarValue10" class="star starClass10l last" ></label> \
+            \
+            <div class="rating"></div> \
+            <div class="rating-bg"></div>';
+      }
+      else if( keyword == 'like-rating' ){ 
+        rating = JSON.parse(rating);
+        if( !(rating[0] == "" || rating[2] == "") ) {
+          voteFeedback += '<img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-up-icon.png">';
+          voteFeedback += rating[0]; 
+          voteFeedback += ', <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-up-icon.png">';
+          voteFeedback += rating[2]; 
+        }
+      }
     }
 
     if ( keyword == 'usage' ){
       return '\
       <div class="usage question"> \
-        ' + html + ' \
         <p class="lead">' + question + '</p> \
-        <input type="radio" name="usageValue" value="yes" /> Yes \
-        <input type="radio" name="usageValue" value="no" /> No \
+        <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
+        <label class="radio-rate" for="yes"> \
+          <input type="radio" name="usageValue" value="yes"/> Yes\
+        </label> \
+        <label class="radio-rate" for="no"> \
+          <input type="radio" name="usageValue" value="no"/> No\
+        </label> \
       </div> \
       '; 
     }
@@ -196,8 +246,8 @@ window.onload=function(){
     else if ( keyword == 'familiarity-slider' ) {
       return '\
       <div class="question"> \
-        ' + html + ' \
         <p class="lead">' + question + '</p> \
+        <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
         <div id="famSlider"></div> \
         <p>Your slider has a value of <span id="famValue"></span></p> \
       </div> \
@@ -207,8 +257,9 @@ window.onload=function(){
     else if ( keyword == 'opinion-star' ) {
       return '\
       <div class="question"> \
-        ' + html + ' \
         <p class="lead">' + question + '</p> \
+        <div class="star-rating" id="voteFeedback">' + voteFeedback + '</div> \
+        <p>('+ voters +' Reviews)</p><p></p> \
         Very Negative \
           <div class="star-rating"> \
             <input class="starClass0" id="starValue0" name="opinionValue" type="radio" value="0" checked > \
@@ -245,17 +296,17 @@ window.onload=function(){
     else if ( keyword == 'like-rating' ){
       return '\
       <div class="like-rating question"> \
-        ' + html + ' \
         <p class="lead">' + question + '</p> \
-        <label class="like-rate" for="like"> \
+        <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
+        <label class="radio-rate" for="like"> \
           <input id="like" type="radio" name="likeValue" value="like"/> \
           <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-up-icon.png"> \
         </label> \
-        <label class="like-rate" for="dislike"> \
+        <label class="radio-rate" for="dislike"> \
           <input id="dislike" type="radio" name="likeValue" value="dislike"/> \
           <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-down-icon.png"> \
         </label> \
-        <label class="like-rate" for="unsure"> \
+        <label class="radio-rate" for="unsure"> \
           <input id="unsure" type="radio" name="likeValue" value="unsure"/> \
           Not Sure \
         </label> \
@@ -268,6 +319,9 @@ window.onload=function(){
   $( '#productDesc' ).html( htmlContainer );
   $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
   $( '#productCaption' ).html( productItems[currentItem].productDesc );
+  // $( '#voteFeedback' ).html( voteFeedback );
+
+  // document.getElementsByName("voterValue")[rating * 2].checked = true;
 
   // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
 
@@ -294,6 +348,7 @@ window.onload=function(){
 
   $("#next, #prev").click(function(){
 
+    console.log( productItems );
     // When the 'next' button is pressed and the user has not finished all the items
     // else {
     if( this.id=='next' && currentItem < productItems.length ) { 

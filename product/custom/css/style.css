@@ -57,14 +57,6 @@
   top: -0.4em;
 }
 
-
-/*.like-rate > input[type=radio]{
-  display:none;
+.radio-rate {
+  margin: 0 25px 0 25px;
 }
-input[type=radio] + img{
-  cursor:pointer;
-  border:2px solid transparent;
-}
-input[type=radio]:checked + img{
-  border:2px solid #f00;
-}*/

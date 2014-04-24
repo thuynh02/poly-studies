@@ -54,7 +54,9 @@ input[type="text"]{
 /* Add space from radio buttons*/
 input[type="radio"]{
 	margin-right: 5px;
+	padding-left: 30px;
 }
+
 
 /*================================ SURVEY CONTENT ================================*/
 

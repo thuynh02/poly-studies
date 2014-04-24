@@ -44,6 +44,7 @@ window.onload=function(){
 			dataType: 'json',
 			async: false,
 			success : function( data ){
+				// console.log( data );
 				for( var i = 0; i < data.length; ++i ){
 					productArr.push( createProductItem( data[i].upload_id, 
 														data[i].image_name, 
@@ -66,7 +67,7 @@ window.onload=function(){
 			async: false,
 			success : function( data ){
 
-				//console.log( data );
+				// console.log( data );
 
 				for (var i = 0; i < products.length; i++) {
 					for (var j = 0; j < data.length; j++) {
@@ -105,7 +106,7 @@ window.onload=function(){
 	      success : function( data ){
 	        for( var i = 0; i < data.length; ++i ){
 	          if( data[i].question_type == "rating" ){
-	          	console.log(JSON.parse( data[i].description ) );
+	          	// console.log(JSON.parse( data[i].description ) );
 	            ratingQuestions.push( JSON.parse( data[i].description ) );
 	          }
 	        }
@@ -143,26 +144,58 @@ window.onload=function(){
 			';
 
 			for (var j = 0; j < productItems[i]['voterRating'].length; j++) {
-				htmlContainer += '<div class="form-group"> \
-					<label class="col-sm-3 control-label">Question #' + ( j + 1 ) + ': </label> \
-					<input type="hidden" id="questionID' + j + "-" + i + '" name="questionID' + j +'" value="' + productItems[i]['voterRating'][j].questionID + '"> \
-					<div class="col-sm-9"> \
-						<div class="col-sm-12 form-control-static">' + ratingQuestions[j][1].replace('[id]', productItems[i].productName ) + '</div> \
-						<div class="col-sm-6"> \
-							<div class="input-group"> \
-								<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name="questionVoters' + j + '" placeholder="Number of Prior Voters"> \
-								<span class="input-group-addon">Voters</span> \
+				if( ratingQuestions[j][0] != 'like-rating' ) {
+					htmlContainer += '<div class="form-group"> \
+						<label class="col-sm-3 control-label">Question #' + ( j + 1 ) + ': </label> \
+						<input type="hidden" id="questionID' + j + "-" + i + '" name="questionID' + j +'" value="' + productItems[i]['voterRating'][j].questionID + '"> \
+						<input type="hidden" id="questionType' + j + "-" + i + '" name="questionType' + j +'" value="' + ratingQuestions[j][0] + '"> \
+						<div class="col-sm-9"> \
+							<div class="col-sm-12 form-control-static">' + ratingQuestions[j][1].replace('[id]', productItems[i].productName ) + '</div> \
+							<div class="col-sm-6"> \
+								<div class="input-group"> \
+									<input type="text" class="form-control" id="questionVoters' + j + "-" + i + '" name="questionVoters' + j + '" placeholder="Number of Prior Voters"> \
+									<span class="input-group-addon">Voters</span> \
+								</div> \
 							</div> \
-						</div> \
-						<div class="col-sm-6"> \
-							<div class="input-group"> \
-								<span class="input-group-addon">Rating</span> \
-								<input type="text" class="form-control" id="questionRatings' + j + "-" + i + '" name="questionRatings' + j + '" placeholder="Value of Rating"> \
+							<div class="col-sm-6"> \
+								<div class="input-group"> \
+									<span class="input-group-addon">Rating</span> \
+									<input type="text" class="form-control" id="questionRatings' + j + "-" + i + '" name="questionRatings' + j + '" placeholder="Value of Rating"> \
+								</div> \
 							</div> \
 						</div> \
 					</div> \
-				</div> \
-				';
+					';
+				}
+				else {
+					htmlContainer += '<div class="form-group"> \
+						<label class="col-sm-3 control-label">Question #' + ( j + 1 ) + ': </label> \
+						<input type="hidden" id="questionID' + j + "-" + i + '" name="questionID' + j +'" value="' + productItems[i]['voterRating'][j].questionID + '"> \
+						<input type="hidden" id="questionType' + j + "-" + i + '" name="questionType' + j +'" value="' + ratingQuestions[j][0] + '"> \
+						<div class="col-sm-9"> \
+							<div class="col-sm-12 form-control-static">' + ratingQuestions[j][1].replace('[id]', productItems[i].productName ) + '</div> \
+							<div class="col-sm-4"> \
+								<div class="input-group"> \
+									<input type="text" class="form-control" id="likeVoters' + j + "-" + i + '" name="likeVoters' + j + '" placeholder="Number of Likes"> \
+									<span class="input-group-addon">Likes</span> \
+								</div> \
+							</div> \
+							<div class="col-sm-4"> \
+								<div class="input-group"> \
+									<input type="text" class="form-control" id="unsureVoters' + j + "-" + i + '" name="unsureVoters' + j + '" placeholder="Number of Dislikes"> \
+									<span class="input-group-addon">Unsure</span> \
+								</div> \
+							</div> \
+							<div class="col-sm-4"> \
+								<div class="input-group"> \
+									<input type="text" class="form-control" id="dislikeVoters' + j + "-" + i + '" name="dislikeVoters' + j + '" placeholder="Number of Unsure"> \
+									<span class="input-group-addon">Dislikes</span> \
+								</div> \
+							</div> \
+						</div> \
+					</div> \
+					';
+				}
 
 			};
 
@@ -198,7 +231,14 @@ window.onload=function(){
 		// Change the voters and ratings accordingly to what is stored in the table ratings.
 		for (var j = 0; j < productItems[i]['voterRating'].length; j++) {
 			$( "#questionVoters" + j + "-" + i ).val( productItems[i]['voterRating'][j].voters );
-			$( "#questionRatings" + j + "-" + i ).val( productItems[i]['voterRating'][j].rating );
+			if( ratingQuestions[j][0] == 'like-rating' ) { 
+				var voteArr = JSON.parse( productItems[i]['voterRating'][j].rating );
+				// console.log( voteArr );	
+				$( "#likeVoters" + j + "-" + i ).val( voteArr[0] );
+				$( "#unsureVoters" + j + "-" + i ).val( voteArr[1] );
+				$( "#dislikeVoters" + j + "-" + i ).val( voteArr[2] );
+			}
+			else { $( "#questionRatings" + j + "-" + i ).val( productItems[i]['voterRating'][j].rating ); }
 		};
 
 	};
@@ -226,7 +266,7 @@ window.onload=function(){
 
 			// An array of all the input information by finding id's with a suffix of the current id number
 			var imgArr = $('[id$=' + currentID + ']').serializeArray();
-			// console.log( imgArr );
+			console.log( imgArr );
 
 			// Post to the form's designated page with the information to be put into the database
 			$.ajax({

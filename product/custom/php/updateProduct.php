@@ -20,12 +20,26 @@
 
 		for ($j = 0; $j < $numberOfQuestions; $j++) { 
 			$questionID = htmlspecialchars( strip_tags( $_POST['questionID'.$j ] ) );
-			$voters = htmlspecialchars( strip_tags( $_POST['questionVoters'.$j ] ) );
-			$rating  = htmlspecialchars( strip_tags( $_POST['questionRatings'.$j ] ) );
-			
-			$query = "UPDATE ratings 
-				  SET rating='$rating', voters='$voters'
-				  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$questionID'";
+			$questionType = htmlspecialchars( strip_tags( $_POST['questionType'.$j ] ) );
+
+			if( $questionType != "like-rating" ){
+				$likes[0] = htmlspecialchars( strip_tags( $_POST['likeVoters'.($numberOfQuestions-1)] ) );
+				$likes[1] = htmlspecialchars( strip_tags( $_POST['unsureVoters'.($numberOfQuestions-1)] ) );
+				$likes[2] = htmlspecialchars( strip_tags( $_POST['dislikeVoters'.($numberOfQuestions-1)] ) );
+				$likes = json_encode($likes);
+				
+				$query = "UPDATE ratings 
+						  SET rating='$likes', voters='like-rating'
+						  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$questionID'";
+			}
+			else {
+				$voters = htmlspecialchars( strip_tags( $_POST['questionVoters'.$j ] ) );
+				$rating  = htmlspecialchars( strip_tags( $_POST['questionRatings'.$j ] ) );
+				
+				$query = "UPDATE ratings 
+						  SET rating='$rating', voters='$voters'
+						  WHERE upload_id='$uploadID' AND survey_id=1 AND question_id='$questionID'";
+			}
 
 			//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
 			mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
