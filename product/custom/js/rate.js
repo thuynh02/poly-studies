@@ -452,13 +452,21 @@ window.onload=function(){
       min: 1,
       max: 10,
       step: 1,
+      range: "min",
+      animate: true,
+      change: function() {
+        //Inform the #famValue div of the value whenever there is change (this includes creation) 
+        $( '#famValue' ).html( $("#famSlider").slider('option', 'value') );
+        $(this).find('.ui-slider-handle').text( $("#famSlider").slider('option', 'value') );
+      },
       slide: function( event, ui ) {
         $( '#famValue' ).html( ui.value );
+        $(this).find('.ui-slider-handle').text( ui.value );
       }
     });
 
-    if( currentQuestion != productItems[currentItem].questionTypes.length - 1 
-        && currentItem != productItems.length - 1 ){  
+    if( currentQuestion != productItems[currentItem].questionTypes.length 
+        && currentItem != productItems.length ){  
 
       // Change the newly formatted productDesc container to select the attributes based on what's currently stored in the object
       var currentValue = productItems[currentItem].questionValues[currentQuestion];

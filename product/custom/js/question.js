@@ -201,6 +201,7 @@ window.onload=function(){
 
         success: function(info){
             console.log( 'YAY ' + info );
+            window.location.reload();
         },
 
         fail: function(){
@@ -208,8 +209,6 @@ window.onload=function(){
         }
 
       });
-
-    // window.location.reload();
 
   });
 
