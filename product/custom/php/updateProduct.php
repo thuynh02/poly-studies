@@ -22,7 +22,7 @@
 			$questionID = htmlspecialchars( strip_tags( $_POST['questionID'.$j ] ) );
 			$questionType = htmlspecialchars( strip_tags( $_POST['questionType'.$j ] ) );
 
-			if( $questionType != "like-rating" ){
+			if( $questionType == "like-rating" ){
 				$likes[0] = htmlspecialchars( strip_tags( $_POST['likeVoters'.($numberOfQuestions-1)] ) );
 				$likes[1] = htmlspecialchars( strip_tags( $_POST['unsureVoters'.($numberOfQuestions-1)] ) );
 				$likes[2] = htmlspecialchars( strip_tags( $_POST['dislikeVoters'.($numberOfQuestions-1)] ) );

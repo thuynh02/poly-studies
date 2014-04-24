@@ -180,12 +180,12 @@ $(document).ready(function() {
 		// questions were left unanswered
 		if( validateInput() ){
 			var timeEnded = new Date();
-			var htmlContainer = '<input type="hidden" id="timeElapsed" name="timeElapsed" value="' + (timeOpened - timeEnded) + '">'
+			var htmlContainer = '<input type="hidden" id="timeElapsed" name="timeElapsed" value="' + (timeEnded - timeOpened) + '">'
 
    	 		$( '#initialSurvey' ).append( htmlContainer );
 
 			//For every checked radio button and provided text input, add the value to the survey data
-			$('input:checked, input[type="text"]').each( function(){
+			$('input:checked, input[type="text"], input[type="hidden"]').each( function(){
 				surveyData[$(this)[0].name] = $(this)[0].value;
 			});
 			// var jsonSurveyData = JSON.stringify(surveyData);
