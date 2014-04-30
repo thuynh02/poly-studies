@@ -242,10 +242,6 @@ $(document).ready(function() {
 
 	});
 
-
-	$("#initialSurvey").submit( function(e){
-		return false;
-	});
 } );
 
 
