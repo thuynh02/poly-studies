@@ -108,10 +108,12 @@ function getQuestionData(){
       async: false,
       success : function( data ){
         for( var i = 0; i < data.length; ++i ){
-          if( data[i].question_type == "survey" ){
+          if( data[i].question_type == "survey"
+              && data[i].hide == 0 && data[i].del == 0 ){
             surveyQuestions.push( data[i].description );
           }
-          else if( data[i].question_type == "rating" ){
+          else if( data[i].question_type == "rating" 
+              && data[i].hide == 0 && data[i].del == 0 ){
             ratingQuestions.push( JSON.parse( data[i].description ) );
           }
         }

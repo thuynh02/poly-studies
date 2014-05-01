@@ -72,3 +72,19 @@ body{
 .questionLead{
   font-size: 30px;
 }
+
+.enableHide{
+  opacity: 0.4;
+}
+
+/* Temp implementation */
+.enableDel{
+  opacity: 0;
+}
+
+@media( max-width: 990px ){
+  #surveyWrap #questionCtrl{
+    margin-right: 15px;
+    float: right;
+  }
+}

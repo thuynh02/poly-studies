@@ -1,7 +1,7 @@
 <?php
 	include('db.php');
 
-	$getQuestionData = "SELECT question_id, question_type, description FROM questions WHERE survey_id = 1";	
+	$getQuestionData = "SELECT question_id, question_type, description, hide, del FROM questions WHERE survey_id = 1";	
 	$stmt = mysqli_query( $bd, $getQuestionData ) or die( "Failed to fetch question data. ".mysqli_error($bd));
 	$questionArr = array();
 

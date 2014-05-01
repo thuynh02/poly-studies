@@ -8,11 +8,11 @@
 		$hide =  htmlspecialchars( strip_tags( $_POST['hide'] ));
 		$del =  htmlspecialchars( strip_tags( $_POST['del'] ));
 
-		$stmtHide = mysqli_query( $bd, 'UPDATE questions 
-										SET hide="$hide", del="$del"
-										WHERE question_id="$questionID"');
+		mysqli_query( $bd, "UPDATE questions 
+							SET hide='$hide', del='$del'
+							WHERE question_id='$questionID'");
 
-		
+		echo( json_encode( $_POST ) );
 
 	}
 

@@ -234,9 +234,14 @@ window.onload=function(){
 			if( ratingQuestions[j][0] == 'like-rating' ) { 
 				var voteArr = JSON.parse( productItems[i]['voterRating'][j].rating );
 				// console.log( voteArr );	
-				$( "#likeVoters" + j + "-" + i ).val( voteArr[0] );
-				$( "#unsureVoters" + j + "-" + i ).val( voteArr[1] );
-				$( "#dislikeVoters" + j + "-" + i ).val( voteArr[2] );
+				try{
+					$( "#likeVoters" + j + "-" + i ).val( voteArr[0] );
+					$( "#unsureVoters" + j + "-" + i ).val( voteArr[1] );
+					$( "#dislikeVoters" + j + "-" + i ).val( voteArr[2] );
+				}
+				catch(e){
+					console.log( "Exception in admin.js. Assigning voters/rating failed.")
+				}
 			}
 			else { $( "#questionRatings" + j + "-" + i ).val( productItems[i]['voterRating'][j].rating ); }
 		};

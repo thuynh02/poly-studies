@@ -91,15 +91,28 @@ window.onload=function(){
       success : function( data ){
         for( var i = 0; i < data.length; ++i ){
           if( data[i].question_type == "survey" ){
-            surveyQuestions.push( data[i].description );
+            surveyQuestions.push( 
+              { //Store survey question object such that it is possible to get the description and the hide/del state
+                description: data[i].description,
+                hide: data[i].hide,
+                del: data[i].del
+              }
+            );
           }
           else if( data[i].question_type == "rating" ){
-            ratingQuestions.push( JSON.parse( data[i].description ) );
+            ratingQuestions.push( 
+              { //Store survey question object such that it is possible to get the description and the hide/del state
+                description: JSON.parse( data[i].description ),
+                hide: data[i].hide,
+                del: data[i].del
+              }  
+            );
+            console.log( ratingQuestions[ ratingQuestions.length-1 ]);
           }
         }
 
         for (var i = 0; i < ratingQuestions.length; i++) {
-          questionTypes.push( ratingQuestions[i][0] );
+          questionTypes.push( ratingQuestions[i]['description'][0] );
         };
       },
 
@@ -172,7 +185,7 @@ window.onload=function(){
     console.log( "I: " + item );
     console.log( "Q: " + questionIndex );
 
-    var question = ratingQuestions[questionIndex][1].replace('[id]', productItems[item].productName );
+    var question = ratingQuestions[questionIndex]['description'][1].replace('[id]', productItems[item].productName );
     var keyword = productItems[item].questionTypes[questionIndex];
     var voters = productItems[item]['voterRating'][questionIndex].voters;
     var rating = productItems[item]['voterRating'][questionIndex].rating;
@@ -231,6 +244,7 @@ window.onload=function(){
     }
 
     if ( keyword == 'usage' ){
+      $( '#imgRate' ).html( '' );
       return '\
       <div class="usage question"> \
         <p class="questionLead">' + question + '</p> \
@@ -246,6 +260,7 @@ window.onload=function(){
     }
 
     else if ( keyword == 'familiarity-slider' ) {
+      $( '#imgRate' ).html( '' );
       return '\
       <div class="question"> \
         <p class="questionLead">' + question + '</p> \
@@ -260,8 +275,8 @@ window.onload=function(){
 
     else if ( keyword == 'opinion-star' ) {
       var html = '<div class="star-rating" id="voteFeedback">' + voteFeedback + '</div>';
-      if( voters > 1 ) { html += '<p>(' + voters + ' Reviews) </p>'; }
-      else { html += '<p>(' + voters + ' Review) </p>'; }
+      if( voters > 1 ) { html += '<p class="starRate">(' + voters + ' Reviews) </p>'; }
+      else { html += '<p class="starRate">(' + voters + ' Review) </p>'; }
       $( '#imgRate' ).html( html );
 
       return '\
@@ -301,6 +316,7 @@ window.onload=function(){
       ';
     }
     else if ( keyword == 'like-rating' ){
+      $( '#imgRate' ).html( '' );
       return '\
       <div class="like-rating question"> \
         <p class="questionLead">' + question + '</p> \

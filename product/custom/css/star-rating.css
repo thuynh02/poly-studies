@@ -130,7 +130,10 @@ label.starClass10l:hover ~ .rating
     vertical-align: text-top;
 }
 
-.starRate{ font-size: 14px; }
+.starRate{ 
+    font-size: 14px; 
+    margin-top: 20px;
+}
 
 @media (min-width: 992px) {
   .labelInline {
@@ -143,5 +146,8 @@ label.starClass10l:hover ~ .rating
   .star-rating {
     height: 40px;
   }
-
+    .starRate{ 
+        font-size: 14px; 
+        margin-top: 0px;
+    }
 }

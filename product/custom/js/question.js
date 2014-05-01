@@ -22,16 +22,27 @@ window.onload=function(){
         console.log( data );
         
         for( var i = 0; i < data.length; ++i ){
-          if( data[i].question_type == "survey" ){
+          if( data[i].question_type == "survey" 
+              && data[i].del == 0 ){
             surveyQuestions.push( 
               { //Store survey question object such that it is possible to get the description and the ID
                 description: data[i].description,
-                question_id: data[i].question_id
+                question_id: data[i].question_id,
+                hide: data[i].hide,
+                del: data[i].del
               }
             );
           }
-          else if( data[i].question_type == "rating" ){
-            ratingQuestions.push( JSON.parse( data[i].description ) );
+          else if( data[i].question_type == "rating" 
+              && data[i].del == 0 ){
+            ratingQuestions.push( 
+              { //Store survey question object such that it is possible to get the description and the ID
+                description: JSON.parse( data[i].description ),
+                question_id: data[i].question_id,
+                hide: data[i].hide,
+                del: data[i].del
+              } 
+            );
           }
         }
 
@@ -58,7 +69,7 @@ window.onload=function(){
           <div class="col-md-8"> \
             <input type="text" class="form-control" id="surveyQuestion' + i + '" name="surveyQuestion' + i + '" placeholder="Insert Question Here"> \
           </div> \
-          <div class="btn-group">\
+          <div class="btn-group" id="questionCtrl">\
             <button type="button" id="hide"' + i + '" class="btn btn-default" value="' + i + '" name="survey">Hide</button>\
             <button type="button" id="del"' + i + '" class="btn btn-danger" value="' + i + '" name="survey">Delete</button>\
           </div>\
@@ -78,7 +89,7 @@ window.onload=function(){
     var htmlContainer = '\
         <div class="form-group"> \
           <label for="question'+ i +'" class="col-md-2 control-label">Rating Question #' + ( i + 1 ) + '</label> \
-          <div class="col-md-10"> \
+          <div class="col-md-8"> \
         '; 
 
 
@@ -133,6 +144,10 @@ window.onload=function(){
 
     htmlContainer += '\
             <input type="text" class="form-control" id="ratingQuestion' + i + '" name="ratingQuestion' + i + '" placeholder="Insert Question Here"> \
+            <div class="btn-group" id="questionCtrl">\
+              <button type="button" id="hide"' + i + '" class="btn btn-default" value="' + i + '" name="rating">Hide</button>\
+              <button type="button" id="del"' + i + '" class="btn btn-danger" value="' + i + '" name="rating">Delete</button>\
+            </div>\
           </div> \
         </div>';
     // End of <div class="col-md-10">
@@ -148,18 +163,57 @@ window.onload=function(){
 
   // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
 
+
+  function fillQuestionObj( type, currentQ, toggleHide, toggleDel ){
+    var questionObj;
+    var questionArr;
+    if( type == 'survey' ){ questionArr = surveyQuestions; }
+    else if( type == 'rating' ){ questionArr = ratingQuestions; }
+
+    questionObj = { question_id: questionArr[currentQ].question_id, 
+                    question_type: type,
+                    hide: questionArr[currentQ].hide,
+                    del: questionArr[currentQ].del 
+                  }; 
+
+    if( toggleHide ){ questionObj.hide = 1 - questionObj.hide; }
+    if( toggleDel ){ questionObj.del = 1 - questionObj.del; }
+
+    return questionObj;
+  }
+
+
   if( numSurveyQuestions < 1 ) {
     // console.log( "WHY? Survey." );
     generateSurveyField( numSurveyQuestions++, '' );
   }
   else{
     for (var i = 0; i < surveyQuestions.length; i++) {
-      generateSurveyField( i, surveyQuestions[i].description );
+      if( surveyQuestions[i].del != 1 ){
+        generateSurveyField( i, surveyQuestions[i].description );
+        
+        if( surveyQuestions[i].del == 1 ){
+          $('#surveyQuestion'+i).addClass('enableDel');
+        }
+        else{
+          if( surveyQuestions[i].hide == 1 ){
+            $('#surveyQuestion'+i).addClass('enableHide');
+          }
+        }
+      }
     };
   }
 
   for (var i = 0; i < ratingQuestions.length; i++) {
-    generateRatingField( i, ratingQuestions[i] );
+    generateRatingField( i, ratingQuestions[i].description );
+    if( ratingQuestions[i].del == 1 ){
+      $('#ratingQuestion'+i).addClass('enableDel');
+    }
+    else{
+      if( ratingQuestions[i].hide == 1 ){
+          $('#ratingQuestion'+i).addClass('enableHide');
+      }
+    }
   };
 
   //Assign the on-click hide functionality to all buttons with the id, "hide"
@@ -168,24 +222,36 @@ window.onload=function(){
     if( event.target ){
       var currentQ = event.target.value;
       var type = event.target.name;
-      var questionObj = 
-          {
-            question_id: surveyQuestions[currentQ].question_id, 
-            hide: 1,
-            del: 0
-          };
+
+      // fillQuestionObj takes the question type and current question
+      // and creates a question object with a toggle hide or toggle del
+      // value. 
+      // ex) If hide was 1 before, this object will store hide as 0
+      var questionObj = fillQuestionObj( type, currentQ, true, false )
 
       $.ajax({
-
         type: 'POST',
         url: 'custom/php/flagQuestions.php',
         data: questionObj,
-        success: function( info ){
-          console.log( info );
+        dataType: 'json',
+        success: function( newData ){
+
+          //Update survey array & corresponding form
+          if( type == 'survey' ){ 
+            surveyQuestions[currentQ].hide = questionObj.hide;
+            if( questionObj.hide == 1 ){  $('#surveyQuestion'+currentQ).addClass('enableHide'); }
+            else{ $('#surveyQuestion'+currentQ).removeClass('enableHide'); }
+          }
+
+          //Update rating array & corresponding form
+          else if( type == 'rating' ){ 
+            ratingQuestions[currentQ].hide = questionObj.hide;
+            if( questionObj.hide == 1 ){ $('#ratingQuestion'+currentQ).addClass('enableHide'); }
+            else{ $('#ratingQuestion'+currentQ).removeClass('enableHide'); }
+          }
+
         }
-
       });
-
     }
 
   });
@@ -196,6 +262,31 @@ window.onload=function(){
     if( event.target ){
       var currentQ = event.target.value;
       var type = event.target.name;
+      var questionObj = fillQuestionObj( type, currentQ, false, true )
+
+      $.ajax({
+        type: 'POST',
+        url: 'custom/php/flagQuestions.php',
+        data: questionObj,
+        dataType: 'json',
+        success: function( newData ){
+
+          //Update survey array & corresponding form
+          if( type == 'survey' ){ 
+            surveyQuestions[currentQ].del = questionObj.del;
+            if( questionObj.del == 1 ){  $('#surveyQuestion'+currentQ).addClass('enableDel'); }
+            else{ $('#surveyQuestion'+currentQ).removeClass('enableDel'); }
+          }
+
+          //Update rating array & corresponding form
+          else if( type == 'rating' ){ 
+            ratingQuestions[currentQ].del = questionObj.del;
+            if( questionObj.del == 1 ){ $('#ratingQuestion'+currentQ).addClass('enableDel'); }
+            else{ $('#ratingQuestion'+currentQ).removeClass('enableDel'); }
+          }
+
+        }
+      });
     }
 
   });
