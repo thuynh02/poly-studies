@@ -1,6 +1,9 @@
+body{
+  background-color: #AAAAAA;
+}
+
 .body{
     padding: 5% 5%;
-    background-color: #AAAAAA;
 }
 
 .navbar{
@@ -59,4 +62,13 @@
 
 .radio-rate {
   margin: 0 25px 0 25px;
+}
+
+#next{ 
+  margin: 40px 5px 10px;
+  font-size: 20px;
+}
+
+.questionLead{
+  font-size: 30px;
 }

@@ -241,11 +241,6 @@ $(document).ready(function() {
 		$('input[name="q18"]').val( "" );
 
 	});
-
-
-	// $("#initialSurvey").submit( function(e){
-	// 	return false;
-	// });
 } );
 
 

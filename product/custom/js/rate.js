@@ -179,7 +179,9 @@ window.onload=function(){
 
     var voteFeedback = "";
 
-    if( !( voters == "" || voters == 0 || rating == "" || voters == null || rating == null ) ) {
+    var voteSetting = ( voters == "" || voters == 0 || rating == "" || voters == null || rating == null );
+
+    if( !voteSetting ) {
       if( keyword == 'usage' || keyword == 'familiarity-slider'){ 
         voteFeedback = voters;
         if( voteFeedback == 1 ){ voteFeedback += ' person voted '; }
@@ -222,7 +224,7 @@ window.onload=function(){
         if( !(rating[0] == "" || rating[2] == "") ) {
           voteFeedback += '<img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-up-icon.png">';
           voteFeedback += rating[0]; 
-          voteFeedback += ', <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-up-icon.png">';
+          voteFeedback += '     <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-up-icon.png">';
           voteFeedback += rating[2]; 
         }
       }
@@ -231,7 +233,7 @@ window.onload=function(){
     if ( keyword == 'usage' ){
       return '\
       <div class="usage question"> \
-        <p class="lead">' + question + '</p> \
+        <p class="questionLead">' + question + '</p> \
         <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
         <label class="radio-rate" for="yes"> \
           <input type="radio" name="usageValue" value="yes"/> Yes\
@@ -246,21 +248,26 @@ window.onload=function(){
     else if ( keyword == 'familiarity-slider' ) {
       return '\
       <div class="question"> \
-        <p class="lead">' + question + '</p> \
+        <p class="questionLead">' + question + '</p> \
         <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
+        <div class="labelInline">Very Negative</div> \
         <div id="famSlider"></div> \
+        <div class="labelInline">Very Positive</div> \
         <p>Your slider has a value of <span id="famValue"></span></p> \
       </div> \
       ';
     }
 
     else if ( keyword == 'opinion-star' ) {
+      var html = '<div class="star-rating" id="voteFeedback">' + voteFeedback + '</div>';
+      if( voters > 1 ) { html += '<p>(' + voters + ' Reviews) </p>'; }
+      else { html += '<p>(' + voters + ' Review) </p>'; }
+      $( '#imgRate' ).html( html );
+
       return '\
       <div class="question"> \
-        <p class="lead">' + question + '</p> \
-        <div class="star-rating" id="voteFeedback">' + voteFeedback + '</div> \
-        <p>('+ voters +' Reviews)</p><p></p> \
-        Very Negative \
+        <p class="questionLead">' + question + '</p> \
+        <div class="labelInline">Very Negative</div> \
           <div class="star-rating"> \
             <input class="starClass0" id="starValue0" name="opinionValue" type="radio" value="0" checked > \
             <input class="starClass1" id="starValue1" name="opinionValue" type="radio" value="1" /> \
@@ -289,26 +296,26 @@ window.onload=function(){
             <div class="rating"></div> \
             <div class="rating-bg"></div> \
           </div> <!-- star-rating --> \
-        Very Positive \
+        <div class="labelInline">Very Positive</div> \
       </div> \
       ';
     }
     else if ( keyword == 'like-rating' ){
       return '\
       <div class="like-rating question"> \
-        <p class="lead">' + question + '</p> \
+        <p class="questionLead">' + question + '</p> \
         <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
         <label class="radio-rate" for="like"> \
           <input id="like" type="radio" name="likeValue" value="like"/> \
           <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-up-icon.png"> \
         </label> \
-        <label class="radio-rate" for="dislike"> \
-          <input id="dislike" type="radio" name="likeValue" value="dislike"/> \
-          <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-down-icon.png"> \
-        </label> \
         <label class="radio-rate" for="unsure"> \
           <input id="unsure" type="radio" name="likeValue" value="unsure"/> \
           Not Sure \
+        </label> \
+        <label class="radio-rate" for="dislike"> \
+          <input id="dislike" type="radio" name="likeValue" value="dislike"/> \
+          <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/48/Thumb-down-icon.png"> \
         </label> \
       </div> \
       '; 
@@ -442,54 +449,54 @@ window.onload=function(){
 
 
 
-    // When the 'prev' button is pressed and the user has not finished all the items
-    else if( this.id=='prev') { 
+    // // When the 'prev' button is pressed and the user has not finished all the items
+    // else if( this.id=='prev') { 
 
-      // Decrement the currentQuestion if there's still more questions for that particular item
-      if( currentQuestion > 0 ){ currentQuestion--; }
+    //   // Decrement the currentQuestion if there's still more questions for that particular item
+    //   if( currentQuestion > 0 ){ currentQuestion--; }
 
-      // Once you reached the end of the question types for that particular item and you're not
-      // at the last item, reset the current question as the last question of the previous item.
-      else if( currentQuestion == 0 && currentItem > 0 ){  
-        if( currentItem > 0 ){ 
-          currentItem--; 
-          currentQuestion = productItems[currentItem].questionTypes.length - 1;
-          // Image path is change only if the current image changes
-          $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
-        }
+    //   // Once you reached the end of the question types for that particular item and you're not
+    //   // at the last item, reset the current question as the last question of the previous item.
+    //   else if( currentQuestion == 0 && currentItem > 0 ){  
+    //     if( currentItem > 0 ){ 
+    //       currentItem--; 
+    //       currentQuestion = productItems[currentItem].questionTypes.length - 1;
+    //       // Image path is change only if the current image changes
+    //       $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
+    //     }
 
-        // Once you reached the end of the question types for that particular item and you're at the last item, ...
-        else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
-                  && currentItem == productItems.length - 1 ){  
+    //     // Once you reached the end of the question types for that particular item and you're at the last item, ...
+    //     else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
+    //               && currentItem == productItems.length - 1 ){  
 
-          // Action to do last question script
-          var arr = checkAllAnswered( DEFAULTVALUE );
-          //console.log( arr );
+    //       // Action to do last question script
+    //       var arr = checkAllAnswered( DEFAULTVALUE );
+    //       //console.log( arr );
 
-          if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
+    //       if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
             
-            //POST can only read in the: "key = value" format. 
-            var jsonItems = "productAnswers=" + JSON.stringify( productItems );
-            console.log( jsonItems );
+    //         //POST can only read in the: "key = value" format. 
+    //         var jsonItems = "productAnswers=" + JSON.stringify( productItems );
+    //         console.log( jsonItems );
             
-            $.ajax({
-              type: 'POST',
-              url: 'custom/php/addAnswers.php',
-              data: jsonItems,
+    //         $.ajax({
+    //           type: 'POST',
+    //           url: 'custom/php/addAnswers.php',
+    //           data: jsonItems,
 
-              success : function( data ){
-                console.log( data );
-              },
-              error : function(){
-                console.log( "NAY" );
-              }
-            });
+    //           success : function( data ){
+    //             console.log( data );
+    //           },
+    //           error : function(){
+    //             console.log( "NAY" );
+    //           }
+    //         });
        
-          }
-          currentQuestion = productItems[currentItem].questionTypes.length - 1;
-        }
-      } 
-    } // End of if statement for 'prev' button
+    //       }
+    //       currentQuestion = productItems[currentItem].questionTypes.length - 1;
+    //     }
+    //   } 
+    // } // End of if statement for 'prev' button
 
 
 

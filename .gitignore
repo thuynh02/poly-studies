@@ -2,4 +2,4 @@
 *.DS_STORE
 
 #Database config file for poly-studies
-*/*/db.php
+db.php
