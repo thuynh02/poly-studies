@@ -23,7 +23,12 @@ window.onload=function(){
         
         for( var i = 0; i < data.length; ++i ){
           if( data[i].question_type == "survey" ){
-            surveyQuestions.push( data[i].description );
+            surveyQuestions.push( 
+              { //Store survey question object such that it is possible to get the description and the ID
+                description: data[i].description,
+                question_id: data[i].question_id
+              }
+            );
           }
           else if( data[i].question_type == "rating" ){
             ratingQuestions.push( JSON.parse( data[i].description ) );
@@ -50,9 +55,13 @@ window.onload=function(){
     var htmlContainer = '\
         <div class="form-group"> \
           <label for="question'+ i +'" class="col-md-2 control-label">Survey Question #' + ( i + 1 ) + '</label> \
-          <div class="col-md-10"> \
+          <div class="col-md-8"> \
             <input type="text" class="form-control" id="surveyQuestion' + i + '" name="surveyQuestion' + i + '" placeholder="Insert Question Here"> \
           </div> \
+          <div class="btn-group">\
+            <button type="button" id="hide"' + i + '" class="btn btn-default" value="' + i + '" name="survey">Hide</button>\
+            <button type="button" id="del"' + i + '" class="btn btn-danger" value="' + i + '" name="survey">Delete</button>\
+          </div>\
         </div>';
 
     // Elements found in question.html
@@ -145,13 +154,51 @@ window.onload=function(){
   }
   else{
     for (var i = 0; i < surveyQuestions.length; i++) {
-      generateSurveyField( i, surveyQuestions[i] );
+      generateSurveyField( i, surveyQuestions[i].description );
     };
   }
 
   for (var i = 0; i < ratingQuestions.length; i++) {
     generateRatingField( i, ratingQuestions[i] );
   };
+
+  //Assign the on-click hide functionality to all buttons with the id, "hide"
+  $(document.body).on( 'click', 'button[id="hide"]', function(event){
+
+    if( event.target ){
+      var currentQ = event.target.value;
+      var type = event.target.name;
+      var questionObj = 
+          {
+            question_id: surveyQuestions[currentQ].question_id, 
+            hide: 1,
+            del: 0
+          };
+
+      $.ajax({
+
+        type: 'POST',
+        url: 'custom/php/flagQuestions.php',
+        data: questionObj,
+        success: function( info ){
+          console.log( info );
+        }
+
+      });
+
+    }
+
+  });
+
+  //Assign the on-click hide functionality to all buttons with the id, "hide"
+  $(document.body).on( 'click', 'button[id="del"]', function(event){
+
+    if( event.target ){
+      var currentQ = event.target.value;
+      var type = event.target.name;
+    }
+
+  });
 
   $("#addSurveyQuestion").bind('click',function(){
 

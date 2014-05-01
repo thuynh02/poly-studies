@@ -243,9 +243,9 @@ $(document).ready(function() {
 	});
 
 
-	$("#initialSurvey").submit( function(e){
-		return false;
-	});
+	// $("#initialSurvey").submit( function(e){
+	// 	return false;
+	// });
 } );
 
 
