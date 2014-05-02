@@ -150,9 +150,9 @@ $(document).ready(function() {
 		$( '#scaleSurvey' ).append( generateSurveyHTML( i, surveyQuestions[i] ) );
 	};
 
-	$( '#scaleSurvey' ).append( '<tr class="question" id="q18"> \
-									<td>18</td> \
-									<td><input type="text" name="q18"> </td> \
+	$( '#scaleSurvey' ).append( '<tr class="question" id="q' + (surveyQuestions.length + 1) +'"> \
+									<td>' + (surveyQuestions.length + 1) + '.</td> \
+									<td><input type="text" name="q' + (surveyQuestions.length + 1) + '"> </td> \
 									<td></td> \
 									<td></td> \
 									<td></td> \
@@ -222,7 +222,7 @@ $(document).ready(function() {
 		$('input[name="gender"][value="male"]').attr("checked",true);
 		$('input[name="q5"][value=6]').attr("checked",true);
 		$('input[name="q11"][value=2]').attr("checked",true);
-		$('input[name="q18"]').val( "az" );
+		$('input[name="q'+ (surveyQuestions.length + 1) +'"]').val( "az" );
 
 		if( validateFilled() ){
 			$( '#surveySubmit' ).attr( 'class', 'btn btn-default' );
@@ -240,7 +240,7 @@ $(document).ready(function() {
 		};
 
 		$('input[name="age"]').val( "" );
-		$('input[name="q18"]').val( "" );
+		$('input[name="q'+ (surveyQuestions.length + 1) +'"]').val( "" );
 
 	});
 } );

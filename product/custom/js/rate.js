@@ -338,6 +338,16 @@ window.onload=function(){
     }
   }
 
+  //Ignore hidden questions
+  while( ratingQuestions[currentQuestion].hide == 1
+         || ratingQuestions[currentQuestion].del == 1 ){
+    currentQuestion++;
+    if( currentQuestion == productItems[currentItem].questionTypes.length ){
+      currentQuestion = 0;
+      currentItem++;
+    }
+  }
+
   var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
   $( '#productDesc' ).html( htmlContainer );
   $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
@@ -345,6 +355,31 @@ window.onload=function(){
   // $( '#voteFeedback' ).html( voteFeedback );
 
   // document.getElementsByName("voterValue")[rating * 2].checked = true;
+
+  //This is to handle if the familiarity-slider is the first question
+  try{
+    $("#famSlider").slider({
+      value: 1,
+      min: 1,
+      max: 10,
+      step: 1,
+      range: "min",
+      animate: true,
+      create: function(){
+        $( '#famValue' ).html( $("#famSlider").slider('option', 'value') );
+        $(this).find('.ui-slider-handle').text( $("#famSlider").slider('option', 'value') );
+      },
+      change: function() {
+        //Inform the #famValue div of the value whenever there is change (this includes creation) 
+        $( '#famValue' ).html( $("#famSlider").slider('option', 'value') );
+        $(this).find('.ui-slider-handle').text( $("#famSlider").slider('option', 'value') );
+      },
+      slide: function( event, ui ) {
+        $( '#famValue' ).html( ui.value );
+        $(this).find('.ui-slider-handle').text( ui.value );
+      }
+    }); 
+  } catch(e){}
 
   // ----------------------------------------------------------------------------------------------------------------------- BUTTON HANDLING
 
@@ -526,7 +561,7 @@ window.onload=function(){
     // console.log( 'I' + currentItem);
 
     $("#famSlider").slider({
-      value: 5,
+      value: 10,
       min: 1,
       max: 10,
       step: 1,
