@@ -1,7 +1,11 @@
 <?php
 	include('db.php');
 
-	$getRatingData = "SELECT upload_id, question_id, voters, rating FROM ratings WHERE survey_id=1";	
+	//Get all ratings for rate questions that are not labelled as hidden
+	$getRatingData = "SELECT Rate.upload_id, Rate.question_id, Rate.voters, Rate.rating FROM ratings AS Rate WHERE survey_id=1
+					  AND Rate.question_id IN (	SELECT Ques.question_id
+											  	FROM questions as Ques
+											  	WHERE hide = 0 AND del = 0)";	
 	$rateQueryResult = mysqli_query( $bd, $getRatingData ) or die( "Failed to fetch image data. ".mysqli_error($bd));
 	$rateArr = array();
 

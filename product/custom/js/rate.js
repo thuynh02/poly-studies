@@ -90,29 +90,20 @@ window.onload=function(){
 
       success : function( data ){
         for( var i = 0; i < data.length; ++i ){
-          if( data[i].question_type == "survey" ){
-            surveyQuestions.push( 
-              { //Store survey question object such that it is possible to get the description and the hide/del state
-                description: data[i].description,
-                hide: data[i].hide,
-                del: data[i].del
-              }
-            );
+          if( data[i].question_type == "survey" 
+            && data[i].hide == 0
+            && data[i].del  == 0 ){
+            surveyQuestions.push( data[i].description );
           }
-          else if( data[i].question_type == "rating" ){
-            ratingQuestions.push( 
-              { //Store survey question object such that it is possible to get the description and the hide/del state
-                description: JSON.parse( data[i].description ),
-                hide: data[i].hide,
-                del: data[i].del
-              }  
-            );
-            console.log( ratingQuestions[ ratingQuestions.length-1 ]);
+          else if( data[i].question_type == "rating" 
+            && data[i].hide == 0
+            && data[i].del  == 0 ){
+            ratingQuestions.push( JSON.parse( data[i].description ) );
           }
         }
 
         for (var i = 0; i < ratingQuestions.length; i++) {
-          questionTypes.push( ratingQuestions[i]['description'][0] );
+          questionTypes.push( ratingQuestions[i][0] );
         };
       },
 
@@ -185,7 +176,7 @@ window.onload=function(){
     console.log( "I: " + item );
     console.log( "Q: " + questionIndex );
 
-    var question = ratingQuestions[questionIndex]['description'][1].replace('[id]', productItems[item].productName );
+    var question = ratingQuestions[questionIndex][1].replace('[id]', productItems[item].productName );
     var keyword = productItems[item].questionTypes[questionIndex];
     var voters = productItems[item]['voterRating'][questionIndex].voters;
     var rating = productItems[item]['voterRating'][questionIndex].rating;
@@ -457,10 +448,10 @@ window.onload=function(){
 
         // Increment the currentQuestion if there's still more questions for that particular item
         if( currentQuestion < productItems[currentItem].questionTypes.length - 1 ){ currentQuestion++; }
-
+       
         // Once you reached the end of the question types for that particular item and you're not
         // at the last item, reset the current question as the last question of the previous item.
-        else if( currentItem < productItems.length - 1 ){  
+        if( currentItem < productItems.length - 1 ){  
           currentItem++;
           currentQuestion = 0; 
           // Image path is change only if the current image changes
