@@ -22,8 +22,7 @@ window.onload=function(){
         console.log( data );
         
         for( var i = 0; i < data.length; ++i ){
-          if( data[i].question_type == "survey" 
-              && data[i].del == 0 ){
+          if( data[i].question_type == "survey" ){
             surveyQuestions.push( 
               { //Store survey question object such that it is possible to get the description and the ID
                 description: data[i].description,
@@ -33,8 +32,7 @@ window.onload=function(){
               }
             );
           }
-          else if( data[i].question_type == "rating" 
-              && data[i].del == 0 ){
+          else if( data[i].question_type == "rating"){
             ratingQuestions.push( 
               { //Store survey question object such that it is possible to get the description and the ID
                 description: JSON.parse( data[i].description ),
@@ -62,10 +60,10 @@ window.onload=function(){
 
   // ----------------------------------------------------------------------------------------------------------------------- HTML HANDLING
 
-  function generateSurveyField( i , question ) {
+  function generateSurveyField( i , num, question ) {
     var htmlContainer = '\
         <div class="form-group"> \
-          <label for="question'+ i +'" class="col-md-2 control-label">Survey Question #' + ( i + 1 ) + '</label> \
+          <label for="question'+ i +'" class="col-md-2 control-label">Survey Question #' + ( num ) + '</label> \
           <div class="col-md-8"> \
             <input type="text" class="form-control" id="surveyQuestion' + i + '" name="surveyQuestion' + i + '" placeholder="Insert Question Here"> \
           </div> \
@@ -85,10 +83,10 @@ window.onload=function(){
   //   generateSurveyField( i, surveyQuestions[i] );
   // };
 
-  function generateRatingField( i , obj ) {
+  function generateRatingField( i , num, obj ) {
     var htmlContainer = '\
-        <div class="form-group"> \
-          <label for="question'+ i +'" class="col-md-2 control-label">Rating Question #' + ( i + 1 ) + '</label> \
+        <div class="form-group" id="ratingContainer'+ i +'" > \
+          <label for="question'+ i +'" class="col-md-2 control-label">Rating Question #' + ( num ) + '</label> \
           <div class="col-md-8"> \
         '; 
 
@@ -182,38 +180,50 @@ window.onload=function(){
     return questionObj;
   }
 
-
+  var containerCounter = 0;
   if( numSurveyQuestions < 1 ) {
     // console.log( "WHY? Survey." );
     generateSurveyField( numSurveyQuestions++, '' );
   }
   else{
+
     for (var i = 0; i < surveyQuestions.length; i++) {
       if( surveyQuestions[i].del != 1 ){
-        generateSurveyField( i, surveyQuestions[i].description );
-        
-        if( surveyQuestions[i].del == 1 ){
-          $('#surveyQuestion'+i).addClass('enableDel');
-        }
-        else{
-          if( surveyQuestions[i].hide == 1 ){
-            $('#surveyQuestion'+i).addClass('enableHide');
-          }
-        }
-      }
-    };
-  }
 
-  for (var i = 0; i < ratingQuestions.length; i++) {
-    generateRatingField( i, ratingQuestions[i].description );
-    if( ratingQuestions[i].del == 1 ){
-      $('#ratingQuestion'+i).addClass('enableDel');
-    }
-    else{
-      if( ratingQuestions[i].hide == 1 ){
-          $('#ratingQuestion'+i).addClass('enableHide');
+        generateSurveyField( i, ++containerCounter, surveyQuestions[i].description );
+        if( surveyQuestions[i].hide == 1 ){
+          $('#surveyQuestion'+i).addClass('enableHide');
+        }
+
+        // if( surveyQuestions[i].del == 1 ){
+        //   $('#surveyQuestion'+i).addClass('enableDel');
+        // }
+        // else{
+        //   if( surveyQuestions[i].hide == 1 ){
+        //     $('#surveyQuestion'+i).addClass('enableHide');
+        //   }
+        // }
       }
     }
+  }
+  containerCounter = 0;
+  for (var i = 0; i < ratingQuestions.length; i++) {
+
+    if( ratingQuestions[i].del != 1 ){
+      generateRatingField( i, ++containerCounter, ratingQuestions[i].description );
+      if( ratingQuestions[i].hide == 1 ){
+          $('#ratingContainer'+i).addClass('enableHide');
+      }
+    }
+
+    // if( ratingQuestions[i].del == 1 ){
+    //   $('#ratingContainer'+i).addClass('enableDel');
+    // }
+    // else{
+    //   if( ratingQuestions[i].hide == 1 ){
+    //       $('#ratingContainer'+i).addClass('enableHide');
+    //   }
+    // }
   };
 
   //Assign the on-click hide functionality to all buttons with the id, "hide"
@@ -246,8 +256,8 @@ window.onload=function(){
           //Update rating array & corresponding form
           else if( type == 'rating' ){ 
             ratingQuestions[currentQ].hide = questionObj.hide;
-            if( questionObj.hide == 1 ){ $('#ratingQuestion'+currentQ).addClass('enableHide'); }
-            else{ $('#ratingQuestion'+currentQ).removeClass('enableHide'); }
+            if( questionObj.hide == 1 ){ $('#ratingContainer'+currentQ).addClass('enableHide'); }
+            else{ $('#ratingContainer'+currentQ).removeClass('enableHide'); }
           }
 
         }
@@ -281,8 +291,8 @@ window.onload=function(){
           //Update rating array & corresponding form
           else if( type == 'rating' ){ 
             ratingQuestions[currentQ].del = questionObj.del;
-            if( questionObj.del == 1 ){ $('#ratingQuestion'+currentQ).addClass('enableDel'); }
-            else{ $('#ratingQuestion'+currentQ).removeClass('enableDel'); }
+            if( questionObj.del == 1 ){ $('#ratingContainer'+currentQ).addClass('enableDel'); }
+            else{ $('#ratingContainer'+currentQ).removeClass('enableDel'); }
           }
 
         }
