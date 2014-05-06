@@ -147,7 +147,7 @@ window.onload=function(){
 
   getRatingData( productItems );
 
-  console.log( productItems );
+  // console.log( productItems );
 
   //*** Hard-coded creation of product items are commented out just as a back up ***//
   // Initialize and push into 'productItems' the Objects created from the function 'createProductItem.'
@@ -396,8 +396,6 @@ window.onload=function(){
   });
 
   $("#next, #prev").click(function(){
-
-    console.log( productItems );
     // When the 'next' button is pressed and the user has not finished all the items
     // else {
     if( this.id=='next' && currentItem < productItems.length ) { 
