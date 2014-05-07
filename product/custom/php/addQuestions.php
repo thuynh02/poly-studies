@@ -20,51 +20,39 @@
 		// Update/Insert survey questions
 		for ($i=0; $i < $numSurveyQuestions; $i++) { 
 
-			$description = htmlspecialchars( strip_tags( $_POST['surveyQuestion'.$i] ) );
-			if(  $i < $oldSurvey ) {
-				$query = "UPDATE questions
-					  	  SET description='$description', created='$time'
-					  	  WHERE question_type='survey' AND survey_id=1 AND question_id='$i'";
-			}
-			else {
-				$query = "INSERT INTO questions (question_id, survey_id, question_type, description, created)
-						  VALUES ( $i, 1, 'survey', '$description', '$time' )";
-			}
+			if( $description = htmlspecialchars( strip_tags( $_POST['surveyQuestion'.$i] ) ) ){
+				if(  $i < $oldSurvey ) {
+					$query = "UPDATE questions
+						  	  SET description='$description', created='$time'
+						  	  WHERE question_type='survey' AND survey_id=1 AND question_id='$i'";
+				}
+				else {
+					$query = "INSERT INTO questions (question_id, survey_id, question_type, description, created)
+							  VALUES ( $i, 1, 'survey', '$description', '$time' )";
+				}
 
-			//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
-			mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
+				//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
+				mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
+			}
 		}
 
 
 		// Update/Insert rating questions
 		for ($i=0; $i < $numRatingQuestions; $i++) { 
 
-			$description = strip_tags( $_POST['ratingQuestion'.$i] );
-			if( $i < $oldRating) {
-				$query = "UPDATE questions
-					  	  SET description='$description', created='$time'
-					  	  WHERE question_type='rating' AND survey_id=1 AND question_id='$i'";
+			if( $description = strip_tags( $_POST['ratingQuestion'.$i] ) ){
+				if( $i < $oldRating) {
+					$query = "UPDATE questions
+						  	  SET description='$description', created='$time'
+						  	  WHERE question_type='rating' AND survey_id=1 AND question_id='$i'";
+				}
+				else {
+					$query = "INSERT INTO questions (question_id, survey_id, question_type, description, created)
+							  VALUES ( $i, 1, 'rating', '$description', '$time' )";
+				}
 
 				//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
 				mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
-			}
-			else {
-				$query = "INSERT INTO questions (question_id, survey_id, question_type, description, created)
-						  VALUES ( $i, 1, 'rating', '$description', '$time' )";
-
-				//Executes the query. If successful, continue. If failed, increment the numOfErrors counter
-				mysqli_query( $bd, $query ) ? $numOfErrors : ++$numOfErrors;
-
-				// $stmtItems = mysqli_query($bd, "SELECT upload_id FROM product_images WHERE survey_id=1");
-
-				// while( $row = mysqli_fetch_assoc($stmtItems) ){
-
-				// 	$query = "INSERT INTO ratings (question_id, survey_id, upload_id)
-				// 		  VALUES ( $i, 1, $row)";
-
-				// 	mysqli_query( $bd, $query );
-				// }
-				
 			}
 
 

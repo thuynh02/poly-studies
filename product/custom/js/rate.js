@@ -53,6 +53,48 @@ window.onload=function(){
     return productItem;
   }
 
+  function getQuestionData(){
+    var data = $.ajax({
+      type: 'POST',
+      url: 'custom/php/getQuestions.php',
+      dataType: 'json',
+      data: data,
+      async: false,
+
+      success : function( data ){
+        for( var i = 0; i < data.length; ++i ){
+          if( data[i].question_type == "survey"){
+            surveyQuestions.push( 
+              { //Store survey question object such that it is possible to get the description and the ID
+                description: data[i].description,
+                question_id: data[i].question_id,
+                hide: data[i].hide,
+                del: data[i].del
+              }
+            );
+          }
+          else if( data[i].question_type == "rating"){
+            ratingQuestions.push( 
+              { //Store survey question object such that it is possible to get the description and the ID
+                description: JSON.parse( data[i].description ),
+                question_id: data[i].question_id,
+                hide: data[i].hide,
+                del: data[i].del
+              } 
+            );
+          }
+        }
+
+        for (var i = 0; i < ratingQuestions.length; i++) {
+          questionTypes.push( ratingQuestions[i]['description'][0] );
+        };
+      },
+
+      error: function () { console.log("NAY"); }
+
+    });
+  }
+
   // getImageData will make an ajax call to getImages.php, which queries the database for all
   // the uploaded images (table: user_uploads). The resulting array of image names are formatted to a
   // json string and retrieved here. Upon success of retrieval, the array is traversed and productItems
@@ -79,39 +121,6 @@ window.onload=function(){
     return productArr;
   }
 
-
-  function getQuestionData(){
-    var data = $.ajax({
-      type: 'POST',
-      url: 'custom/php/getQuestions.php',
-      dataType: 'json',
-      data: data,
-      async: false,
-
-      success : function( data ){
-        for( var i = 0; i < data.length; ++i ){
-          if( data[i].question_type == "survey" 
-            && data[i].hide == 0
-            && data[i].del  == 0 ){
-            surveyQuestions.push( data[i].description );
-          }
-          else if( data[i].question_type == "rating" 
-            && data[i].hide == 0
-            && data[i].del  == 0 ){
-            ratingQuestions.push( JSON.parse( data[i].description ) );
-          }
-        }
-
-        for (var i = 0; i < ratingQuestions.length; i++) {
-          questionTypes.push( ratingQuestions[i][0] );
-        };
-      },
-
-      error: function () { console.log("NAY"); }
-
-    });
-  }
-
   function getRatingData( array ){
     var data = $.ajax({
       type: 'POST',
@@ -121,7 +130,7 @@ window.onload=function(){
       async: false,
 
       success : function( data ){
-        console.log( data );
+        // console.log( data );
         for (var i = 0; i < array.length; i++) {
           for (var j = 0; j < data.length; j++) {
             if( array[i].imageID === data[j].upload_id ) {
@@ -139,15 +148,14 @@ window.onload=function(){
     });
   }
 
-
+  //Must be called before getImageData so that questionTypes array can be filled
   getQuestionData();
 
   // productItems serve as the array of Objects for each productItem returned from the 'createProductItem' function.
   var productItems = getImageData();
-
   getRatingData( productItems );
 
-  // console.log( productItems );
+  console.log( productItems );
 
   //*** Hard-coded creation of product items are commented out just as a back up ***//
   // Initialize and push into 'productItems' the Objects created from the function 'createProductItem.'
@@ -164,7 +172,11 @@ window.onload=function(){
     var i, j;
     for ( i = 0; i < productItems.length; i++) {
       for ( j = 0; j < productItems[i].questionValues.length; j++) {
-        if( productItems[i].questionValues[j] == unansweredValue ) { return [i, j]; }
+
+        //Only check visible questions
+        if( productItems[i].questionValues[j] == unansweredValue  && ratingQuestions[j].hide == 0  && ratingQuestions[j].del == 0 ) { 
+          return [i, j]; 
+        }
       }
     }
     return [i, j];
@@ -176,14 +188,14 @@ window.onload=function(){
     console.log( "I: " + item );
     console.log( "Q: " + questionIndex );
 
-    var question = ratingQuestions[questionIndex][1].replace('[id]', productItems[item].productName );
+    var question = ratingQuestions[questionIndex]['description'][1].replace('[id]', productItems[item].productName );
     var keyword = productItems[item].questionTypes[questionIndex];
     var voters = productItems[item]['voterRating'][questionIndex].voters;
     var rating = productItems[item]['voterRating'][questionIndex].rating;
 
     var voteFeedback = "";
 
-    var voteSetting = ( voters == "" || voters == 0 || rating == "" || voters == null || rating == null );
+    var voteSetting = ( voters == "" || (voters == 0 && keyword != 'like-rating') || rating == "" || voters == null || rating == null );
 
     if( !voteSetting ) {
       if( keyword == 'usage' || keyword == 'familiarity-slider'){ 
@@ -228,7 +240,7 @@ window.onload=function(){
         if( !(rating[0] == "" || rating[2] == "") ) {
           voteFeedback += '<img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-up-icon.png">';
           voteFeedback += rating[0]; 
-          voteFeedback += '     <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-up-icon.png">';
+          voteFeedback += '     <img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Thumb-down-icon.png">';
           voteFeedback += rating[2]; 
         }
       }
@@ -330,13 +342,10 @@ window.onload=function(){
   }
 
   //Ignore hidden questions
-  while( ratingQuestions[currentQuestion].hide == 1
-         || ratingQuestions[currentQuestion].del == 1 ){
+  while(     currentQuestion <= productItems[currentItem].questionTypes.length - 1 
+         &&( ratingQuestions[currentQuestion].hide == 1
+         ||  ratingQuestions[currentQuestion].del  == 1 )){
     currentQuestion++;
-    if( currentQuestion == productItems[currentItem].questionTypes.length ){
-      currentQuestion = 0;
-      currentItem++;
-    }
   }
 
   var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
@@ -443,30 +452,39 @@ window.onload=function(){
 
       // Only proceed to the next questionType/item if the answer is a valid value. (Basically, not 0)
       if( productItems[currentItem].questionValues[currentQuestion] != DEFAULTVALUE ){
-
         // Increment the currentQuestion if there's still more questions for that particular item
-        if( currentQuestion < productItems[currentItem].questionTypes.length - 1 ){ currentQuestion++; }
-       
+        if( currentQuestion < productItems[currentItem].questionTypes.length - 1 ){ 
+          currentQuestion++;
+          //Ignore hidden questions
+          while(     currentQuestion < productItems[currentItem].questionTypes.length 
+                 &&( ratingQuestions[currentQuestion].hide == 1
+                 ||  ratingQuestions[currentQuestion].del  == 1 )){
+            currentQuestion++;
+          } 
+        }
+
         // Once you reached the end of the question types for that particular item and you're not
         // at the last item, reset the current question as the last question of the previous item.
-        if( currentItem < productItems.length - 1 ){  
+        if( currentQuestion >= productItems[currentItem].questionTypes.length - 1
+                  && currentItem < productItems.length - 1 ){  
           currentItem++;
           currentQuestion = 0; 
           // Image path is change only if the current image changes
           $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
         }
+
         // Once you reached the end of the question types for that particular item and you're at the last item, ...
-        else if( currentQuestion == productItems[currentItem].questionTypes.length - 1 
-                  && currentItem == productItems.length - 1 ){  
+        if( currentQuestion >= productItems[currentItem].questionTypes.length - 1
+             && currentItem == productItems.length - 1 ){  
             // Action to do last question script
           var arr = checkAllAnswered( DEFAULTVALUE );
-          //console.log( arr );
+          console.log( arr );
 
           if ( arr[0] == productItems.length && arr[1] == productItems[ productItems.length - 1 ].questionValues.length ){
             
             //POST can only read in the: "key = value" format. 
             var jsonItems = "productAnswers=" + JSON.stringify( productItems );
-            // console.log( productItems );
+            console.log( productItems );
             
             $.ajax({
               type: 'POST',
@@ -481,9 +499,9 @@ window.onload=function(){
                 console.log( "NAY" );
               }
             });
-            
           }
         }
+        
       } // End of if statement to check for valid answer
     } // End of if statement for the 'next' button
 
@@ -541,6 +559,7 @@ window.onload=function(){
 
 
     // Changing the productDesc container based on currentItem's question type
+
     var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
     $( '#productDesc' ).html( htmlContainer );
 
@@ -550,7 +569,7 @@ window.onload=function(){
     // console.log( 'I' + currentItem);
 
     $("#famSlider").slider({
-      value: 10,
+      value: 1,
       min: 1,
       max: 10,
       step: 1,

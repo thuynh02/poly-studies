@@ -68,8 +68,8 @@ window.onload=function(){
             <input type="text" class="form-control" id="surveyQuestion' + i + '" name="surveyQuestion' + i + '" placeholder="Insert Question Here"> \
           </div> \
           <div class="btn-group" id="questionCtrl">\
-            <button type="button" id="hide"' + i + '" class="btn btn-default" value="' + i + '" name="survey">Hide</button>\
-            <button type="button" id="del"' + i + '" class="btn btn-danger" value="' + i + '" name="survey">Delete</button>\
+            <button type="button" id="hide' + i + '" class="btn btn-default" value="' + i + '" name="survey">Hide</button>\
+            <button type="button" id="del' + i + '" class="btn btn-danger" value="' + i + '" name="survey">Delete</button>\
           </div>\
         </div>';
 
@@ -94,11 +94,11 @@ window.onload=function(){
     for (var j = 0; j < questionTypes.length; j++) {
       switch( questionTypes[j] ){
 
-          // Usage question
+          // Usage question (active by default when adding a new rating question)
           case 'usage': 
             htmlContainer += '\
             <div class="radio"> \
-              <input type="radio" name="questionType' + i + '" value="' + questionTypes[j] + '"> Usage \
+              <input type="radio" name="questionType' + i + '" value="' + questionTypes[j] + '" checked="checked"> Usage \
             </div> \
             ';
             break;
@@ -143,8 +143,8 @@ window.onload=function(){
     htmlContainer += '\
             <input type="text" class="form-control" id="ratingQuestion' + i + '" name="ratingQuestion' + i + '" placeholder="Insert Question Here"> \
             <div class="btn-group" id="questionCtrl">\
-              <button type="button" id="hide"' + i + '" class="btn btn-default" value="' + i + '" name="rating">Hide</button>\
-              <button type="button" id="del"' + i + '" class="btn btn-danger" value="' + i + '" name="rating">Delete</button>\
+              <button type="button" id="hide' + i + '" class="btn btn-default" value="' + i + '" name="rating">Hide</button>\
+              <button type="button" id="del' + i + '" class="btn btn-danger" value="' + i + '" name="rating">Delete</button>\
             </div>\
           </div> \
         </div>';
@@ -168,6 +168,9 @@ window.onload=function(){
     if( type == 'survey' ){ questionArr = surveyQuestions; }
     else if( type == 'rating' ){ questionArr = ratingQuestions; }
 
+    console.log( type );
+    console.log( questionArr );
+
     questionObj = { question_id: questionArr[currentQ].question_id, 
                     question_type: type,
                     hide: questionArr[currentQ].hide,
@@ -177,6 +180,7 @@ window.onload=function(){
     if( toggleHide ){ questionObj.hide = 1 - questionObj.hide; }
     if( toggleDel ){ questionObj.del = 1 - questionObj.del; }
 
+    console.log( questionObj );
     return questionObj;
   }
 
@@ -189,20 +193,10 @@ window.onload=function(){
 
     for (var i = 0; i < surveyQuestions.length; i++) {
       if( surveyQuestions[i].del != 1 ){
-
         generateSurveyField( i, ++containerCounter, surveyQuestions[i].description );
         if( surveyQuestions[i].hide == 1 ){
           $('#surveyQuestion'+i).addClass('enableHide');
         }
-
-        // if( surveyQuestions[i].del == 1 ){
-        //   $('#surveyQuestion'+i).addClass('enableDel');
-        // }
-        // else{
-        //   if( surveyQuestions[i].hide == 1 ){
-        //     $('#surveyQuestion'+i).addClass('enableHide');
-        //   }
-        // }
       }
     }
   }
@@ -215,19 +209,10 @@ window.onload=function(){
           $('#ratingContainer'+i).addClass('enableHide');
       }
     }
-
-    // if( ratingQuestions[i].del == 1 ){
-    //   $('#ratingContainer'+i).addClass('enableDel');
-    // }
-    // else{
-    //   if( ratingQuestions[i].hide == 1 ){
-    //       $('#ratingContainer'+i).addClass('enableHide');
-    //   }
-    // }
   };
 
   //Assign the on-click hide functionality to all buttons with the id, "hide"
-  $(document.body).on( 'click', 'button[id="hide"]', function(event){
+  $(document.body).on( 'click', 'button[id^="hide"]', function(event){
 
     if( event.target ){
       var currentQ = event.target.value;
@@ -249,14 +234,14 @@ window.onload=function(){
           //Update survey array & corresponding form
           if( type == 'survey' ){ 
             surveyQuestions[currentQ].hide = questionObj.hide;
-            if( questionObj.hide == 1 ){  $('#surveyQuestion'+currentQ).addClass('enableHide'); }
+            if( questionObj.hide ){  $('#surveyQuestion'+currentQ).addClass('enableHide'); }
             else{ $('#surveyQuestion'+currentQ).removeClass('enableHide'); }
           }
 
           //Update rating array & corresponding form
           else if( type == 'rating' ){ 
             ratingQuestions[currentQ].hide = questionObj.hide;
-            if( questionObj.hide == 1 ){ $('#ratingContainer'+currentQ).addClass('enableHide'); }
+            if( questionObj.hide ){ $('#ratingContainer'+currentQ).addClass('enableHide'); }
             else{ $('#ratingContainer'+currentQ).removeClass('enableHide'); }
           }
 
@@ -267,7 +252,7 @@ window.onload=function(){
   });
 
   //Assign the on-click hide functionality to all buttons with the id, "hide"
-  $(document.body).on( 'click', 'button[id="del"]', function(event){
+  $(document.body).on( 'click', 'button[id^="del"]', function(event){
 
     if( event.target ){
       var currentQ = event.target.value;
@@ -340,7 +325,7 @@ window.onload=function(){
 
 
     var jsonArr = $("#addQuestions").serializeArray();
-    // console.log( jsonArr );
+    console.log( JSON.stringify(jsonArr) );
 
     $.ajax({
         type: 'POST',

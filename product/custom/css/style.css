@@ -79,7 +79,9 @@ body{
 
 /* Temp implementation */
 .enableDel{
-  opacity: 0;
+  border-radius: 4px;
+  opacity: 0.2;
+  box-shadow: 0 0 30px red;
 }
 
 @media( max-width: 990px ){
