@@ -268,10 +268,9 @@ window.onload=function(){
       <div class="question"> \
         <p class="questionLead">' + question + '</p> \
         <p class="lead" id="voteFeedback">' + voteFeedback + '</p> \
-        <div class="labelInline">Very Negative</div> \
         <div id="famSlider"></div> \
-        <div class="labelInline">Very Positive</div> \
-        <p>Your slider has a value of <span id="famValue"></span></p> \
+        <div class="labelInline left">Unfamiliar<br>(1)</div> \
+        <div class="labelInline right">Very Familiar<br>(10)</div> \
       </div> \
       ';
     }
@@ -341,12 +340,17 @@ window.onload=function(){
     }
   }
 
-  //Ignore hidden questions
-  while(     currentQuestion <= productItems[currentItem].questionTypes.length - 1 
-         &&( ratingQuestions[currentQuestion].hide == 1
-         ||  ratingQuestions[currentQuestion].del  == 1 )){
-    currentQuestion++;
+  function nextValidQuestion( currentQ, questionArr, currentI, itemArr ){
+    while(  currentQ < itemArr[currentI].questionTypes.length 
+            && (   questionArr[currentQ].hide == 1
+                || questionArr[currentQ].del  == 1 )){
+            currentQ++;
+          } 
+    return currentQ;
   }
+
+  //Ignore hidden questions
+  currentQuestion = nextValidQuestion( currentQuestion, ratingQuestions, currentItem, productItems ); 
 
   var htmlContainer = generateQuestionHTML( currentItem, currentQuestion );
   $( '#productDesc' ).html( htmlContainer );
@@ -453,22 +457,18 @@ window.onload=function(){
       // Only proceed to the next questionType/item if the answer is a valid value. (Basically, not 0)
       if( productItems[currentItem].questionValues[currentQuestion] != DEFAULTVALUE ){
         // Increment the currentQuestion if there's still more questions for that particular item
-        if( currentQuestion < productItems[currentItem].questionTypes.length - 1 ){ 
+        if( currentQuestion <= productItems[currentItem].questionTypes.length - 1 ){ 
           currentQuestion++;
-          //Ignore hidden questions
-          while(     currentQuestion < productItems[currentItem].questionTypes.length 
-                 &&( ratingQuestions[currentQuestion].hide == 1
-                 ||  ratingQuestions[currentQuestion].del  == 1 )){
-            currentQuestion++;
-          } 
+          currentQuestion = nextValidQuestion( currentQuestion, ratingQuestions, currentItem, productItems ); 
         }
 
         // Once you reached the end of the question types for that particular item and you're not
         // at the last item, reset the current question as the last question of the previous item.
-        if( currentQuestion >= productItems[currentItem].questionTypes.length - 1
-                  && currentItem < productItems.length - 1 ){  
+        if( currentQuestion > productItems[currentItem].questionTypes.length - 1 && currentItem < productItems.length - 1 ){  
           currentItem++;
-          currentQuestion = 0; 
+          currentQuestion = 0
+          currentQuestion = nextValidQuestion( currentQuestion, ratingQuestions, currentItem, productItems ); 
+
           // Image path is change only if the current image changes
           $( '#productImg' ).attr( "src", productItems[currentItem].imagePath) ;
         }

@@ -41,8 +41,17 @@ body{
     padding-bottom: 30px;
 }
 
+.left{
+  float: left;
+}
+
+.right{
+  float: right;
+}
+
 #famSlider{
   margin-bottom: 10px;
+  clear: both;
 }
 
 .ui-slider-handle:hover,
