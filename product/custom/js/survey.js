@@ -176,13 +176,15 @@ $(document).ready(function() {
 
 	// Once the user clicks submit, begin to fill the survey data object with the answers
 	// Afterwards, convert the object into a JSON string 
-	$('#surveySubmit').click( function(){
+	$('#surveySubmit').click( function(e){
+
+		e.preventDefault();
 
 		// Validate takes a boolean parameter. If true is passed, alerts appear, telling the user what
 		// questions were left unanswered
 		if( validateInput() ){
 			var timeEnded = new Date();
-			var htmlContainer = '<input type="hidden" id="timeElapsed" name="timeElapsed" value="' + (timeEnded - timeOpened) + '">'
+			var htmlContainer = '<input type="hidden" id="timeElapsed" name="timeElapsed" value="' + ( (timeEnded - timeOpened) / 1000 ) + '">'
 
    	 		$( '#initialSurvey' ).append( htmlContainer );
 
@@ -202,11 +204,17 @@ $(document).ready(function() {
               url: 'custom/php/addSurveyAnswers.php',
               data: jsonSurveyData,
 
-              success : function( data ){
-                console.log( data );
+              success : function( errors ){
+                // console.log( "Success!" );
+                if( errors == 0 ){
+                	window.location.replace( "rate.html" );
+                }
+                else{
+                	console.log( "Errors made in adding survey answers! Error Count: " + errors );
+                }
               },
-              error : function(){
-                console.log( "NAY" );
+              error : function(  ){
+                console.log( "Error connecting to PHP file that inserts survey answers!");
               }
             });
 	    }

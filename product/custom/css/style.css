@@ -82,6 +82,18 @@ body{
   font-size: 30px;
 }
 
+#confirmation{
+  margin: 5% 0;
+  background-color: #e5e5e5;
+  border-radius: 4px;
+  font-size: 30px;
+}
+
+#infoText{
+  width: 400px;
+  height: 200px;
+}
+
 .enableHide{
   opacity: 0.4;
 }
@@ -91,6 +103,26 @@ body{
   border-radius: 4px;
   opacity: 0.2;
   box-shadow: 0 0 30px red;
+}
+
+
+/* Turk Panel Table */
+#workerList{
+  border: 1px #428bca solid;
+}
+
+#workerList>tbody>tr:nth-child(odd){
+  background-color: #e5e5e5;
+}
+
+#workerList>tbody>tr>th{
+  background: #428bca;
+  color: white;
+  font-weight: normal;
+}
+
+#workerList>tbody>tr>td{
+  border: none;
 }
 
 @media( max-width: 990px ){

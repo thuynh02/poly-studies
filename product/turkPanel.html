@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Brooklyn Atlantis">
+    <!-- <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> -->
+
+    <title>Mechanical Turks Control Panel</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="custom/css/style.css">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script>
+    </script>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Survey 2A</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Admin</a></li>
+                    <li><a href="question.html">Questions</a></li>
+                    <li class="active"><a href="turkPanel.html">Turk Panel</a></li>
+                    <li><a href="survey.html">Survey</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <div class="body">
+
+        <div class="productContainer">
+            <h1> Email Turks </h1>
+            <form method='post' id='workerForm' action='emailer.php'>
+                <table class="table" id="workerList">
+                    <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
+                        <th>#</th>
+                        <th>Worker ID</th>
+                        <th>Survey code</th>
+                        <th>User ID</th>
+                        <th>Survey date</th>
+                        <th>Expected email date</th>
+                        <th>Time until email</th>
+                        <th>Email status</th>
+                    </tr>
+                </table>
+
+
+                <br>
+                <label>Custom message:</label>
+                <br>
+                <textarea id="infoText" name="infoText"></textarea>
+                <br>
+
+                <input type="hidden" value="" id="workerIdsToEmail" name="workerIds">
+                <button type="submit" class="btn btn-default">Send email</button>
+            </form>
+        </div>
+
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="custom/js/jquery.min.js"></script>
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <script src="custom/js/emailer.js"></script>
+
+</body>
+
+</html>

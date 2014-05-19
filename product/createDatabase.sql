@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 06, 2014 at 09:04 PM
+-- Generation Time: May 18, 2014 at 08:17 PM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -25,7 +25,8 @@ CREATE TABLE `answers` (
   `survey_id` int(11) NOT NULL,
   `survey_answers` text NOT NULL,
   `rating_answers` text,
-  `created` int(11) DEFAULT NULL,
+  `created` int(32) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
   KEY `survey_id` (`survey_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -35,22 +36,13 @@ CREATE TABLE `answers` (
 --
 
 INSERT INTO `answers` (`user_id`, `survey_id`, `survey_answers`, `rating_answers`, `created`) VALUES
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"a"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":""}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"-1515"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"2464"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"64052730"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"23754"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"134093"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"1681"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"7405"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"2781"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"2","q18":"","timeElapsed":"14042"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106),
-(-1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"az","timeElapsed":"5452"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","opinion-star"],"questionValues":["yes",2.5],"voterRating":[{"questionID":"0","voters":"12","rating":"no"},{"questionID":"2","voters":"100","rating":"4"}]}]', 1399137106);
+(1, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"1.698"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","familiarity-slider","opinion-star","like-rating","usage"],"questionValues":[0,0,0,"like",0],"voterRating":[{"questionID":"0","voters":"120","rating":"yes"},{"questionID":"1","voters":"122","rating":"0"},{"questionID":"2","voters":"100","rating":"4.5"},{"questionID":"3","voters":"0","rating":"["1231","23","123"]"},{"questionID":"4","voters":"321","rating":"yes"}]},{"imageID":"27","productName":"1399423246coke.jpg","productDesc":null,"imagePath":"images/1399423246coke.jpg","questionTypes":["usage","familiarity-slider","opinion-star","like-rating","usage"],"questionValues":[0,0,0,"like",0],"voterRating":[{"questionID":"0","voters":null,"rating":null},{"questionID":"1","voters":null,"rating":null},{"questionID":"2","voters":null,"rating":null},{"questionID":"3","voters":null,"rating":null},{"questionID":"4","voters":null,"rating":null}]}]', 1400014426),
+(2, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"1.462"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","familiarity-slider","opinion-star","like-rating","usage"],"questionValues":[0,0,0,"like",0],"voterRating":[{"questionID":"0","voters":"120","rating":"yes"},{"questionID":"1","voters":"122","rating":"0"},{"questionID":"2","voters":"100","rating":"4.5"},{"questionID":"3","voters":"0","rating":"["1231","23","123"]"},{"questionID":"4","voters":"321","rating":"yes"}]}]', 1400014495),
+(3, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"2.152"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","familiarity-slider","opinion-star","like-rating","usage"],"questionValues":[0,0,0,"like",0],"voterRating":[{"questionID":"0","voters":"120","rating":"yes"},{"questionID":"1","voters":"122","rating":"0"},{"questionID":"2","voters":"100","rating":"4.5"},{"questionID":"3","voters":"0","rating":"["1231","23","123"]"},{"questionID":"4","voters":"321","rating":"yes"}]}]', 1400019360),
+(4, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"2.266"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","familiarity-slider","opinion-star","like-rating","usage"],"questionValues":[0,0,0,"like",0],"voterRating":[{"questionID":"0","voters":"120","rating":"yes"},{"questionID":"1","voters":"122","rating":"0"},{"questionID":"2","voters":"100","rating":"4.5"},{"questionID":"3","voters":"0","rating":"["1231","23","123"]"},{"questionID":"4","voters":"321","rating":"yes"}]}]', 1400020505),
+(5, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"3.114"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","familiarity-slider","opinion-star","like-rating","usage"],"questionValues":[0,0,0,"like",0],"voterRating":[{"questionID":"0","voters":"120","rating":"yes"},{"questionID":"1","voters":"122","rating":"0"},{"questionID":"2","voters":"100","rating":"4.5"},{"questionID":"3","voters":"0","rating":"["1231","23","123"]"},{"questionID":"4","voters":"321","rating":"yes"}]}]', 1400031267),
+(6, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"2.979"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","familiarity-slider","opinion-star","like-rating","usage"],"questionValues":[0,0,0,"like",0],"voterRating":[{"questionID":"0","voters":"120","rating":"yes"},{"questionID":"1","voters":"122","rating":"0"},{"questionID":"2","voters":"100","rating":"4.5"},{"questionID":"3","voters":"0","rating":"["1231","23","123"]"},{"questionID":"4","voters":"321","rating":"yes"}]}]', 1400125504),
+(7, 1, '{"age":"18","gender":"male","q1":"1","q2":"1","q3":"1","q4":"1","q5":"6","q6":"1","q7":"1","q8":"1","q9":"1","q10":"1","q11":"2","q12":"1","q13":"1","q14":"1","q15":"1","q16":"1","q17":"1","q18":"az","timeElapsed":"2.905"}', '[{"imageID":"25","productName":"iPad Mini","productDesc":"","imagePath":"images/1398961739ipad-mini.jpg","questionTypes":["usage","familiarity-slider","opinion-star","like-rating","usage"],"questionValues":[0,0,0,"unsure",0],"voterRating":[{"questionID":"0","voters":"120","rating":"yes"},{"questionID":"1","voters":"122","rating":"0"},{"questionID":"2","voters":"100","rating":"4.5"},{"questionID":"3","voters":"0","rating":"["1231","23","123"]"},{"questionID":"4","voters":"321","rating":"yes"}]}]', 1400125571);
 
 -- --------------------------------------------------------
 
@@ -67,7 +59,7 @@ CREATE TABLE `product_images` (
   `created` int(11) DEFAULT NULL,
   PRIMARY KEY (`upload_id`,`survey_id`),
   KEY `survey_id` (`survey_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
 
 --
 -- Dumping data for table `product_images`
@@ -98,27 +90,28 @@ CREATE TABLE `questions` (
 --
 
 INSERT INTO `questions` (`question_id`, `survey_id`, `question_type`, `description`, `created`, `hide`, `del`) VALUES
-(0, 1, 'rating', '["usage","Have you ever had a [id]?"]', 1398976416, 0, 0),
-(0, 1, 'survey', 'I describe myself as extraverted, enthusiastic.', 1398976416, 0, 0),
-(1, 1, 'rating', '["familiarity-slider","On a scale of 1 - 10, how familiar are you with [id]?"]', 1398976416, 1, 0),
-(1, 1, 'survey', 'I seldom feel blue.', 1398976416, 1, 0),
-(2, 1, 'rating', '["opinion-star","On a scale of 1 (very negative) to 5 (very positive), what is your opinion of [id]?"]', 1398976416, 0, 0),
-(2, 1, 'survey', 'I describe myself as critical, quarrelsome.', 1398976416, 0, 0),
-(3, 1, 'rating', '["like-rating","Do you like [id]?"]', 1398976416, 1, 0),
-(3, 1, 'survey', 'I describe myself as dependable, self-disciplined.', 1398976416, 1, 0),
-(4, 1, 'survey', 'Please select option six, then write az in the last question.', 1398976416, 0, 0),
-(5, 1, 'survey', 'I describe myself as anxious, easily upset.', 1398976416, 0, 0),
-(6, 1, 'survey', 'I feel comfortable with myself.', 1398976416, 0, 0),
-(7, 1, 'survey', 'I describe myself as open to new experiences, complex.', 1398976416, 0, 0),
-(8, 1, 'survey', 'I look at the bright side of life.', 1398976416, 0, 0),
-(9, 1, 'survey', 'I describe myself as reserved, quiet.', 1398976416, 0, 0),
-(10, 1, 'survey', 'Please select option two.', 1398976416, 0, 0),
-(11, 1, 'survey', 'I describe myself as sympathetic, warm.', 1398976416, 0, 0),
-(12, 1, 'survey', 'I often feel blue.', 1398976416, 0, 0),
-(13, 1, 'survey', 'I describe myself as disorganized, careless.', 1398976416, 0, 0),
-(14, 1, 'survey', 'I describe myself as calm, emotionally stable.', 1398976416, 0, 0),
-(15, 1, 'survey', 'I worry about things.', 1398976416, 0, 0),
-(16, 1, 'survey', 'I describe myself as conventional, uncreative.', 1398976416, 0, 0);
+(0, 1, 'rating', '["usage","Have you ever had a [id]?"]', 1399418050, 1, 0),
+(0, 1, 'survey', 'I describe myself as extraverted, enthusiastic.', 1399418050, 0, 0),
+(1, 1, 'rating', '["familiarity-slider","On a scale of 1 - 10, how familiar are you with [id]?"]', 1399418050, 1, 0),
+(1, 1, 'survey', 'I seldom feel blue.', 1399418050, 0, 0),
+(2, 1, 'rating', '["opinion-star","On a scale of 1 (very negative) to 5 (very positive), what is your opinion of [id]?"]', 1399418050, 0, 1),
+(2, 1, 'survey', 'I describe myself as critical, quarrelsome.', 1399418050, 0, 0),
+(3, 1, 'rating', '["like-rating","Do you like [id]?"]', 1399418050, 0, 0),
+(3, 1, 'survey', 'I describe myself as dependable, self-disciplined.', 1399418050, 0, 0),
+(4, 1, 'rating', '["usage","Something"]', 1399418050, 1, 0),
+(4, 1, 'survey', 'Please select option six, then write az in question twenty.', 1399418050, 0, 0),
+(5, 1, 'survey', 'I describe myself as anxious, easily upset.', 1399418050, 0, 0),
+(6, 1, 'survey', 'I feel comfortable with myself.', 1399418050, 0, 0),
+(7, 1, 'survey', 'I describe myself as open to new experiences, complex.', 1399418050, 0, 0),
+(8, 1, 'survey', 'I look at the bright side of life.', 1399418050, 0, 0),
+(9, 1, 'survey', 'I describe myself as reserved, quiet.', 1399418050, 0, 0),
+(10, 1, 'survey', 'Please select option two.', 1399418050, 0, 0),
+(11, 1, 'survey', 'I describe myself as sympathetic, warm.', 1399418050, 0, 0),
+(12, 1, 'survey', 'I often feel blue.', 1399418050, 0, 0),
+(13, 1, 'survey', 'I describe myself as disorganized, careless.', 1399418050, 0, 0),
+(14, 1, 'survey', 'I describe myself as calm, emotionally stable.', 1399418050, 0, 0),
+(15, 1, 'survey', 'I worry about things.', 1399418050, 0, 0),
+(16, 1, 'survey', 'I describe myself as conventional, uncreative.', 1399418050, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -142,10 +135,11 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`question_id`, `upload_id`, `survey_id`, `voters`, `rating`) VALUES
-(0, 25, 1, 12, 'no'),
-(1, 25, 1, 142, '0'),
-(2, 25, 1, 100, '4'),
-(3, 25, 1, 0, '["14","",""]');
+(0, 25, 1, 120, 'yes'),
+(1, 25, 1, 122, '0'),
+(2, 25, 1, 100, '4.5'),
+(3, 25, 1, 0, '["1231","23","123"]'),
+(4, 25, 1, 321, 'yes');
 
 -- --------------------------------------------------------
 
@@ -177,17 +171,24 @@ CREATE TABLE `users` (
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `survey_code` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `password`, `email`) VALUES
-(-1, NULL, NULL, NULL);
+INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `survey_code`) VALUES
+(1, NULL, NULL, NULL, '8qqBw'),
+(2, NULL, NULL, NULL, 'MlArL'),
+(3, NULL, NULL, NULL, 'vSM3y'),
+(4, NULL, NULL, NULL, 'z6biJ'),
+(5, NULL, NULL, NULL, 'CqLJA'),
+(6, NULL, NULL, NULL, 'KeSyL'),
+(7, NULL, NULL, NULL, '9FNEN');
 
 --
 -- Constraints for dumped tables
