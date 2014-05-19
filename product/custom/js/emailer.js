@@ -72,39 +72,6 @@ window.onload = function(){
         );
     }
 
-    // function sendEmail($wrkrId, $code, $msg) {
-     
-    //     global $turk50;
-    //     $defaultWorkerId = "A27YK1ATF39NIR";
-
-    //     $subject = "Please complete survey";
-    //         $msg .= "\n Your code is ".$code;
-
-    //     $Request = array(
-    //         "Subject" => $subject,
-    //         "MessageText" => $msg,
-    //         "WorkerId" => $wrkrId
-    //     );
-
-    //     $Response = $turk50->NotifyWorkers($Request);
-
-    // }
-
-
-    /* SAMPLE OF TABLE FORMAT FOR DISPLAYING TURKS
-        <tr>
-            <td> <input type="checkbox" id="workerCheckbox" value=""> </td>
-            <td> $n </td>
-            <td> $workerId </td>
-            <td> $surveyId </td>
-            <td> $id </td>
-            <td> $formattedAcceptTime </td>
-            <td> date('Y-m-d', $twoweekslater) </td>
-            <td> $time_remaining </td>
-            <td> $email_status </td>
-        </tr>
-    */
-
     $("#selectAll").on( "click", function(){
         if( this.checked ){
             $("input").each( function(){
